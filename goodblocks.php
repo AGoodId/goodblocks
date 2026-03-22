@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.1.0' );
+define( 'GOODBLOCKS_VERSION', '1.1.1' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
@@ -132,6 +132,7 @@ add_action( 'wp_enqueue_scripts', 'goodblocks_localize_scripts', 20 );
  */
 function goodblocks_activate() {
 	goodblocks_migrate_namespace( 'agoodsite-fse', 'goodblocks' );
+	goodblocks_migrate_agoodblocks();
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'goodblocks_activate' );
@@ -141,6 +142,7 @@ register_activation_hook( __FILE__, 'goodblocks_activate' );
  */
 function goodblocks_deactivate() {
 	goodblocks_migrate_namespace( 'goodblocks', 'agoodsite-fse' );
+	goodblocks_rollback_agoodblocks();
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'goodblocks_deactivate' );
@@ -185,5 +187,63 @@ function goodblocks_migrate_namespace( string $from, string $to ): void {
 	}
 
 	// Clear object cache so WP picks up the changes.
+	wp_cache_flush();
+}
+
+/**
+ * Migrate agoodblocks namespace to goodblocks.
+ *
+ * Handles block name changes (e.g. post-grid-block → post-grid).
+ */
+function goodblocks_migrate_agoodblocks(): void {
+	global $wpdb;
+
+	$mapping = [
+		'post-grid-block' => 'post-grid',
+	];
+
+	foreach ( $mapping as $old_name => $new_name ) {
+		$old = 'wp:agoodblocks/' . $old_name;
+		$new = 'wp:goodblocks/' . $new_name;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE post_content LIKE %s",
+				$old,
+				$new,
+				'%' . $wpdb->esc_like( $old ) . '%'
+			)
+		);
+	}
+
+	wp_cache_flush();
+}
+
+/**
+ * Roll back goodblocks namespace to agoodblocks on deactivation.
+ */
+function goodblocks_rollback_agoodblocks(): void {
+	global $wpdb;
+
+	$mapping = [
+		'post-grid' => 'post-grid-block',
+	];
+
+	foreach ( $mapping as $old_name => $new_name ) {
+		$old = 'wp:goodblocks/' . $old_name;
+		$new = 'wp:agoodblocks/' . $new_name;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE post_content LIKE %s",
+				$old,
+				$new,
+				'%' . $wpdb->esc_like( $old ) . '%'
+			)
+		);
+	}
+
 	wp_cache_flush();
 }
