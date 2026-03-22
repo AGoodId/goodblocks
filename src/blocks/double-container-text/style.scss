@@ -1,0 +1,107 @@
+.wp-block-goodblocks-double-container-text {
+
+    .double-text-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        @media(max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &+.wp-block-goodblocks-double-container-text {
+        margin-top: 0 !important;
+    }
+
+    &:has(+.wp-block-goodblocks-double-container-text) {
+        margin-bottom: 0 !important;
+    }
+
+    .double-container-text-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+
+    .double-container-text-left,
+    .double-container-text-right {
+        position: relative;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: stretch;
+        justify-content: stretch;
+        overflow: hidden;
+    }
+
+    img,
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .double-container-text-title,
+    .double-container-text-text {
+        position: relative;
+        z-index: 2;
+        margin: 0;
+    }
+
+    .double-container-text-title {
+        font-size: 1.25rem;
+        margin-bottom: 3px;
+    }
+
+    .double-container-text-text {
+        font-size: 1rem;
+    }
+
+    .double-container-text-content {
+        position: absolute;
+        z-index: 2;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+    }
+
+    .text-pos-top-left .double-container-text-content {
+        top: 0;
+        left: 0;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    .text-pos-top-right .double-container-text-content {
+        top: 0;
+        right: 0;
+        left: auto;
+        align-items: flex-end;
+        justify-content: flex-start;
+    }
+    .text-pos-bottom-left .double-container-text-content {
+        bottom: 0;
+        left: 0;
+        top: auto;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+    .text-pos-bottom-right .double-container-text-content {
+        bottom: 0;
+        right: 0;
+        left: auto;
+        top: auto;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
+}

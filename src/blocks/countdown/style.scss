@@ -1,0 +1,103 @@
+.wp-block-goodblocks-countdown {
+	.countdown-display {
+		display: flex;
+		gap: 2rem;
+		justify-content: center;
+		flex-wrap: wrap;
+
+		&.countdown-align-left {
+			justify-content: flex-start;
+		}
+
+		&.countdown-align-right {
+			justify-content: flex-end;
+		}
+
+		&.countdown-align-center {
+			justify-content: center;
+		}
+	}
+
+	.countdown-unit {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 120px;
+		position: relative;
+	}
+
+	.countdown-number {
+		font-size: 8rem;
+		line-height: 1;
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+
+		@media (max-width: 768px) {
+			font-size: 3rem;
+		}
+
+		@media (max-width: 480px) {
+			font-size: 2.5rem;
+		}
+	}
+
+	.countdown-label {
+		font-size: 2rem;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-align: center;
+
+		@media (max-width: 768px) {
+			font-size: 1rem;
+		}
+
+		@media (max-width: 480px) {
+			font-size: 0.9rem;
+		}
+	}
+
+	.countdown-placeholder,
+	.countdown-finished {
+		text-align: center;
+		padding: 2rem;
+		border: 2px dashed #ddd;
+		border-radius: 8px;
+		background-color: #f9f9f9;
+
+		p {
+			margin: 0;
+			font-size: 1.1rem;
+			color: #666;
+		}
+	}
+
+	.countdown-finished {
+		border-color: #28a745;
+		background-color: #d4edda;
+
+		p {
+			color: #155724;
+			font-weight: 600;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.countdown-display {
+			gap: 1.5rem;
+		}
+
+		.countdown-unit {
+			min-width: 100px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.countdown-display {
+			gap: 1rem;
+		}
+
+		.countdown-unit {
+			min-width: 80px;
+		}
+	}
+}

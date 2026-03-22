@@ -1,0 +1,101 @@
+:root {
+	--correct_background: #fff;
+}
+
+.wp-block-goodblocks-quiz {
+	position: relative;
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	.components-base-control {
+		width: 100%;
+	}
+
+	&.answered {
+		background: var(--correct_background) !important;
+	}
+
+	.question-quiz-container {
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-flow: column;
+		height: 100%;
+		z-index: 3;
+		position: relative;
+		padding: 2rem;
+	}
+
+	.question-title {
+		margin-top: 0;
+	}
+
+	video {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		object-fit: cover;
+		z-index: 2;
+	}
+
+	.question {
+		width: 100%;
+
+		.form-check-input {
+			color: inherit;
+			border-color: currentColor;
+			margin-left: -1.5em;
+
+			&:disabled {
+				opacity: 1;
+			}
+		}
+
+		.form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
+			opacity: 1;
+		}
+
+		.form-check {
+			position: relative;
+		}
+
+		input[type="radio"] {
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			border-radius: 50%;
+			display: inline-block;
+			position: relative;
+		}
+
+		.correct-answer {
+			color: green;
+		}
+
+		.wrong-answer {
+			color: red;
+		}
+
+		.answer-icon {
+			position: absolute;
+			top: 0.25em;
+			left: 0;
+			background-repeat: no-repeat;
+			background-size: contain;
+		}
+
+		.answer-icon.wrong {
+			background-image: url("data:image/svg+xml,%3Csvg width='36' height='36' viewBox='0 0 36 36' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 2L34 33.5' stroke='%23D03933' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M33.5 2L2 33.5' stroke='%23D03933' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E%0A");
+			height: 1em;
+			width: 1em;
+		}
+
+		.answer-icon.correct {
+			background-image: url("data:image/svg+xml,%3Csvg width='34' height='45' viewBox='0 0 34 45' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 26L17.5965 41.5965C18.6748 42.6748 20.5148 42.198 20.9338 40.7318L32 2' stroke='%2319A87C' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E%0A");
+			height: 1.4em;
+			width: 1em;
+		}
+	}
+}

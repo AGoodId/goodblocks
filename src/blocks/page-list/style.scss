@@ -1,0 +1,31 @@
+.wp-block-goodblocks-page-list {
+	li {
+		list-style: none;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	.page_item {
+		margin-bottom: 0.5em;
+	}
+
+	.children {
+		margin-top: 0.5em;
+	}
+
+	.current_page_item > a {
+		font-weight: bold;
+	}
+
+	.page-list {
+		padding-left: 0;
+	}
+
+	.page-list-title {
+		font-size: inherit;
+		line-height: inherit;
+		margin-bottom: 0.5em;
+	}
+}
