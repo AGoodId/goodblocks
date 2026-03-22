@@ -1,0 +1,275 @@
+.wp-block-goodblocks-post-grid {
+
+	&.grid,
+	&.people {
+		gap: 1rem;
+		display: grid;
+		grid-template-columns: repeat(var(--posts-per-row, 3), 1fr);
+
+		@media (max-width: 992px) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		@media (max-width: 768px) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.timeline-line {
+		display: none;
+	}
+
+	&.list {
+		.list-item {
+			border-bottom: 1px solid black;
+			padding: 2rem 0;
+			display: flex;
+			flex-flow: row-reverse;
+			gap: 2rem;
+
+			&:first-child {
+				border-top: 1px solid black;
+			}
+
+			.post-thumbnail {
+				max-width: 33%;
+			}
+
+			.post-content {
+				width: 100%;
+			}
+
+			.post-excerpt {
+				max-width: 800px;
+			}
+		}
+	}
+
+	&.timeline {
+		position: relative;
+		display: table;
+		width: 100%;
+		opacity: 0;
+		transition: opacity 0.5s ease;
+
+		.timeline-line {
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 50%;
+			width: 2px;
+			height: 100%;
+			background-color: black;
+			z-index: 1;
+			transform: translateX(-50%);
+
+			@media (max-width: 992px) {
+				left: 0;
+				transform: translateX(0);
+				display: none;
+			}
+		}
+
+		.timeline-item {
+			position: absolute;
+			margin-bottom: 2rem;
+			width: 50%;
+			z-index: 2;
+			clear: both;
+			margin-top: 2rem;
+
+			&:nth-child(3) {
+				margin-top: 12rem;
+			}
+
+			&.is-small {
+				.timeline-year,
+				.timeline-title {
+					font-size: 1rem;
+				}
+			}
+
+			.timeline-year,
+			.timeline-title {
+				font-size: 1.5rem;
+			}
+
+			@media (max-width: 992px) {
+				position: relative;
+				float: none !important;
+				width: 100%;
+				padding-right: 0;
+				left: 0 !important;
+				top: 0 !important;
+
+				&:nth-child(3) {
+					margin-top: 2rem;
+				}
+
+				.timeline-title,
+				.timeline-content {
+					text-align: left !important;
+				}
+
+				img {
+					width: 100% !important;
+				}
+
+				&.is-small .timeline-dot {
+					left: -10px !important;
+				}
+			}
+		}
+
+		.timeline-content {
+			display: flex;
+			flex-flow: column;
+		}
+
+		.timeline-item.is-left {
+			float: left;
+			padding-right: 2rem;
+
+			.timeline-content {
+				align-items: flex-end;
+			}
+
+			.timeline-content,
+			.timeline-title {
+				text-align: right;
+			}
+
+			@media (max-width: 992px) {
+				padding-right: 0;
+
+				.timeline-dot {
+					left: -15px;
+				}
+
+				.timeline-content {
+					align-items: flex-start;
+				}
+			}
+		}
+
+		.timeline-item.is-right {
+			float: right;
+			padding-left: 2rem;
+
+			@media (max-width: 992px) {
+				padding-left: 0;
+			}
+
+			.timeline-dot {
+				left: -15px;
+			}
+
+			.timeline-content {
+				align-items: flex-start;
+			}
+		}
+
+		.timeline-thumbnail {
+			img {
+				object-fit: contain;
+				width: auto;
+				max-height: 600px;
+				max-width: 600px;
+			}
+		}
+
+		.timeline-dot {
+			position: absolute;
+			top: 15px;
+			right: -15px;
+			width: 30px;
+			height: 30px;
+			background-color: black;
+			border-radius: 50%;
+			z-index: 3;
+
+			@media (max-width: 992px) {
+				display: none;
+			}
+		}
+
+		.is-small .timeline-dot {
+			width: 10px;
+			height: 10px;
+			top: 10px;
+			right: -5px;
+		}
+
+		.is-right.is-small .timeline-dot {
+			left: -5px;
+		}
+
+		.timeline-title {
+			margin-bottom: 1rem;
+
+			a {
+				text-decoration: none;
+			}
+		}
+
+		.timeline-excerpt {
+			margin-bottom: 1rem;
+			margin-top: 1rem;
+		}
+
+		.timeline-text,
+		.timeline-title {
+			max-width: 600px;
+		}
+
+		.timeline-read-more {
+			text-decoration: none;
+		}
+	}
+
+	.post-grid-item {
+		.post-thumbnail + p,
+		.post-thumbnail + h3,
+		.post-thumbnail + div {
+			margin-top: 1rem;
+		}
+
+		.post-date + .post-venue {
+			margin-top: 0;
+		}
+
+		.post-thumbnail {
+			width: 100%;
+			overflow: hidden;
+			aspect-ratio: var(--aspect-ratio, 16/9);
+
+			img {
+				aspect-ratio: var(--aspect-ratio, 16/9);
+				object-fit: cover;
+				width: 100%;
+				height: auto;
+			}
+		}
+
+		.post-title {
+			font-size: 1.5rem;
+		}
+
+		.post-date,
+		.post-author,
+		.post-excerpt,
+		.post-meta {
+			margin: 0;
+		}
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	.post-grid-more-link {
+		margin-top: 2rem;
+		text-align: center;
+		grid-column: 1 / -1;
+	}
+}

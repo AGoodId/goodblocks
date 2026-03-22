@@ -4,6 +4,7 @@
 
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	...defaultConfig,
@@ -27,9 +28,25 @@ module.exports = {
 		'blocks/media-grid/view': path.resolve(__dirname, 'src/blocks/media-grid/view.js'),
 		'blocks/media-grid-item/index': path.resolve(__dirname, 'src/blocks/media-grid-item/index.js'),
 		'blocks/mailchimp-signup/index': path.resolve(__dirname, 'src/blocks/mailchimp-signup/index.js'),
+		'blocks/post-grid/index': path.resolve(__dirname, 'src/blocks/post-grid/index.js'),
+		'blocks/post-grid/view': path.resolve(__dirname, 'src/blocks/post-grid/view.js'),
 	},
 	output: {
 		...defaultConfig.output,
 		path: path.resolve(__dirname, 'build'),
 	},
+	plugins: [
+		...(defaultConfig.plugins || []),
+		new CopyWebpackPlugin({
+			patterns: [
+				{
+					from: 'src/blocks/*/templates/**/*.php',
+					to({ absoluteFilename }) {
+						const relative = path.relative(path.resolve(__dirname, 'src'), absoluteFilename);
+						return path.join('blocks', relative.replace(/^blocks[/\\]/, ''));
+					},
+				},
+			],
+		}),
+	],
 };

@@ -17,8 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param int $attachment_id Attachment ID.
  * @return array|null Associative array of metadata strings, or null if none.
  */
-if ( ! function_exists( 'agoodsite_fse_get_image_exif' ) ) {
-	function agoodsite_fse_get_image_exif( $attachment_id ) {
+if ( ! function_exists( 'goodblocks_get_image_exif' ) ) {
+	function goodblocks_get_image_exif( $attachment_id ) {
 		$meta = wp_get_attachment_metadata( $attachment_id );
 		if ( ! $meta || empty( $meta['image_meta'] ) ) {
 			return null;
@@ -470,7 +470,7 @@ foreach ( $data_attrs as $key => $value ) {
 			if ( $image_full ) {
 				$img_caption = wp_get_attachment_caption( $image_id );
 				$slide       = [ 'type' => 'image', 'src' => $image_full[0], 'w' => $image_full[1], 'h' => $image_full[2], 'cap' => $img_caption ?: '' ];
-				$exif        = agoodsite_fse_get_image_exif( $image_id );
+				$exif        = goodblocks_get_image_exif( $image_id );
 				if ( $exif ) {
 					$slide['meta'] = $exif;
 				}
@@ -490,7 +490,7 @@ foreach ( $data_attrs as $key => $value ) {
 								if ( $gimg ) {
 									$gcap  = wp_get_attachment_caption( $gid );
 									$slide = [ 'type' => 'image', 'src' => $gimg[0], 'w' => $gimg[1], 'h' => $gimg[2], 'cap' => $gcap ?: '' ];
-									$exif  = agoodsite_fse_get_image_exif( $gid );
+									$exif  = goodblocks_get_image_exif( $gid );
 									if ( $exif ) {
 										$slide['meta'] = $exif;
 									}

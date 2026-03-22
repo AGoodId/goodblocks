@@ -6,7 +6,7 @@
 @use "../_shared/mixins" as sharedMixins;
 @use "../_shared/tokens" as sharedTokens;
 
-.wp-block-agoodsite-card-feature {
+.wp-block-goodblocks-card-feature {
 	@include cardFeatureBase.card-feature-base;
 
 	transition: transform var(--wp--custom--transition--base),

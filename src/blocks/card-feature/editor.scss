@@ -5,7 +5,7 @@
 @use "../_shared/card-feature-base" as cardFeatureBase;
 @use "../_shared/mixins" as sharedMixins;
 
-.wp-block-agoodsite-card-feature {
+.wp-block-goodblocks-card-feature {
 	@include cardFeatureBase.card-feature-base;
 
 	transition: all var(--wp--custom--transition--base);

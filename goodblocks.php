@@ -20,8 +20,12 @@ define( 'GOODBLOCKS_VERSION', '1.0.0' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
-// Masonry Query REST API for load-more pagination.
+// REST API endpoints.
 require_once GOODBLOCKS_DIR . 'inc/masonry-rest-api.php';
+require_once GOODBLOCKS_DIR . 'inc/search-rest-api.php';
+
+// Helper functions (template loader, thumbnail fallback).
+require_once GOODBLOCKS_DIR . 'inc/helpers.php';
 
 // GitHub-based auto-updater.
 require_once GOODBLOCKS_DIR . 'inc/github-updater.php';
@@ -43,6 +47,7 @@ function goodblocks_register_blocks() {
 		'media-grid',
 		'media-grid-item',
 		'mailchimp-signup',
+		'post-grid',
 	];
 
 	foreach ( $blocks as $block ) {
@@ -144,6 +149,7 @@ function goodblocks_migrate_namespace( string $from, string $to ): void {
 		'media-grid',
 		'media-grid-item',
 		'mailchimp-signup',
+		'post-grid',
 	];
 
 	foreach ( $blocks as $block ) {

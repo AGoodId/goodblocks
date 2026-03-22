@@ -83,7 +83,7 @@ const Edit = ({ attributes, setAttributes }) => {
 				</PanelBody>
 			</InspectorControls>
 
-			<div class="question-quiz-container">
+			<div className="question-quiz-container">
 				<TextControl
 					label={__('Question', 'goodblocks')}
 					value={question}

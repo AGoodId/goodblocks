@@ -29,12 +29,12 @@
 	&[data-layout="mosaic"] {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		auto-rows: var(--item-height, 250px);
+		grid-auto-rows: var(--item-height, 250px);
 		gap: var(--gap, 20px);
 
 		.wp-block-goodblocks-media-grid-item {
 			&[style*="aspect-ratio"] {
-				auto-rows: auto;
+				grid-auto-rows: auto;
 			}
 		}
 	}

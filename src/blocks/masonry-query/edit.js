@@ -3,7 +3,7 @@
  */
 
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls, useSetting } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, useSettings } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	PanelRow,
@@ -27,8 +27,9 @@ import { grid } from '@wordpress/icons';
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	// Theme.json custom.masonry = single source of truth for visual defaults.
 	// Block attributes override per-instance; undefined falls through to theme.json.
-	const masonryDefaults = useSetting( 'custom.masonry' ) || {};
-	const d = ( key, fallback ) => masonryDefaults[ key ] ?? fallback;
+	const [ masonryDefaults ] = useSettings( 'custom.masonry' );
+	const defaults = masonryDefaults || {};
+	const d = ( key, fallback ) => defaults[ key ] ?? fallback;
 
 	const {
 		// Data source (per-instance, keep block.json defaults)

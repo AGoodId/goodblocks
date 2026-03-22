@@ -20,7 +20,7 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<div class="content-wrapper">
+			<div className="content-wrapper">
 				<RichText
 					tagName="h2"
 					value={title}

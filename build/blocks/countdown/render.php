@@ -17,7 +17,7 @@ if (empty($target_date)) {
 }
 
 $target_timestamp = strtotime($target_date);
-$current_timestamp = current_time('timestamp');
+$current_timestamp = time();
 $difference = $target_timestamp - $current_timestamp;
 
 if ($difference <= 0) {

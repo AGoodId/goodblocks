@@ -1,0 +1,126 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/post-grid",
+  "title": "Post Grid",
+  "category": "goodblocks",
+  "icon": "grid-view",
+  "description": "Display posts in a customizable grid, list, people, or timeline layout.",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "default": {
+      "align": "full"
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "showTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "showFeaturedImage": {
+      "type": "boolean",
+      "default": true
+    },
+    "showExcerpt": {
+      "type": "boolean",
+      "default": true
+    },
+    "excerptLength": {
+      "type": "number",
+      "default": 100
+    },
+    "showDate": {
+      "type": "boolean",
+      "default": true
+    },
+    "showAuthor": {
+      "type": "boolean",
+      "default": true
+    },
+    "aspectRatio": {
+      "type": "string",
+      "default": "16/9"
+    },
+    "metaFields": {
+      "type": "array",
+      "default": []
+    },
+    "postsToShow": {
+      "type": "number",
+      "default": 6
+    },
+    "postType": {
+      "type": "string",
+      "default": "post"
+    },
+    "sortOrder": {
+      "type": "string",
+      "default": "desc"
+    },
+    "taxonomyTerms": {
+      "type": "string",
+      "default": ""
+    },
+    "selectedTaxonomy": {
+      "type": "string",
+      "default": ""
+    },
+    "postsPerRow": {
+      "type": "number",
+      "default": 3
+    },
+    "metaKey": {
+      "type": "string",
+      "default": ""
+    },
+    "gridType": {
+      "type": "string",
+      "default": "grid",
+      "enum": [
+        "grid",
+        "list",
+        "people",
+        "timeline"
+      ]
+    },
+    "showChildren": {
+      "type": "boolean",
+      "default": false
+    },
+    "parentPost": {
+      "type": "number",
+      "default": 0
+    },
+    "showMoreLink": {
+      "type": "boolean",
+      "default": false
+    },
+    "moreLinkText": {
+      "type": "string",
+      "default": "Fler nyheter"
+    },
+    "moreLinkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "noPostsText": {
+      "type": "string",
+      "default": "Inga inlägg hittades."
+    }
+  },
+  "example": {},
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}
