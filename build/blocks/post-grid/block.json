@@ -61,13 +61,19 @@
       "type": "string",
       "default": "post"
     },
+    "postTypes": {
+      "type": "array",
+      "default": [
+        "post"
+      ]
+    },
     "sortOrder": {
       "type": "string",
       "default": "desc"
     },
     "taxonomyTerms": {
-      "type": "string",
-      "default": ""
+      "type": "array",
+      "default": []
     },
     "selectedTaxonomy": {
       "type": "string",

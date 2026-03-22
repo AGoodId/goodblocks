@@ -6,7 +6,8 @@ import {
 	TextControl,
 	SelectControl,
 	RangeControl,
-	ComboboxControl,
+	CheckboxControl,
+	FormTokenField,
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
@@ -23,7 +24,7 @@ const Edit = ({ attributes, setAttributes }) => {
 		showAuthor,
 		aspectRatio,
 		postsToShow,
-		postType,
+		postTypes: selectedPostTypes,
 		taxonomyTerms,
 		sortOrder,
 		metaKey,
@@ -37,37 +38,86 @@ const Edit = ({ attributes, setAttributes }) => {
 		noPostsText,
 	} = attributes;
 
-	const postTypes = useSelect((select) => {
-		const types = select(coreDataStore).getPostTypes({ per_page: -1 }) || [];
-		return [...types, { name: __('Alla', 'goodblocks'), slug: 'any' }];
+	// Migrate legacy single postType to postTypes array.
+	const activePostTypes = selectedPostTypes && selectedPostTypes.length > 0
+		? selectedPostTypes
+		: (attributes.postType ? [attributes.postType] : ['post']);
+
+	const allPostTypes = useSelect((select) => {
+		return (select(coreDataStore).getPostTypes({ per_page: -1 }) || [])
+			.filter((t) => t.viewable && t.slug !== 'attachment');
 	});
 
 	const taxonomies = useSelect((select) => {
 		return select(coreDataStore).getTaxonomies() || [];
 	});
 
+	// Filter taxonomies to those that apply to selected post types.
+	const relevantTaxonomies = taxonomies.filter((tax) =>
+		tax.types?.some((type) => activePostTypes.includes(type))
+	);
+
 	const terms = useSelect(
 		(select) => {
 			if (!selectedTaxonomy) return [];
-			const fetchedTerms =
+			return (
 				select(coreDataStore).getEntityRecords('taxonomy', selectedTaxonomy, {
 					per_page: -1,
-				}) || [];
-			return [{ name: __('Ingen', 'goodblocks'), slug: '' }, ...fetchedTerms];
+				}) || []
+			);
 		},
 		[selectedTaxonomy]
 	);
 
+	// For parent post picker, use first selected post type.
+	const primaryPostType = activePostTypes[0] || 'post';
 	const parentPosts = useSelect(
 		(select) => {
 			return (
-				select('core').getEntityRecords('postType', postType || 'post', {
+				select('core').getEntityRecords('postType', primaryPostType, {
 					per_page: 20,
 				}) || []
 			);
 		},
-		[postType]
+		[primaryPostType]
 	);
+
+	const handlePostTypeToggle = (slug, checked) => {
+		const updated = checked
+			? [...activePostTypes, slug]
+			: activePostTypes.filter((s) => s !== slug);
+		setAttributes({
+			postTypes: updated.length > 0 ? updated : ['post'],
+			// Also keep legacy attribute in sync for ServerSideRender.
+			postType: updated.length > 0 ? updated.join(',') : 'post',
+		});
+	};
+
+	// Term multi-select helpers.
+	const termNames = terms.map((t) => t.name);
+	const selectedTermNames = (taxonomyTerms || [])
+		.map((slug) => {
+			const found = terms.find((t) => t.slug === slug);
+			return found ? found.name : null;
+		})
+		.filter(Boolean);
+
+	const handleTermChange = (names) => {
+		const slugs = names
+			.map((name) => {
+				const found = terms.find((t) => t.name === name);
+				return found ? found.slug : null;
+			})
+			.filter(Boolean);
+		setAttributes({ taxonomyTerms: slugs });
+	};
+
+	// Build SSR-compatible attributes (postType as comma-separated, taxonomyTerms as comma-separated).
+	const ssrAttributes = {
+		...attributes,
+		postType: activePostTypes.join(','),
+		taxonomyTerms: Array.isArray(taxonomyTerms) ? taxonomyTerms.join(',') : taxonomyTerms || '',
+	};
 
 	return (
 		<div {...useBlockProps()}>
@@ -137,18 +187,48 @@ const Edit = ({ attributes, setAttributes }) => {
 						min={1}
 						max={4}
 					/>
+				</PanelBody>
+
+				<PanelBody title={__('Innehållskällor', 'goodblocks')} initialOpen={true}>
+					<p className="components-base-control__label">
+						{__('Post types', 'goodblocks')}
+					</p>
+					{allPostTypes &&
+						allPostTypes.map((type) => (
+							<CheckboxControl
+								key={type.slug}
+								label={type.labels?.singular_name || type.name}
+								checked={activePostTypes.includes(type.slug)}
+								onChange={(checked) => handlePostTypeToggle(type.slug, checked)}
+							/>
+						))}
+
 					<SelectControl
-						label={__('Post type', 'goodblocks')}
-						value={postType}
-						options={
-							postTypes &&
-							postTypes.map((type) => ({
-								label: type.name,
-								value: type.slug,
-							}))
+						label={__('Taxonomi', 'goodblocks')}
+						value={selectedTaxonomy || ''}
+						options={[
+							{ label: __('Välj taxonomi', 'goodblocks'), value: '' },
+							...relevantTaxonomies.map((taxonomy) => ({
+								label: taxonomy.name,
+								value: taxonomy.slug,
+							})),
+						]}
+						onChange={(value) =>
+							setAttributes({ selectedTaxonomy: value, taxonomyTerms: [] })
 						}
-						onChange={(value) => setAttributes({ postType: value })}
 					/>
+					{selectedTaxonomy && terms.length > 0 && (
+						<FormTokenField
+							label={__('Termer', 'goodblocks')}
+							value={selectedTermNames}
+							suggestions={termNames}
+							onChange={handleTermChange}
+							__experimentalExpandOnFocus
+						/>
+					)}
+				</PanelBody>
+
+				<PanelBody title={__('Sortering & filter', 'goodblocks')} initialOpen={false}>
 					<SelectControl
 						label={__('Sorteringsordning', 'goodblocks')}
 						value={sortOrder}
@@ -192,34 +272,9 @@ const Edit = ({ attributes, setAttributes }) => {
 							}
 						/>
 					)}
-					<SelectControl
-						label={__('Taxonomi', 'goodblocks')}
-						value={selectedTaxonomy || ''}
-						options={[
-							{ label: __('Välj taxonomi', 'goodblocks'), value: '' },
-							...taxonomies.map((taxonomy) => ({
-								label: taxonomy.name,
-								value: taxonomy.slug,
-							})),
-						]}
-						onChange={(value) =>
-							setAttributes({ selectedTaxonomy: value, taxonomyTerms: '' })
-						}
-					/>
-					{selectedTaxonomy && (
-						<ComboboxControl
-							label={__('Termer', 'goodblocks')}
-							value={taxonomyTerms}
-							options={
-								terms &&
-								terms.map((term) => ({
-									label: term.name,
-									value: term.slug,
-								}))
-							}
-							onChange={(value) => setAttributes({ taxonomyTerms: value })}
-						/>
-					)}
+				</PanelBody>
+
+				<PanelBody title={__('Layout', 'goodblocks')} initialOpen={false}>
 					<SelectControl
 						label={__('Typ av post grid', 'goodblocks')}
 						value={gridType}
@@ -260,7 +315,7 @@ const Edit = ({ attributes, setAttributes }) => {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<ServerSideRender block="goodblocks/post-grid" attributes={attributes} />
+			<ServerSideRender block="goodblocks/post-grid" attributes={ssrAttributes} />
 		</div>
 	);
 };

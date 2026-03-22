@@ -11,8 +11,19 @@
 
 $current_date = current_time( 'mysql' );
 
+// Post type: support both array (postTypes) and legacy string (postType).
+$post_type_raw = $attributes['postType'] ?? 'post';
+if ( is_array( $post_type_raw ) ) {
+	$post_types = $post_type_raw;
+} elseif ( str_contains( $post_type_raw, ',' ) ) {
+	$post_types = array_map( 'trim', explode( ',', $post_type_raw ) );
+} else {
+	$post_types = [ $post_type_raw ];
+}
+
+// WP_Query accepts array for post_type.
 $query_args = [
-	'post_type'      => $attributes['postType'],
+	'post_type'      => count( $post_types ) === 1 ? $post_types[0] : $post_types,
 	'posts_per_page' => $attributes['postsToShow'],
 	'post_status'    => 'publish',
 	'tax_query'      => [],
@@ -62,12 +73,21 @@ if ( $attributes['sortOrder'] === 'asc' || $attributes['sortOrder'] === 'desc' )
 	$query_args['order']   = 'DESC';
 }
 
-// Taxonomy filter.
-if ( ! empty( $attributes['taxonomyTerms'] ) && ! empty( $attributes['selectedTaxonomy'] ) ) {
+// Taxonomy filter — supports multiple terms.
+$tax_terms_raw = $attributes['taxonomyTerms'] ?? '';
+if ( is_string( $tax_terms_raw ) && $tax_terms_raw !== '' ) {
+	$tax_terms = array_map( 'trim', explode( ',', $tax_terms_raw ) );
+} elseif ( is_array( $tax_terms_raw ) ) {
+	$tax_terms = $tax_terms_raw;
+} else {
+	$tax_terms = [];
+}
+
+if ( ! empty( $tax_terms ) && ! empty( $attributes['selectedTaxonomy'] ) ) {
 	$query_args['tax_query'][] = [
 		'taxonomy' => $attributes['selectedTaxonomy'],
 		'field'    => 'slug',
-		'terms'    => $attributes['taxonomyTerms'],
+		'terms'    => $tax_terms,
 		'operator' => 'IN',
 	];
 }
@@ -75,7 +95,7 @@ if ( ! empty( $attributes['taxonomyTerms'] ) && ! empty( $attributes['selectedTa
 // Child/parent logic for pages.
 if (
 	! empty( $attributes['showChildren'] ) &&
-	$attributes['postType'] === 'page' &&
+	in_array( 'page', $post_types, true ) &&
 	! empty( $attributes['parentPost'] )
 ) {
 	$query_args['post_parent'] = intval( $attributes['parentPost'] );
@@ -85,7 +105,7 @@ $query = new WP_Query( $query_args );
 
 // Fallback for upcoming events: show past events if none upcoming.
 if (
-	$attributes['postType'] === 'tribe_events' &&
+	in_array( 'tribe_events', $post_types, true ) &&
 	$attributes['sortOrder'] === 'date_upcoming' &&
 	! $query->have_posts()
 ) {
@@ -105,7 +125,7 @@ $index = 0;
 if ( $query->have_posts() ) : ?>
 	<div <?php echo get_block_wrapper_attributes( [
 		'style' => '--posts-per-row: ' . intval( $attributes['postsPerRow'] ) . ';',
-		'class' => esc_attr( $attributes['postType'] . ' ' . $attributes['gridType'] ),
+		'class' => esc_attr( implode( ' ', $post_types ) . ' ' . $attributes['gridType'] ),
 	] ); ?>>
 		<div class="timeline-line"></div>
 
@@ -136,7 +156,7 @@ if ( $query->have_posts() ) : ?>
 	</div>
 
 <?php else : ?>
-	<?php if ( $attributes['postType'] === 'tribe_events' ) : ?>
+	<?php if ( in_array( 'tribe_events', $post_types, true ) ) : ?>
 		<p class="my-6"><?php esc_html_e( 'Inga kommande händelser.', 'goodblocks' ); ?></p>
 	<?php else : ?>
 		<p class="my-6"><?php echo esc_html( $attributes['noPostsText'] ); ?></p>

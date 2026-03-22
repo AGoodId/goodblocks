@@ -60,6 +60,23 @@ function goodblocks_register_blocks() {
 add_action( 'init', 'goodblocks_register_blocks' );
 
 /**
+ * Enable categories and tags on Pages.
+ *
+ * Opt-in: only active when the `goodblocks_page_taxonomies` filter returns true
+ * (defaults to true). Themes or other plugins can disable it with:
+ *     add_filter( 'goodblocks_page_taxonomies', '__return_false' );
+ */
+function goodblocks_register_page_taxonomies() {
+	if ( ! apply_filters( 'goodblocks_page_taxonomies', true ) ) {
+		return;
+	}
+
+	register_taxonomy_for_object_type( 'category', 'page' );
+	register_taxonomy_for_object_type( 'post_tag', 'page' );
+}
+add_action( 'init', 'goodblocks_register_page_taxonomies' );
+
+/**
  * Register block category.
  */
 function goodblocks_block_category( $categories ) {
