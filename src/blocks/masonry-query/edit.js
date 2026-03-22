@@ -3,7 +3,7 @@
  */
 
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls, useSettings } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, useSettings, ColorPalette } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	PanelRow,
@@ -416,6 +416,24 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								onChange={ ( value ) => setAttributes( { overlayVisibility: value } ) }
 							/>
 
+							<p className="components-base-control__label">
+								{ __( 'Overlay-färg', 'goodblocks' ) }
+							</p>
+							<ColorPalette
+								value={ attributes.overlayColor || '' }
+								onChange={ ( value ) => setAttributes( { overlayColor: value || '' } ) }
+								clearable={ true }
+							/>
+
+							<RangeControl
+								label={ __( 'Overlay-opacitet', 'goodblocks' ) }
+								value={ attributes.overlayOpacity >= 0 ? attributes.overlayOpacity : ( overlayStyle === 'solid' ? 92 : overlayStyle === 'gradient' ? 70 : 30 ) }
+								onChange={ ( value ) => setAttributes( { overlayOpacity: value } ) }
+								min={ 0 }
+								max={ 100 }
+								step={ 1 }
+							/>
+
 							<SelectControl
 								label={ __( 'Typsnitt (overlay)', 'goodblocks' ) }
 								value={ overlayFontFamily }
@@ -485,6 +503,39 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								checked={ attributes.lightboxShowLink }
 								onChange={ ( value ) => setAttributes( { lightboxShowLink: value } ) }
 							/>
+							<ToggleControl
+								label={ __( 'Visa bildtext i lightbox', 'goodblocks' ) }
+								checked={ attributes.lightboxCaption !== false }
+								onChange={ ( value ) => setAttributes( { lightboxCaption: value } ) }
+							/>
+
+							{ taxonomies.length > 0 && (
+								<div>
+									<p className="components-base-control__label">
+										{ __( 'Taxonomier i lightbox', 'goodblocks' ) }
+									</p>
+									<p className="components-base-control__help" style={ { marginTop: 0, marginBottom: 8 } }>
+										{ __( 'Välj vilka taxonomier som visas som taggar i lightboxen. Lämna tomt = alla.', 'goodblocks' ) }
+									</p>
+									{ taxonomies.map( ( tax ) => (
+										<CheckboxControl
+											key={ tax.value }
+											label={ tax.label }
+											checked={ ( attributes.lightboxTaxonomies || [] ).includes( tax.value ) }
+											onChange={ ( checked ) => {
+												const current = [ ...( attributes.lightboxTaxonomies || [] ) ];
+												if ( checked && ! current.includes( tax.value ) ) {
+													current.push( tax.value );
+												} else if ( ! checked ) {
+													const idx = current.indexOf( tax.value );
+													if ( idx > -1 ) current.splice( idx, 1 );
+												}
+												setAttributes( { lightboxTaxonomies: current } );
+											} }
+										/>
+									) ) }
+								</div>
+							) }
 						</>
 					) }
 

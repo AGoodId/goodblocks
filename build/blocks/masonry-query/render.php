@@ -99,6 +99,8 @@ $overlay_style   = $attr( 'overlayStyle', 'solid' );
 $overlay_pos     = $attr( 'overlayPosition', 'full' );
 $overlay_vis     = $attr( 'overlayVisibility', 'hover' );
 $overlay_font    = $attr( 'overlayFontFamily', 'body' );
+$overlay_color   = $attr( 'overlayColor', '' );
+$overlay_opacity = $attr( 'overlayOpacity', -1 );
 $hover_effect    = $attr( 'hoverEffect', 'zoom' );
 $border_radius   = $attr( 'borderRadius', 'none' );
 $click_action    = $attr( 'clickAction', 'link' );
@@ -106,6 +108,8 @@ $link_target     = $attr( 'linkTarget', '_self' );
 $lightbox_anim   = $attr( 'lightboxAnimation', 'zoom' );
 $lightbox_info   = $attr( 'lightboxShowInfo', true );
 $lightbox_link   = $attr( 'lightboxShowLink', true );
+$lightbox_taxonomies = $attr( 'lightboxTaxonomies', [] );
+$lightbox_caption    = $attr( 'lightboxCaption', true );
 $enable_filter   = $attr( 'enableFiltering', false );
 $filter_taxonomy = $attr( 'filterTaxonomy', 'category' );
 $cat_taxonomy    = $attr( 'categoryTaxonomy', '' );
@@ -268,6 +272,44 @@ $style_vars = [
 
 if ( $padding_ratio ) {
 	$style_vars[] = "--masonry-ratio: {$padding_ratio}";
+}
+
+// Build overlay background CSS value from color + opacity.
+$overlay_bg = '';
+if ( $overlay_color || $overlay_opacity >= 0 ) {
+	// Parse hex/rgb color to RGB components.
+	$r = 0; $g = 0; $b = 0;
+	$base_color = $overlay_color ?: ( $overlay_style === 'solid' ? '#ff6b35' : '#000000' );
+
+	if ( preg_match( '/^#([0-9a-f]{3,8})$/i', $base_color, $m ) ) {
+		$hex = $m[1];
+		if ( strlen( $hex ) === 3 ) {
+			$r = hexdec( $hex[0] . $hex[0] );
+			$g = hexdec( $hex[1] . $hex[1] );
+			$b = hexdec( $hex[2] . $hex[2] );
+		} else {
+			$r = hexdec( substr( $hex, 0, 2 ) );
+			$g = hexdec( substr( $hex, 2, 2 ) );
+			$b = hexdec( substr( $hex, 4, 2 ) );
+		}
+	} elseif ( preg_match( '/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/', $base_color, $m ) ) {
+		$r = intval( $m[1] );
+		$g = intval( $m[2] );
+		$b = intval( $m[3] );
+	}
+
+	// Default opacities per style if not set.
+	$default_opacities = [ 'solid' => 92, 'gradient' => 70, 'blur' => 30 ];
+	$op = $overlay_opacity >= 0 ? $overlay_opacity : ( $default_opacities[ $overlay_style ] ?? 70 );
+	$alpha = max( 0, min( 100, intval( $op ) ) ) / 100;
+
+	if ( $overlay_style === 'gradient' ) {
+		$overlay_bg = "linear-gradient(to top, rgba({$r},{$g},{$b},{$alpha}) 0%, transparent 100%)";
+	} else {
+		$overlay_bg = "rgba({$r},{$g},{$b},{$alpha})";
+	}
+
+	$style_vars[] = "--masonry-overlay-bg: {$overlay_bg}";
 }
 
 // Data attributes for JS
@@ -435,27 +477,40 @@ foreach ( $data_attrs as $key => $value ) {
 				? get_the_terms( $post_id, $filter_taxonomy )
 				: $overlay_terms;
 
-			// Get all tags for the item (for lightbox) with URLs
-			$post_tags = get_the_terms( $post_id, 'post_tag' );
+			// Get taxonomy terms for lightbox display
 			$tag_names = [];
 			$tag_links = [];
-			if ( $post_tags && ! is_wp_error( $post_tags ) ) {
-				foreach ( $post_tags as $pt ) {
-					$tag_names[] = $pt->name;
-					$tag_links[ $pt->name ] = get_term_link( $pt );
+
+			if ( ! empty( $lightbox_taxonomies ) && is_array( $lightbox_taxonomies ) ) {
+				// User-selected taxonomies
+				foreach ( $lightbox_taxonomies as $tax_slug ) {
+					$terms = get_the_terms( $post_id, $tax_slug );
+					if ( $terms && ! is_wp_error( $terms ) ) {
+						foreach ( $terms as $term ) {
+							$tag_names[] = $term->name;
+							$tag_links[ $term->name ] = get_term_link( $term );
+						}
+					}
 				}
-			}
-			// Add category/filter taxonomy terms with URLs
-			if ( $categories && ! is_wp_error( $categories ) ) {
-				foreach ( $categories as $cat ) {
-					$tag_links[ $cat->name ] = get_term_link( $cat );
+			} else {
+				// Default: post_tag + filter taxonomy + portfolio_service
+				$post_tags = get_the_terms( $post_id, 'post_tag' );
+				if ( $post_tags && ! is_wp_error( $post_tags ) ) {
+					foreach ( $post_tags as $pt ) {
+						$tag_names[] = $pt->name;
+						$tag_links[ $pt->name ] = get_term_link( $pt );
+					}
 				}
-			}
-			// Add service taxonomy terms if portfolio
-			$service_terms = get_the_terms( $post_id, 'portfolio_service' );
-			if ( $service_terms && ! is_wp_error( $service_terms ) ) {
-				foreach ( $service_terms as $st ) {
-					$tag_links[ $st->name ] = get_term_link( $st );
+				if ( $categories && ! is_wp_error( $categories ) ) {
+					foreach ( $categories as $cat ) {
+						$tag_links[ $cat->name ] = get_term_link( $cat );
+					}
+				}
+				$service_terms = get_the_terms( $post_id, 'portfolio_service' );
+				if ( $service_terms && ! is_wp_error( $service_terms ) ) {
+					foreach ( $service_terms as $st ) {
+						$tag_links[ $st->name ] = get_term_link( $st );
+					}
 				}
 			}
 
@@ -468,7 +523,7 @@ foreach ( $data_attrs as $key => $value ) {
 				$gallery[] = [ 'type' => 'video', 'src' => $hero_video_url ];
 			}
 			if ( $image_full ) {
-				$img_caption = wp_get_attachment_caption( $image_id );
+				$img_caption = $lightbox_caption ? wp_get_attachment_caption( $image_id ) : '';
 				$slide       = [ 'type' => 'image', 'src' => $image_full[0], 'w' => $image_full[1], 'h' => $image_full[2], 'cap' => $img_caption ?: '' ];
 				$exif        = goodblocks_get_image_exif( $image_id );
 				if ( $exif ) {
@@ -488,7 +543,7 @@ foreach ( $data_attrs as $key => $value ) {
 								if ( $gid === $image_id ) continue; // skip featured image duplicate
 								$gimg = wp_get_attachment_image_src( $gid, 'large' );
 								if ( $gimg ) {
-									$gcap  = wp_get_attachment_caption( $gid );
+									$gcap  = $lightbox_caption ? wp_get_attachment_caption( $gid ) : '';
 									$slide = [ 'type' => 'image', 'src' => $gimg[0], 'w' => $gimg[1], 'h' => $gimg[2], 'cap' => $gcap ?: '' ];
 									$exif  = goodblocks_get_image_exif( $gid );
 									if ( $exif ) {

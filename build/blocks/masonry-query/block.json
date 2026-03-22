@@ -185,6 +185,14 @@
         "hover"
       ]
     },
+    "overlayColor": {
+      "type": "string",
+      "default": ""
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "default": -1
+    },
     "overlayFontFamily": {
       "type": "string"
     },
@@ -234,6 +242,14 @@
       "default": true
     },
     "lightboxShowLink": {
+      "type": "boolean",
+      "default": true
+    },
+    "lightboxTaxonomies": {
+      "type": "array",
+      "default": []
+    },
+    "lightboxCaption": {
       "type": "boolean",
       "default": true
     },

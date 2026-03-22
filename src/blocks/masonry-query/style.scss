@@ -188,17 +188,17 @@
 		}
 	}
 
-	// Overlay styles
+	// Overlay styles — color/opacity baked into --masonry-overlay-bg via render.php
 	&.masonry-query--overlay-gradient .masonry-query__overlay {
-		background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+		background: var(--masonry-overlay-bg, linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%));
 	}
 
 	&.masonry-query--overlay-solid .masonry-query__overlay {
-		background: rgba(255, 107, 53, 0.92);
+		background: var(--masonry-overlay-bg, rgba(255, 107, 53, 0.92));
 	}
 
 	&.masonry-query--overlay-blur .masonry-query__overlay {
-		background: rgba(0, 0, 0, 0.3);
+		background: var(--masonry-overlay-bg, rgba(0, 0, 0, 0.3));
 		backdrop-filter: blur(8px);
 	}
 
