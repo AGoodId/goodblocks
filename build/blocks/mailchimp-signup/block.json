@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/mailchimp-signup",
+  "version": "0.1.0",
+  "title": "Mailchimp Signup Form",
+  "category": "widgets",
+  "icon": "email",
+  "description": "A simple Mailchimp signup form block with email field, title, and text.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "align": [
+      "wide",
+      "full"
+    ],
+    "default": {
+      "align": "full"
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Subscribe to our newsletter"
+    },
+    "text": {
+      "type": "string",
+      "default": "Enter your email address to receive our newsletters."
+    },
+    "listLink": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

@@ -1,0 +1,92 @@
+{
+  "apiVersion": 3,
+  "name": "goodblocks/double-container-text",
+  "title": "Double Container with Text",
+  "category": "goodblocks",
+  "icon": "columns",
+  "description": "Two side-by-side containers for text and images.",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": {
+      "gradient": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "leftTitle": {
+      "type": "string"
+    },
+    "leftText": {
+      "type": "string"
+    },
+    "leftMedia": {
+      "type": "number"
+    },
+    "leftPosition": {
+      "type": "string",
+      "default": "top-left"
+    },
+    "leftColor": {
+      "type": "string",
+      "default": "#000"
+    },
+    "leftOverlayColor": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "leftDimRatio": {
+      "type": "number",
+      "default": 0
+    },
+    "leftLink": {
+      "type": "string",
+      "default": ""
+    },
+    "rightTitle": {
+      "type": "string"
+    },
+    "rightText": {
+      "type": "string"
+    },
+    "rightMedia": {
+      "type": "number"
+    },
+    "rightPosition": {
+      "type": "string",
+      "default": "top-left"
+    },
+    "rightColor": {
+      "type": "string",
+      "default": "#000"
+    },
+    "rightOverlayColor": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "rightDimRatio": {
+      "type": "number",
+      "default": 0
+    },
+    "rightLink": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "example": {},
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

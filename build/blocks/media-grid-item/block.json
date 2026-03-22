@@ -1,0 +1,103 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/media-grid-item",
+  "title": "Media Grid Item",
+  "category": "goodblocks",
+  "icon": "image-flip-horizontal",
+  "description": "Individual item for media grid with background image/video and text.",
+  "keywords": [
+    "grid",
+    "media",
+    "item"
+  ],
+  "parent": [
+    "goodblocks/media-grid"
+  ],
+  "supports": {
+    "html": false,
+    "reusable": false,
+    "color": {
+      "text": true,
+      "background": true,
+      "gradients": false
+    },
+    "spacing": {
+      "padding": false,
+      "margin": false
+    },
+    "typography": {
+      "fontSize": false,
+      "lineHeight": false
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Title here"
+    },
+    "text": {
+      "type": "string",
+      "default": "Text here..."
+    },
+    "backgroundMedia": {
+      "type": "object",
+      "default": {
+        "type": "image",
+        "url": "",
+        "id": null
+      }
+    },
+    "textPosition": {
+      "type": "string",
+      "default": "flex-start"
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "default": 0.3
+    },
+    "link": {
+      "type": "string",
+      "default": ""
+    },
+    "size": {
+      "type": "string",
+      "default": "normal"
+    },
+    "gridColumn": {
+      "type": "string",
+      "default": ""
+    },
+    "gridRow": {
+      "type": "string",
+      "default": ""
+    },
+    "imageType": {
+      "type": "string",
+      "enum": [
+        "overlayOnHover",
+        "imageOnHover",
+        "none",
+        "alwaysOverlay"
+      ],
+      "default": "overlayOnHover"
+    },
+    "textType": {
+      "type": "string",
+      "default": "titleOnTop"
+    },
+    "titleSize": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "large"
+      ],
+      "default": "normal"
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

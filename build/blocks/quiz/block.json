@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/quiz",
+  "version": "0.1.0",
+  "title": "Quiz",
+  "category": "goodblocks",
+  "icon": "smiley",
+  "description": "Interactive quiz question block.",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": {
+      "gradient": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "instanceId": {
+      "type": "string",
+      "default": ""
+    },
+    "question": {
+      "type": "string",
+      "default": "What is 2+2?"
+    },
+    "backgroundMedia": {
+      "type": "object",
+      "default": null
+    },
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "-4",
+        "8",
+        "4"
+      ]
+    },
+    "correctIndex": {
+      "type": "number",
+      "default": 2
+    },
+    "style": {
+      "type": "object",
+      "default": {
+        "spacing": {
+          "margin": {
+            "top": "3rem",
+            "bottom": "3rem"
+          }
+        }
+      }
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/countdown",
+  "title": "Countdown",
+  "category": "goodblocks",
+  "icon": "clock",
+  "description": "Display a countdown timer to a specific date and time.",
+  "keywords": [
+    "countdown",
+    "timer",
+    "date"
+  ],
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "attributes": {
+    "targetDate": {
+      "type": "string",
+      "default": ""
+    },
+    "showSeconds": {
+      "type": "boolean",
+      "default": false
+    },
+    "alignment": {
+      "type": "string",
+      "default": "center"
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}
