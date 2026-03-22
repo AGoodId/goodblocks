@@ -1,0 +1,146 @@
+/**
+ * Image Compare Block — shared styles (editor + frontend).
+ */
+
+.wp-block-goodblocks-image-compare {
+	position: relative;
+	overflow: hidden;
+	cursor: col-resize;
+	-webkit-user-select: none;
+	user-select: none;
+	line-height: 0;
+	border-radius: 4px;
+
+	// After image — full, sets aspect ratio.
+	.image-compare__after img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	// Before image — overlaid, clipped.
+	.image-compare__before {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		clip-path: inset(0 50% 0 0);
+
+		img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	// Handle bar.
+	.image-compare__handle {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 50%;
+		width: 3px;
+		background: #fff;
+		box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+		transform: translateX(-1.5px);
+		z-index: 10;
+		cursor: col-resize;
+		border: none;
+		padding: 0;
+		outline: none;
+		-webkit-appearance: none;
+		appearance: none;
+
+		&:focus-visible {
+			box-shadow: 0 0 0 3px var(--wp--preset--color--primary, #2C5F2D);
+		}
+	}
+
+	// Handle knob.
+	.image-compare__handle-knob {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background: #fff;
+		border: 2px solid var(--wp--preset--color--primary, #2C5F2D);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		// Arrow icons (CSS-only).
+		&::before,
+		&::after {
+			content: '';
+			display: block;
+			width: 0;
+			height: 0;
+			border-style: solid;
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+
+		// Left arrow.
+		&::before {
+			left: 7px;
+			border-width: 5px 6px 5px 0;
+			border-color: transparent var(--wp--preset--color--primary, #2C5F2D) transparent transparent;
+		}
+
+		// Right arrow.
+		&::after {
+			right: 7px;
+			border-width: 5px 0 5px 6px;
+			border-color: transparent transparent transparent var(--wp--preset--color--primary, #2C5F2D);
+		}
+	}
+
+	// Labels.
+	.image-compare__label {
+		position: absolute;
+		top: 12px;
+		padding: 4px 12px;
+		border-radius: 3px;
+		background: rgba(0, 0, 0, 0.55);
+		color: #fff;
+		font-family: var(--wp--preset--font-family--body, system-ui, sans-serif);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		pointer-events: none;
+		z-index: 5;
+
+		&--before {
+			left: 12px;
+		}
+
+		&--after {
+			right: 12px;
+		}
+	}
+
+	// Smooth transition when not dragging.
+	&:not(.is-dragging) .image-compare__before {
+		transition: clip-path 0.1s ease;
+	}
+
+	&:not(.is-dragging) .image-compare__handle {
+		transition: left 0.1s ease;
+	}
+}
+
+// Reduced motion.
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-goodblocks-image-compare .image-compare__before,
+	.wp-block-goodblocks-image-compare .image-compare__handle {
+		transition: none !important;
+	}
+}

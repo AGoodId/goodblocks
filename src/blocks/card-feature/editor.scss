@@ -1,0 +1,52 @@
+/**
+ * Feature Card - Editor Styles
+ */
+
+@use "../_shared/card-feature-base" as cardFeatureBase;
+@use "../_shared/mixins" as sharedMixins;
+
+.wp-block-agoodsite-card-feature {
+	@include cardFeatureBase.card-feature-base;
+
+	transition: all var(--wp--custom--transition--base);
+
+	// Link indicator
+	.card-feature__link-indicator {
+		position: absolute;
+		top: var(--wp--preset--spacing--sm);
+		right: var(--wp--preset--spacing--sm);
+		width: 24px;
+		height: 24px;
+		background: var(--wp--preset--color--surface);
+		border-radius: var(--wp--custom--radius--full);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.8;
+
+		svg {
+			width: 14px;
+			height: 14px;
+		}
+	}
+
+	// Layout: Overlay
+	&.card-feature--overlay {
+		.card-feature__image-wrapper {
+			position: absolute;
+			inset: 0;
+		}
+
+		.card-feature__content {
+			position: relative;
+			z-index: 1;
+			@include sharedMixins.overlay-gradient(0.8);
+			color: var(--wp--preset--color--surface);
+			margin-top: auto;
+			min-height: 200px;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+		}
+	}
+}

@@ -1,0 +1,489 @@
+/**
+ * Search Autocomplete Block - Frontend Styles
+ */
+
+.search-autocomplete {
+	--search-height: 56px;
+	--search-radius: 0px;
+	--search-close-width: 56px;
+	--search-form-gap: 0.625rem;
+	--search-font-family: "Untitled Sans", var(--wp--preset--font-family--body, system-ui), sans-serif;
+	--search-bg: var(--wp--preset--color--surface, #fff);
+	--search-border: color-mix(in srgb, var(--wp--preset--color--text-muted, #666) 18%, transparent);
+	--search-text: #111;
+	--search-body-text: #6f6f6f;
+	--search-placeholder: #7a7a7a;
+	--search-focus: var(--wp--preset--color--primary, #0170b9);
+	--search-shadow: 0 30px 68px rgba(0, 0, 0, 0.2), 0 12px 28px rgba(0, 0, 0, 0.12);
+	--search-overlay-width: min(760px, calc(100vw - 2rem));
+	--search-overlay-top: clamp(72px, 12vh, 140px);
+	--search-overlay-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	font-family: var(--search-font-family);
+	font-weight: 400;
+
+	&__trigger {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		min-width: 46px;
+		min-height: 46px;
+		padding: 0.625rem;
+		background: transparent;
+		border: none;
+		border-radius: 999px;
+		color: var(--search-text);
+		cursor: pointer;
+		transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--search-focus);
+			background: color-mix(in srgb, var(--search-focus) 12%, transparent);
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+
+		&:focus-visible {
+			outline: 2px solid color-mix(in srgb, var(--search-focus) 70%, white);
+			outline-offset: 2px;
+		}
+	}
+
+	&__trigger-icon {
+		display: block;
+		stroke-width: 2;
+		pointer-events: none;
+	}
+
+	&__trigger-text {
+		font-size: var(--wp--preset--font-size--sm, 0.875rem);
+		font-weight: 400;
+	}
+
+	&__form {
+		display: flex;
+		align-items: center;
+		gap: var(--search-form-gap);
+	}
+
+	&--expandable {
+		.search-autocomplete__form {
+			position: fixed;
+			top: var(--search-overlay-top);
+			left: 50%;
+			width: var(--search-overlay-width);
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) var(--search-close-width);
+			column-gap: var(--search-form-gap);
+			row-gap: 0;
+			align-items: start;
+			transform: translate(-50%, -12px) scale(0.985);
+			opacity: 0;
+			visibility: hidden;
+			pointer-events: none;
+			transition: transform 0.18s var(--search-overlay-ease), opacity 0.16s ease, visibility 0s linear 0.16s;
+			z-index: 1002;
+		}
+
+		&.is-expanded {
+			.search-autocomplete__trigger {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+
+			.search-autocomplete__form {
+				transform: translate(-50%, 0) scale(1);
+				opacity: 1;
+				visibility: visible;
+				pointer-events: auto;
+				transition: transform 0.2s var(--search-overlay-ease), opacity 0.16s ease;
+			}
+		}
+	}
+
+	&__field {
+		position: relative;
+		display: flex;
+		align-items: center;
+		flex: 1;
+		grid-column: 1;
+		min-width: 0;
+		height: var(--search-height);
+		background: var(--search-bg);
+		border: 1px solid var(--search-border);
+		border-radius: var(--search-radius);
+		box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+		transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+		&:focus-within {
+			border-color: color-mix(in srgb, var(--search-focus) 52%, white);
+			box-shadow: 0 0 0 4px color-mix(in srgb, var(--search-focus) 16%, transparent);
+		}
+	}
+
+	&__field-icon {
+		position: absolute;
+		left: 1rem;
+		color: var(--search-placeholder);
+		pointer-events: none;
+		flex-shrink: 0;
+	}
+
+	&__input {
+		flex: 1;
+		width: 100%;
+		height: 100%;
+		padding: 0 3rem 0 3rem;
+		background: transparent;
+		border: none;
+		font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+		color: var(--search-text);
+		font-weight: 400;
+		outline: none;
+		letter-spacing: 0.01em;
+
+		&::placeholder {
+			color: var(--search-placeholder);
+		}
+
+		&::-webkit-search-cancel-button,
+		&::-webkit-search-decoration {
+			display: none;
+		}
+	}
+
+	&__icons {
+		position: absolute;
+		right: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	&__spinner {
+		display: none;
+		color: var(--search-placeholder);
+
+		.is-loading & {
+			display: block;
+		}
+	}
+
+	&__clear {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		background: transparent;
+		border: none;
+		border-radius: 0;
+		color: var(--search-placeholder);
+		cursor: pointer;
+		transition: color 0.2s ease, background-color 0.2s ease;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--search-text);
+			background: color-mix(in srgb, var(--search-focus) 12%, transparent);
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	&__close {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		grid-column: 2;
+		width: var(--search-close-width);
+		height: var(--search-height);
+		padding: 0;
+		background: color-mix(in srgb, white 84%, transparent);
+		border: 1px solid var(--search-border);
+		border-radius: 0;
+		color: var(--search-placeholder);
+		cursor: pointer;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--search-text);
+			border-color: color-mix(in srgb, var(--search-focus) 36%, transparent);
+			background: color-mix(in srgb, var(--search-focus) 8%, white);
+		}
+	}
+
+	&__backdrop {
+		position: fixed;
+		inset: 0;
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		background:
+			radial-gradient(circle at 30% 15%, rgba(255, 255, 255, 0.18), transparent 45%),
+			linear-gradient(180deg, rgba(8, 8, 8, 0.18), rgba(8, 8, 8, 0.42));
+		backdrop-filter: blur(10px) saturate(0.92);
+		-webkit-backdrop-filter: blur(10px) saturate(0.92);
+		transition: opacity 0.16s ease, visibility 0.16s ease;
+		z-index: 1001;
+	}
+
+	&.is-expanded .search-autocomplete__backdrop {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+	}
+
+	&__results {
+		position: absolute;
+		top: calc(100% + 0.75rem);
+		left: 0;
+		right: auto;
+		width: 100%;
+		max-height: min(62vh, 540px);
+		overflow-y: auto;
+		background: var(--search-bg);
+		border: 1px solid var(--search-border);
+		border-radius: 0;
+		box-shadow: var(--search-shadow);
+		backdrop-filter: blur(6px);
+		-webkit-backdrop-filter: blur(6px);
+		z-index: 1003;
+
+			&[hidden] {
+				display: none;
+			}
+		}
+
+	&--expandable {
+		.search-autocomplete__results {
+			left: 0;
+			width: calc(100% - var(--search-close-width) - var(--search-form-gap));
+		}
+	}
+
+	&__group-label {
+		display: none;
+		padding: 0.875rem 1.125rem 0.5rem;
+		margin: 0;
+		font-size: 0.75rem;
+		font-weight: 400;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--search-text);
+		background: color-mix(in srgb, var(--wp--preset--color--surface-alt, #f5f5f5) 70%, transparent);
+	}
+
+	&__result {
+		border-bottom: 1px solid color-mix(in srgb, var(--search-border) 65%, transparent);
+
+		&:last-of-type {
+			border-bottom: none;
+		}
+	}
+
+	&__result-link {
+		display: flex;
+		gap: 0.875rem;
+		padding: 0.875rem 1.125rem 0.5rem;
+		text-decoration: none;
+		color: var(--search-text);
+		transition: background-color 0.15s ease;
+
+		&:hover,
+		&:focus {
+			background: color-mix(in srgb, var(--search-focus) 8%, white);
+			outline: none;
+		}
+	}
+
+	&__result.is-selected .search-autocomplete__result-link {
+		background: color-mix(in srgb, var(--search-focus) 10%, white);
+	}
+
+	&__thumb {
+		width: 56px;
+		height: 56px;
+		object-fit: cover;
+		border-radius: 0;
+		flex-shrink: 0;
+	}
+
+	&__content {
+		flex: 1;
+		min-width: 0;
+	}
+
+	&__header {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		margin-bottom: 0.25rem;
+	}
+
+	&__title {
+		font-weight: 400;
+		font-size: var(--wp--preset--font-size--sm, 0.875rem);
+		color: var(--search-text);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__type {
+		flex-shrink: 0;
+		padding: 0.125rem 0.5rem;
+		background: color-mix(in srgb, var(--wp--preset--color--surface-alt, #f0f0f0) 86%, transparent);
+		border-radius: 0;
+		font-size: 0.6875rem;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		color: var(--search-body-text);
+	}
+
+	&__excerpt {
+		margin: 0;
+		font-size: 0.85rem;
+		color: var(--search-body-text);
+		font-weight: 400;
+		line-height: 1.45;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	&__terms {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		padding: 0 1.125rem 0.9rem;
+	}
+
+	&__term {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.22rem 0.58rem;
+		border-radius: 0;
+		background: color-mix(in srgb, var(--wp--preset--color--surface-alt, #f5f5f5) 88%, transparent);
+		border: 1px solid color-mix(in srgb, var(--search-border) 74%, transparent);
+		text-decoration: none;
+		font-size: 0.735rem;
+		line-height: 1.3;
+		font-weight: 400;
+		color: var(--search-body-text);
+		transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+		&:hover,
+		&:focus {
+			color: var(--search-focus);
+			border-color: color-mix(in srgb, var(--search-focus) 40%, transparent);
+			background: color-mix(in srgb, var(--search-focus) 9%, white);
+		}
+	}
+
+	&__highlight {
+		background: color-mix(in srgb, var(--search-focus) 28%, white);
+		color: inherit;
+		padding: 0.02em 0.14em;
+		border-radius: 0;
+	}
+
+	&__view-all {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5em;
+		padding: 0.875rem 1rem;
+		background: color-mix(in srgb, var(--wp--preset--color--surface-alt, #f5f5f5) 92%, transparent);
+		text-decoration: none;
+		font-size: var(--wp--preset--font-size--sm, 0.875rem);
+		font-weight: 400;
+		color: var(--search-focus);
+		transition: background-color 0.15s ease, color 0.15s ease;
+
+		&:hover,
+		&:focus {
+			background: color-mix(in srgb, var(--search-focus) 12%, white);
+		}
+
+		svg {
+			flex-shrink: 0;
+		}
+	}
+
+	&__no-results,
+	&__error {
+		padding: 1.5rem 1rem;
+		text-align: center;
+		color: var(--search-body-text);
+		font-weight: 400;
+
+		p {
+			margin: 0;
+		}
+
+		strong {
+			color: var(--search-text);
+			font-weight: 400;
+		}
+	}
+
+	b,
+	strong {
+		font-weight: 400;
+	}
+}
+
+@media (max-width: 782px) {
+	.search-autocomplete {
+		--search-height: 52px;
+		--search-close-width: 44px;
+		--search-form-gap: 0.5rem;
+		--search-overlay-width: calc(100vw - 1.25rem);
+		--search-overlay-top: max(16px, env(safe-area-inset-top, 0px) + 8px);
+
+		&__results {
+			max-height: calc(100vh - var(--search-overlay-top) - var(--search-height) - 2.5rem);
+		}
+
+		&__close {
+			height: var(--search-height);
+			width: var(--search-close-width);
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.search-autocomplete {
+		&__form,
+		&__trigger,
+		&__field,
+		&__result-link,
+		&__term,
+		&__clear,
+		&__close,
+		&__backdrop {
+			transition: none;
+		}
+
+		&__spinner svg {
+			animation: none;
+		}
+	}
+}

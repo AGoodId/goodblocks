@@ -1,0 +1,63 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/image-compare",
+	"version": "1.0.0",
+	"title": "Image Compare",
+	"category": "media",
+	"icon": "image-flip-horizontal",
+	"description": "Compare two images with a draggable slider — perfect for before/after views.",
+	"keywords": ["before", "after", "compare", "slider", "image"],
+	"textdomain": "goodblocks",
+	"supports": {
+		"align": ["wide", "full"],
+		"anchor": true,
+		"html": false,
+		"spacing": {
+			"margin": true
+		}
+	},
+	"attributes": {
+		"beforeId": {
+			"type": "number"
+		},
+		"beforeUrl": {
+			"type": "string"
+		},
+		"beforeAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"afterId": {
+			"type": "number"
+		},
+		"afterUrl": {
+			"type": "string"
+		},
+		"afterAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"beforeLabel": {
+			"type": "string",
+			"default": "Before"
+		},
+		"afterLabel": {
+			"type": "string",
+			"default": "After"
+		},
+		"showLabels": {
+			"type": "boolean",
+			"default": true
+		},
+		"startPosition": {
+			"type": "number",
+			"default": 50
+		}
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
+}

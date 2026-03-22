@@ -1,0 +1,31 @@
+/**
+ * Masonry Query Block - Editor Styles
+ */
+
+.masonry-query-editor {
+	// Editor-specific wrapper
+	min-height: 200px;
+
+	// Loading state
+	.components-placeholder {
+		min-height: 200px;
+	}
+
+	// Preview wrapper
+	.block-editor-server-side-render {
+		pointer-events: none; // Prevent interactions in editor
+	}
+}
+
+// Inspector Controls customizations
+.wp-block-goodblocks-masonry-query {
+	// Divider styling
+	.components-divider {
+		margin: 1rem 0;
+	}
+
+	// Range control labels
+	.components-base-control__label {
+		font-weight: 500;
+	}
+}

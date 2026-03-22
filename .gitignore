@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build artifacts (committed by CI or local build)
+# build/
+
+# IDE
+.vscode/
+.history/
+*.swp
+*.swo

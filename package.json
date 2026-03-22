@@ -1,0 +1,17 @@
+{
+  "name": "goodblocks",
+  "version": "1.0.0",
+  "description": "Reusable Gutenberg blocks by AGoodId",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "packages-update": "wp-scripts packages-update"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.0.0"
+  },
+  "dependencies": {
+    "@wordpress/icons": "^11.6.0",
+    "gsap": "^3.12.0"
+  }
+}

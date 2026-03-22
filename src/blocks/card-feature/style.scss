@@ -1,0 +1,79 @@
+/**
+ * Feature Card - Frontend Styles
+ */
+
+@use "../_shared/card-feature-base" as cardFeatureBase;
+@use "../_shared/mixins" as sharedMixins;
+@use "../_shared/tokens" as sharedTokens;
+
+.wp-block-agoodsite-card-feature {
+	@include cardFeatureBase.card-feature-base;
+
+	transition: transform var(--wp--custom--transition--base),
+		box-shadow var(--wp--custom--transition--base);
+	text-decoration: none;
+	color: inherit;
+
+	.card-feature__image {
+		transition: transform sharedTokens.$transition-emphasized;
+	}
+
+	// Layout: Overlay
+	&.card-feature--overlay {
+		min-height: 300px;
+
+		.card-feature__image-wrapper {
+			position: absolute;
+			inset: 0;
+		}
+
+		.card-feature__content {
+			position: relative;
+			z-index: 1;
+			@include sharedMixins.overlay-gradient(0.8);
+			color: var(--wp--preset--color--surface);
+			margin-top: auto;
+			min-height: 50%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+
+			.card-feature__meta {
+				color: var(--wp--preset--color--primary);
+			}
+		}
+	}
+
+	// Hover effects
+	&.card-feature--hover-lift:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--wp--preset--shadow--lg);
+	}
+
+	&.card-feature--hover-scale:hover {
+		transform: scale(1.02);
+	}
+
+	&.card-feature--hover-zoom:hover .card-feature__image {
+		transform: scale(1.05);
+	}
+
+	&.card-feature--hover-lift-zoom:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--wp--preset--shadow--lg);
+
+		.card-feature__image {
+			transform: scale(1.05);
+		}
+	}
+}
+
+// Linked card styles
+a.card-feature {
+	cursor: pointer;
+
+	&:focus {
+		outline: 2px solid var(--wp--preset--color--primary);
+		outline-offset: 2px;
+	}
+}

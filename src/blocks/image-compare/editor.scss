@@ -1,0 +1,56 @@
+/**
+ * Image Compare Block — editor-only styles.
+ */
+
+.image-compare-editor__preview {
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.image-compare-editor__knob {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: #fff;
+	border: 2px solid #2C5F2D;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.image-compare-editor__label {
+	position: absolute;
+	top: 8px;
+	padding: 3px 10px;
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.55);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	pointer-events: none;
+
+	&--before {
+		left: 8px;
+	}
+
+	&--after {
+		right: 8px;
+	}
+}
+
+.image-compare-editor__buttons {
+	display: flex;
+	gap: 8px;
+	margin-top: 8px;
+	justify-content: center;
+}
+
+.image-compare-editor__selectors {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+}
