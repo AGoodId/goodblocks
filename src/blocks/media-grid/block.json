@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "goodblocks/media-grid",
+    "title": "Media Grid",
+    "category": "goodblocks",
+    "icon": "layout",
+    "description": "A flexible grid container with background images/videos and text, featuring bento layout options.",
+    "allowedBlocks": [
+        "goodblocks/media-grid-item"
+    ],
+    "supports": {
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "attributes": {
+        "columns": {
+            "type": "number",
+            "default": 3
+        },
+        "gap": {
+            "type": "number",
+            "default": 0
+        },
+        "layout": {
+            "type": "string",
+            "enum": [
+                "grid",
+                "bento-large-left",
+                "bento-large-right",
+                "bento-large-top",
+                "mosaic",
+                "custom"
+            ]
+        },
+        "tabletColumns": {
+            "type": "number",
+            "default": 2
+        },
+        "mobileColumns": {
+            "type": "number",
+            "default": 1
+        },
+        "height": {
+            "type": "number",
+            "default": 300
+        },
+        "borderRadius": {
+            "type": "string",
+            "default": "0px"
+        }
+    },
+    "example": {},
+    "textdomain": "goodblocks",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
+}

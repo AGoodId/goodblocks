@@ -1,0 +1,46 @@
+.wp-block-goodblocks-mailchimp-signup {
+	.content-wrapper {
+		padding: 80px;
+		margin: 0 auto;
+		max-width: 960px;
+		text-align: center;
+
+		h2 {
+			margin-bottom: 1rem;
+		}
+
+		form {
+			margin-top: 2rem;
+			display: flex;
+
+			input[type="email"] {
+				width: 80%;
+				padding: 16px 20px;
+				border: 0;
+				background: white;
+				border-radius: 0;
+				margin-bottom: 0;
+			}
+
+			input[type="submit"] {
+				width: 20%;
+				margin-left: 10px;
+			}
+
+			@media(max-width: 768px) {
+				flex-direction: column;
+
+				input[type="email"] {
+					width: 100%;
+				}
+
+				input[type="submit"] {
+					max-width: 100%;
+					width: 100%;
+					margin-left: 0;
+					margin-top: 10px;
+				}
+			}
+		}
+	}
+}

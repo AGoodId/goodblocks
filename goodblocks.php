@@ -2,7 +2,7 @@
 /**
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
- * Description: Reusable Gutenberg blocks: Masonry Query, Search Autocomplete, Image Compare, and Feature Card.
+ * Description: Reusable Gutenberg blocks: Masonry Query, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
  * Version: 1.0.0
  * Requires at least: 6.4
  * Requires PHP: 8.0
@@ -32,6 +32,13 @@ function goodblocks_register_blocks() {
 		'card-feature',
 		'search-autocomplete',
 		'image-compare',
+		'countdown',
+		'quiz',
+		'page-list',
+		'double-container-text',
+		'media-grid',
+		'media-grid-item',
+		'mailchimp-signup',
 	];
 
 	foreach ( $blocks as $block ) {
@@ -126,6 +133,13 @@ function goodblocks_migrate_namespace( string $from, string $to ): void {
 		'card-feature',
 		'search-autocomplete',
 		'image-compare',
+		'countdown',
+		'quiz',
+		'page-list',
+		'double-container-text',
+		'media-grid',
+		'media-grid-item',
+		'mailchimp-signup',
 	];
 
 	foreach ( $blocks as $block ) {
