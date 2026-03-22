@@ -1,0 +1,20 @@
+@use "tokens";
+
+@mixin overlay-gradient($opacity: 0.8, $direction: to top) {
+	background: linear-gradient(
+		$direction,
+		rgba(0, 0, 0, $opacity) 0%,
+		transparent 100%
+	);
+}
+
+@mixin card-feature-aspect-ratios(
+	$element-selector: ".card-feature__image-wrapper",
+	$ratios: tokens.$card-feature-aspect-ratios
+) {
+	@each $name, $ratio in $ratios {
+		&.card-feature--ratio-#{$name} #{$element-selector} {
+			aspect-ratio: $ratio;
+		}
+	}
+}

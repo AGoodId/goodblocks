@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/card-feature",
+  "version": "1.0.0",
+  "title": "Feature Card",
+  "category": "goodblocks",
+  "icon": "format-image",
+  "description": "Versatile card with image, hover effects, and animations",
+  "keywords": [
+    "card",
+    "feature",
+    "image",
+    "link"
+  ],
+  "supports": {
+    "anchor": true,
+    "html": false,
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "spacing": {
+      "padding": true
+    }
+  },
+  "attributes": {
+    "layout": {
+      "type": "string",
+      "default": "vertical"
+    },
+    "mediaUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "mediaId": {
+      "type": "number"
+    },
+    "imageRatio": {
+      "type": "string",
+      "default": "16-9"
+    },
+    "hoverEffect": {
+      "type": "string",
+      "default": "lift"
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "linkTarget": {
+      "type": "string",
+      "default": "_self"
+    },
+    "showMeta": {
+      "type": "boolean",
+      "default": false
+    },
+    "metaText": {
+      "type": "string",
+      "default": ""
+    },
+    "animation": {
+      "type": "string",
+      "default": "fade-up"
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./index.css"
+}

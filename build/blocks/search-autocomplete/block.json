@@ -1,0 +1,83 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/search-autocomplete",
+  "version": "1.0.0",
+  "title": "Search Autocomplete",
+  "category": "goodblocks",
+  "icon": "search",
+  "description": "Sökfält med live autocomplete-resultat via REST API.",
+  "keywords": [
+    "search",
+    "sök",
+    "autocomplete",
+    "find"
+  ],
+  "textdomain": "goodblocks",
+  "supports": {
+    "align": false,
+    "html": false,
+    "anchor": true,
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "spacing": {
+      "padding": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "attributes": {
+    "blockId": {
+      "type": "string"
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "Sök..."
+    },
+    "minChars": {
+      "type": "number",
+      "default": 2
+    },
+    "maxResults": {
+      "type": "number",
+      "default": 5
+    },
+    "postTypes": {
+      "type": "string",
+      "default": "post,page,portfolio"
+    },
+    "showThumbnail": {
+      "type": "boolean",
+      "default": true
+    },
+    "showExcerpt": {
+      "type": "boolean",
+      "default": true
+    },
+    "showType": {
+      "type": "boolean",
+      "default": true
+    },
+    "expandable": {
+      "type": "boolean",
+      "default": true
+    },
+    "buttonStyle": {
+      "type": "string",
+      "enum": [
+        "icon",
+        "text",
+        "both"
+      ],
+      "default": "icon"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}

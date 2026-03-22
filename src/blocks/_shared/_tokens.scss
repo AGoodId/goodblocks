@@ -1,0 +1,27 @@
+/**
+ * Shared SCSS tokens for block styles.
+ * Kept as SCSS constants to avoid runtime cascade side effects.
+ */
+
+@use "sass:math";
+
+$transition-fast: 0.2s ease !default;
+$transition-base: 0.3s ease !default;
+$transition-slow: 0.4s ease !default;
+$transition-emphasized: 0.6s cubic-bezier(0.4, 0, 0.2, 1) !default;
+
+$color-white-high: rgba(255, 255, 255, 0.85) !default;
+$color-white-medium: rgba(255, 255, 255, 0.55) !default;
+$color-white-low: rgba(255, 255, 255, 0.45) !default;
+
+$overlay-dark: rgba(0, 0, 0, 0.3) !default;
+$overlay-darker: rgba(0, 0, 0, 0.7) !default;
+$overlay-darkest: rgba(0, 0, 0, 0.8) !default;
+
+$card-feature-aspect-ratios: (
+	"16-9": math.div(16, 9),
+	"4-3": math.div(4, 3),
+	"1-1": math.div(1, 1),
+	"2-3": math.div(2, 3),
+	"3-4": math.div(3, 4),
+) !default;

@@ -1,0 +1,305 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/masonry-query",
+  "version": "1.0.0",
+  "title": "Masonry Query",
+  "category": "goodblocks",
+  "icon": "grid-view",
+  "description": "Dynamisk masonry-grid som hämtar inlägg, sidor eller custom post types med valfri lightbox.",
+  "keywords": [
+    "masonry",
+    "gallery",
+    "grid",
+    "portfolio",
+    "query",
+    "posts"
+  ],
+  "textdomain": "goodblocks",
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "html": false,
+    "anchor": true,
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "color": {
+      "background": true,
+      "text": true
+    }
+  },
+  "attributes": {
+    "blockId": {
+      "type": "string"
+    },
+    "queryType": {
+      "type": "string",
+      "enum": [
+        "posts",
+        "pages",
+        "media",
+        "custom",
+        "mixed"
+      ],
+      "default": "posts"
+    },
+    "postType": {
+      "type": "string",
+      "default": "post"
+    },
+    "postTypes": {
+      "type": "array",
+      "default": [
+        "post"
+      ]
+    },
+    "postsPerPage": {
+      "type": "number",
+      "default": 12
+    },
+    "offset": {
+      "type": "number",
+      "default": 0
+    },
+    "orderBy": {
+      "type": "string",
+      "enum": [
+        "date",
+        "title",
+        "modified",
+        "rand",
+        "menu_order",
+        "meta_value"
+      ],
+      "default": "date"
+    },
+    "order": {
+      "type": "string",
+      "enum": [
+        "DESC",
+        "ASC"
+      ],
+      "default": "DESC"
+    },
+    "taxonomies": {
+      "type": "object",
+      "default": {}
+    },
+    "includeIds": {
+      "type": "array",
+      "default": []
+    },
+    "excludeIds": {
+      "type": "array",
+      "default": []
+    },
+    "excludeCurrent": {
+      "type": "boolean",
+      "default": true
+    },
+    "columns": {
+      "type": "object"
+    },
+    "gap": {
+      "type": "number"
+    },
+    "imageRatio": {
+      "type": "string",
+      "enum": [
+        "original",
+        "1:1",
+        "4:5",
+        "3:4",
+        "4:3",
+        "16:9",
+        "9:16",
+        "2:3",
+        "3:2"
+      ]
+    },
+    "imageFit": {
+      "type": "string",
+      "enum": [
+        "cover",
+        "contain"
+      ]
+    },
+    "imageSource": {
+      "type": "string",
+      "enum": [
+        "featured",
+        "first",
+        "acf"
+      ]
+    },
+    "acfImageField": {
+      "type": "string",
+      "default": ""
+    },
+    "fallbackImageId": {
+      "type": "number",
+      "default": 0
+    },
+    "showTitle": {
+      "type": "boolean"
+    },
+    "showExcerpt": {
+      "type": "boolean"
+    },
+    "showCategory": {
+      "type": "boolean"
+    },
+    "categoryTaxonomy": {
+      "type": "string",
+      "default": ""
+    },
+    "showDate": {
+      "type": "boolean"
+    },
+    "overlayStyle": {
+      "type": "string",
+      "enum": [
+        "none",
+        "gradient",
+        "solid",
+        "blur"
+      ]
+    },
+    "overlayPosition": {
+      "type": "string",
+      "enum": [
+        "bottom",
+        "full",
+        "center",
+        "below"
+      ]
+    },
+    "overlayVisibility": {
+      "type": "string",
+      "enum": [
+        "always",
+        "hover"
+      ]
+    },
+    "overlayFontFamily": {
+      "type": "string"
+    },
+    "hoverEffect": {
+      "type": "string",
+      "enum": [
+        "none",
+        "zoom",
+        "lift",
+        "grayscale",
+        "brightness"
+      ]
+    },
+    "borderRadius": {
+      "type": "string"
+    },
+    "clickAction": {
+      "type": "string",
+      "enum": [
+        "lightbox",
+        "link",
+        "none"
+      ]
+    },
+    "linkTarget": {
+      "type": "string",
+      "enum": [
+        "_self",
+        "_blank"
+      ]
+    },
+    "enableLightbox": {
+      "type": "boolean",
+      "default": true
+    },
+    "lightboxAnimation": {
+      "type": "string",
+      "enum": [
+        "fade",
+        "zoom",
+        "slide"
+      ],
+      "default": "zoom"
+    },
+    "lightboxShowInfo": {
+      "type": "boolean",
+      "default": true
+    },
+    "lightboxShowLink": {
+      "type": "boolean",
+      "default": true
+    },
+    "enableFiltering": {
+      "type": "boolean",
+      "default": false
+    },
+    "filterTaxonomy": {
+      "type": "string",
+      "default": "category"
+    },
+    "filterStyle": {
+      "type": "string",
+      "enum": [
+        "tabs",
+        "buttons",
+        "dropdown"
+      ]
+    },
+    "filterAllText": {
+      "type": "string"
+    },
+    "enablePagination": {
+      "type": "boolean",
+      "default": false
+    },
+    "paginationType": {
+      "type": "string",
+      "enum": [
+        "load-more",
+        "infinite",
+        "numbered"
+      ],
+      "default": "load-more"
+    },
+    "loadMoreText": {
+      "type": "string",
+      "default": "Ladda fler"
+    },
+    "enableDeepLinks": {
+      "type": "boolean",
+      "default": true
+    },
+    "enableAnimation": {
+      "type": "boolean"
+    },
+    "animationType": {
+      "type": "string",
+      "enum": [
+        "fade-up",
+        "fade",
+        "scale",
+        "slide-up"
+      ]
+    },
+    "animationStagger": {
+      "type": "number"
+    }
+  },
+  "usesContext": [
+    "postId",
+    "postType"
+  ],
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}
