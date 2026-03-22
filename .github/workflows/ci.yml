@@ -20,7 +20,14 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
+      - name: Lint JavaScript
+        # 16 legacy errors remain in card-feature, media-grid, masonry-query view.js
+        # Remove continue-on-error once cleaned up
+        run: npx wp-scripts lint-js src/
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
 
       - name: Verify build output
         run: |
@@ -30,3 +37,53 @@ jobs:
           fi
           echo "Build completed successfully"
           ls -la build/blocks/
+
+  php-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: PHP syntax check
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 | \
+            xargs -0 -n1 php -l
+
+  validate-blocks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate block.json files
+        run: |
+          errors=0
+          for f in src/blocks/*/block.json; do
+            if ! python3 -m json.tool "$f" > /dev/null 2>&1; then
+              echo "::error file=$f::Invalid JSON"
+              errors=$((errors + 1))
+            fi
+
+            # Check required fields
+            name=$(python3 -c "import json; print(json.load(open('$f')).get('name',''))")
+            if [ -z "$name" ]; then
+              echo "::error file=$f::Missing 'name' field"
+              errors=$((errors + 1))
+            fi
+
+            # Verify namespace
+            if [[ "$name" != goodblocks/* ]]; then
+              echo "::error file=$f::Block name '$name' does not use goodblocks/ namespace"
+              errors=$((errors + 1))
+            fi
+          done
+
+          if [ $errors -gt 0 ]; then
+            echo "::error::$errors block.json validation error(s)"
+            exit 1
+          fi
+          echo "All block.json files valid"

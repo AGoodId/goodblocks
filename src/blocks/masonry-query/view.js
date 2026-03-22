@@ -17,10 +17,16 @@ class MasonryQueryBlock {
 	constructor( container ) {
 		this.container = container;
 		this.grid = container.querySelector( '.masonry-query__grid' );
-		this.items = Array.from( container.querySelectorAll( '.masonry-query__item' ) );
+		this.items = Array.from(
+			container.querySelectorAll( '.masonry-query__item' )
+		);
 		this.filters = container.querySelectorAll( '.masonry-query__filter' );
-		this.loadMoreBtn = container.querySelector( '.masonry-query__load-more' );
-		this.pagination = container.querySelector( '.masonry-query__pagination' );
+		this.loadMoreBtn = container.querySelector(
+			'.masonry-query__load-more'
+		);
+		this.pagination = container.querySelector(
+			'.masonry-query__pagination'
+		);
 
 		this.settings = {
 			blockId: container.dataset.blockId,
@@ -30,11 +36,14 @@ class MasonryQueryBlock {
 			lightboxLink: container.dataset.lightboxLink === 'true',
 			enableAnimation: container.dataset.enableAnimation === 'true',
 			animationType: container.dataset.animationType || 'fade-up',
-			animationStagger: parseInt( container.dataset.animationStagger ) || 50,
+			animationStagger:
+				parseInt( container.dataset.animationStagger ) || 50,
 		};
 
 		this.currentPage = 1;
-		this.maxPages = this.pagination ? parseInt( this.pagination.dataset.maxPages ) : 1;
+		this.maxPages = this.pagination
+			? parseInt( this.pagination.dataset.maxPages )
+			: 1;
 		this.isLoading = false;
 		this.modal = null;
 		this.currentProjectIndex = 0; // Index in visibleItems
@@ -90,10 +99,14 @@ class MasonryQueryBlock {
 
 		// Recalculate on resize
 		let resizeTimer;
-		window.addEventListener( 'resize', () => {
-			clearTimeout( resizeTimer );
-			resizeTimer = setTimeout( layout, 100 );
-		}, { passive: true } );
+		window.addEventListener(
+			'resize',
+			() => {
+				clearTimeout( resizeTimer );
+				resizeTimer = setTimeout( layout, 100 );
+			},
+			{ passive: true }
+		);
 	}
 
 	layoutMasonryGrid() {
@@ -101,9 +114,12 @@ class MasonryQueryBlock {
 			return;
 		}
 
-		const gap = parseFloat(
-			getComputedStyle( this.container ).getPropertyValue( '--masonry-gap' )
-		) || 0;
+		const gap =
+			parseFloat(
+				getComputedStyle( this.container ).getPropertyValue(
+					'--masonry-gap'
+				)
+			) || 0;
 
 		// Temporarily use auto rows to measure natural item heights.
 		this.grid.style.gridAutoRows = 'auto';
@@ -116,7 +132,9 @@ class MasonryQueryBlock {
 		this.grid.offsetHeight; // eslint-disable-line no-unused-expressions
 
 		// Read natural heights while grid-auto-rows is auto.
-		const heights = this.items.map( ( item ) => item.getBoundingClientRect().height );
+		const heights = this.items.map(
+			( item ) => item.getBoundingClientRect().height
+		);
 
 		// Switch to 1px rows for tight masonry packing.
 		this.grid.style.gridAutoRows = '1px';
@@ -152,7 +170,10 @@ class MasonryQueryBlock {
 		} );
 
 		document.addEventListener( 'keydown', ( e ) => {
-			if ( ! this.modal || ! this.modal.classList.contains( 'is-open' ) ) {
+			if (
+				! this.modal ||
+				! this.modal.classList.contains( 'is-open' )
+			) {
 				return;
 			}
 			switch ( e.key ) {
@@ -203,12 +224,16 @@ class MasonryQueryBlock {
 						</svg>
 					</a>
 				</div>
-				<button class="masonry-modal__nav masonry-modal__nav--prev" aria-label="${ i18n.prev || 'Previous' }">
+				<button class="masonry-modal__nav masonry-modal__nav--prev" aria-label="${
+					i18n.prev || 'Previous'
+				}">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<polyline points="15 18 9 12 15 6"></polyline>
 					</svg>
 				</button>
-				<button class="masonry-modal__nav masonry-modal__nav--next" aria-label="${ i18n.next || 'Next' }">
+				<button class="masonry-modal__nav masonry-modal__nav--next" aria-label="${
+					i18n.next || 'Next'
+				}">
 					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<polyline points="9 18 15 12 9 6"></polyline>
 					</svg>
@@ -224,17 +249,30 @@ class MasonryQueryBlock {
 
 		document.body.appendChild( this.modal );
 
-		this.modal.querySelector( '.masonry-modal__backdrop' ).addEventListener( 'click', () => this.closeModal() );
-		this.modal.querySelector( '.masonry-modal__close' ).addEventListener( 'click', () => this.closeModal() );
-		this.modal.querySelector( '.masonry-modal__nav--prev' ).addEventListener( 'click', () => this.navigatePrev() );
-		this.modal.querySelector( '.masonry-modal__nav--next' ).addEventListener( 'click', () => this.navigateNext() );
+		this.modal
+			.querySelector( '.masonry-modal__backdrop' )
+			.addEventListener( 'click', () => this.closeModal() );
+		this.modal
+			.querySelector( '.masonry-modal__close' )
+			.addEventListener( 'click', () => this.closeModal() );
+		this.modal
+			.querySelector( '.masonry-modal__nav--prev' )
+			.addEventListener( 'click', () => this.navigatePrev() );
+		this.modal
+			.querySelector( '.masonry-modal__nav--next' )
+			.addEventListener( 'click', () => this.navigateNext() );
 
 		// Focus trap inside modal.
 		this.modal.addEventListener( 'keydown', ( e ) => {
-			if ( e.key !== 'Tab' || ! this.modal.classList.contains( 'is-open' ) ) {
+			if (
+				e.key !== 'Tab' ||
+				! this.modal.classList.contains( 'is-open' )
+			) {
 				return;
 			}
-			const focusable = this.modal.querySelectorAll( 'button, a[href], [tabindex]:not([tabindex="-1"])' );
+			const focusable = this.modal.querySelectorAll(
+				'button, a[href], [tabindex]:not([tabindex="-1"])'
+			);
 			const first = focusable[ 0 ];
 			const last = focusable[ focusable.length - 1 ];
 
@@ -252,30 +290,40 @@ class MasonryQueryBlock {
 	}
 
 	setupModalSwipe() {
-		const container = this.modal.querySelector( '.masonry-modal__container' );
+		const container = this.modal.querySelector(
+			'.masonry-modal__container'
+		);
 		let touchStartX = 0;
 		let touchStartY = 0;
 
-		container.addEventListener( 'touchstart', ( e ) => {
-			touchStartX = e.touches[ 0 ].clientX;
-			touchStartY = e.touches[ 0 ].clientY;
-		}, { passive: true } );
+		container.addEventListener(
+			'touchstart',
+			( e ) => {
+				touchStartX = e.touches[ 0 ].clientX;
+				touchStartY = e.touches[ 0 ].clientY;
+			},
+			{ passive: true }
+		);
 
-		container.addEventListener( 'touchend', ( e ) => {
-			const dx = e.changedTouches[ 0 ].clientX - touchStartX;
-			const dy = e.changedTouches[ 0 ].clientY - touchStartY;
+		container.addEventListener(
+			'touchend',
+			( e ) => {
+				const dx = e.changedTouches[ 0 ].clientX - touchStartX;
+				const dy = e.changedTouches[ 0 ].clientY - touchStartY;
 
-			// Only count horizontal swipes (ignore vertical scrolling).
-			if ( Math.abs( dx ) < 50 || Math.abs( dx ) < Math.abs( dy ) ) {
-				return;
-			}
+				// Only count horizontal swipes (ignore vertical scrolling).
+				if ( Math.abs( dx ) < 50 || Math.abs( dx ) < Math.abs( dy ) ) {
+					return;
+				}
 
-			if ( dx > 0 ) {
-				this.navigatePrev();
-			} else {
-				this.navigateNext();
-			}
-		}, { passive: true } );
+				if ( dx > 0 ) {
+					this.navigatePrev();
+				} else {
+					this.navigateNext();
+				}
+			},
+			{ passive: true }
+		);
 	}
 
 	getProjectGallery( item ) {
@@ -288,7 +336,9 @@ class MasonryQueryBlock {
 	}
 
 	openModal( index ) {
-		const visibleIndices = this.visibleItems.map( item => this.items.indexOf( item ) );
+		const visibleIndices = this.visibleItems.map( ( item ) =>
+			this.items.indexOf( item )
+		);
 		this.currentProjectIndex = visibleIndices.indexOf( index );
 		if ( this.currentProjectIndex === -1 ) {
 			this.currentProjectIndex = 0;
@@ -308,9 +358,14 @@ class MasonryQueryBlock {
 			this.modal.querySelector( '.masonry-modal__container' ),
 			{ opacity: 0, scale: 0.95 },
 			{
-				opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out',
+				opacity: 1,
+				scale: 1,
+				duration: 0.3,
+				ease: 'power2.out',
 				onComplete: () => {
-					this.modal.querySelector( '.masonry-modal__close' )?.focus();
+					this.modal
+						.querySelector( '.masonry-modal__close' )
+						?.focus();
 				},
 			}
 		);
@@ -329,7 +384,9 @@ class MasonryQueryBlock {
 		}
 		// Stop any playing video
 		const video = this.modal.querySelector( '.masonry-modal__video' );
-		if ( video ) video.pause();
+		if ( video ) {
+			video.pause();
+		}
 
 		gsap.to( this.modal.querySelector( '.masonry-modal__container' ), {
 			opacity: 0,
@@ -345,12 +402,16 @@ class MasonryQueryBlock {
 	}
 
 	navigateNext() {
-		if ( this.currentGallery.length > 1 && this.currentSlideIndex < this.currentGallery.length - 1 ) {
+		if (
+			this.currentGallery.length > 1 &&
+			this.currentSlideIndex < this.currentGallery.length - 1
+		) {
 			// Next slide within same project
 			this.currentSlideIndex++;
 		} else {
 			// Next project
-			this.currentProjectIndex = ( this.currentProjectIndex + 1 ) % this.visibleItems.length;
+			this.currentProjectIndex =
+				( this.currentProjectIndex + 1 ) % this.visibleItems.length;
 			const item = this.visibleItems[ this.currentProjectIndex ];
 			this.currentGallery = this.getProjectGallery( item );
 			this.currentSlideIndex = 0;
@@ -364,10 +425,15 @@ class MasonryQueryBlock {
 			this.currentSlideIndex--;
 		} else {
 			// Previous project (go to its last slide)
-			this.currentProjectIndex = ( this.currentProjectIndex - 1 + this.visibleItems.length ) % this.visibleItems.length;
+			this.currentProjectIndex =
+				( this.currentProjectIndex - 1 + this.visibleItems.length ) %
+				this.visibleItems.length;
 			const item = this.visibleItems[ this.currentProjectIndex ];
 			this.currentGallery = this.getProjectGallery( item );
-			this.currentSlideIndex = Math.max( 0, this.currentGallery.length - 1 );
+			this.currentSlideIndex = Math.max(
+				0,
+				this.currentGallery.length - 1
+			);
 		}
 		this.animateSlide( -1 );
 	}
@@ -392,7 +458,9 @@ class MasonryQueryBlock {
 
 	updateModalContent( isFirstOpen = false ) {
 		const item = this.visibleItems[ this.currentProjectIndex ];
-		if ( ! item ) return;
+		if ( ! item ) {
+			return;
+		}
 
 		const slide = this.currentGallery[ this.currentSlideIndex ];
 		const image = this.modal.querySelector( '.masonry-modal__image' );
@@ -414,20 +482,40 @@ class MasonryQueryBlock {
 			video.style.display = 'none';
 			video.pause();
 			image.style.display = '';
-			image.src = slide ? slide.src : ( item.dataset.pswpSrc || item.querySelector( 'img' )?.src || '' );
-			image.alt = item.querySelector( '.masonry-query__title' )?.textContent || '';
+			image.src = slide
+				? slide.src
+				: item.dataset.pswpSrc ||
+				  item.querySelector( 'img' )?.src ||
+				  '';
+			image.alt =
+				item.querySelector( '.masonry-query__title' )?.textContent ||
+				'';
 			caption.textContent = slide?.cap || '';
 
 			// EXIF metadata
 			if ( slide?.meta ) {
 				const parts = [];
-				if ( slide.meta.camera ) parts.push( slide.meta.camera );
-				if ( slide.meta.focal ) parts.push( slide.meta.focal );
-				if ( slide.meta.aperture ) parts.push( slide.meta.aperture );
-				if ( slide.meta.shutter ) parts.push( slide.meta.shutter );
-				if ( slide.meta.iso ) parts.push( slide.meta.iso );
-				if ( slide.meta.dimensions ) parts.push( slide.meta.dimensions );
-				if ( slide.meta.date ) parts.push( slide.meta.date );
+				if ( slide.meta.camera ) {
+					parts.push( slide.meta.camera );
+				}
+				if ( slide.meta.focal ) {
+					parts.push( slide.meta.focal );
+				}
+				if ( slide.meta.aperture ) {
+					parts.push( slide.meta.aperture );
+				}
+				if ( slide.meta.shutter ) {
+					parts.push( slide.meta.shutter );
+				}
+				if ( slide.meta.iso ) {
+					parts.push( slide.meta.iso );
+				}
+				if ( slide.meta.dimensions ) {
+					parts.push( slide.meta.dimensions );
+				}
+				if ( slide.meta.date ) {
+					parts.push( slide.meta.date );
+				}
 				meta.textContent = parts.join( ' · ' );
 			} else {
 				meta.textContent = '';
@@ -436,28 +524,41 @@ class MasonryQueryBlock {
 
 		// Counter (e.g. "2 / 8")
 		if ( this.currentGallery.length > 1 ) {
-			counter.textContent = `${ this.currentSlideIndex + 1 } / ${ this.currentGallery.length }`;
+			counter.textContent = `${ this.currentSlideIndex + 1 } / ${
+				this.currentGallery.length
+			}`;
 			counter.style.display = '';
 		} else {
 			counter.style.display = 'none';
 		}
 
 		// Sidebar content — from data attributes + hidden lightbox data
-		const lightboxData = item.querySelector( '.masonry-query__lightbox-data' );
-		const title = item.querySelector( '.masonry-query__overlay .masonry-query__title' )?.textContent
-			|| lightboxData?.querySelector( '.masonry-query__title' )?.textContent
-			|| '';
+		const lightboxData = item.querySelector(
+			'.masonry-query__lightbox-data'
+		);
+		const title =
+			item.querySelector(
+				'.masonry-query__overlay .masonry-query__title'
+			)?.textContent ||
+			lightboxData?.querySelector( '.masonry-query__title' )
+				?.textContent ||
+			'';
 		const excerpt = item.dataset.excerpt || '';
 		const permalink = item.dataset.permalink || '#';
 
 		this.modal.querySelector( '.masonry-modal__title' ).textContent = title;
-		this.modal.querySelector( '.masonry-modal__excerpt' ).textContent = excerpt;
+		this.modal.querySelector( '.masonry-modal__excerpt' ).textContent =
+			excerpt;
 
 		// Tags
-		const tagsContainer = this.modal.querySelector( '.masonry-modal__tags' );
+		const tagsContainer = this.modal.querySelector(
+			'.masonry-modal__tags'
+		);
 		tagsContainer.innerHTML = '';
 		try {
-			const tagLinks = item.dataset.tagLinks ? JSON.parse( item.dataset.tagLinks ) : {};
+			const tagLinks = item.dataset.tagLinks
+				? JSON.parse( item.dataset.tagLinks )
+				: {};
 			Object.entries( tagLinks ).forEach( ( [ name, url ] ) => {
 				const pill = document.createElement( 'a' );
 				pill.className = 'portfolio-meta__pill';
@@ -465,23 +566,37 @@ class MasonryQueryBlock {
 				pill.textContent = name;
 				tagsContainer.appendChild( pill );
 			} );
-		} catch { /* ignore */ }
+		} catch {
+			/* ignore */
+		}
 
 		// Read more link
 		const fullUrl = new URL( permalink, window.location.origin );
-		this.modal.querySelector( '.masonry-modal__read-more' ).href = fullUrl.toString();
+		this.modal.querySelector( '.masonry-modal__read-more' ).href =
+			fullUrl.toString();
 
 		// Browser URL
 		if ( isFirstOpen ) {
-			history.pushState( { masonryLightbox: true }, '', fullUrl.pathname );
+			history.pushState(
+				{ masonryLightbox: true },
+				'',
+				fullUrl.pathname
+			);
 		} else {
-			history.replaceState( { masonryLightbox: true }, '', fullUrl.pathname );
+			history.replaceState(
+				{ masonryLightbox: true },
+				'',
+				fullUrl.pathname
+			);
 		}
 
 		// Nav visibility
-		const showNav = this.visibleItems.length > 1 || this.currentGallery.length > 1;
-		this.modal.querySelector( '.masonry-modal__nav--prev' ).style.display = showNav ? '' : 'none';
-		this.modal.querySelector( '.masonry-modal__nav--next' ).style.display = showNav ? '' : 'none';
+		const showNav =
+			this.visibleItems.length > 1 || this.currentGallery.length > 1;
+		this.modal.querySelector( '.masonry-modal__nav--prev' ).style.display =
+			showNav ? '' : 'none';
+		this.modal.querySelector( '.masonry-modal__nav--next' ).style.display =
+			showNav ? '' : 'none';
 	}
 
 	// ========================================
@@ -528,13 +643,17 @@ class MasonryQueryBlock {
 					scale: 0.9,
 					duration: 0.3,
 					ease: 'power2.out',
-					onComplete: () => { item.style.display = 'none'; },
+					onComplete: () => {
+						item.style.display = 'none';
+					},
 				} );
 			}
 		} );
 
 		setTimeout( () => {
-			this.visibleItems = this.items.filter( item => item.style.display !== 'none' );
+			this.visibleItems = this.items.filter(
+				( item ) => item.style.display !== 'none'
+			);
 		}, 350 );
 	}
 
@@ -565,24 +684,31 @@ class MasonryQueryBlock {
 		this.loadMoreBtn.disabled = true;
 
 		try {
-			const response = await fetch( '/wp-json/goodblocks/v1/masonry-query', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify( {
-					page: this.currentPage + 1,
-					blockId: this.settings.blockId,
-					attributes: this.getBlockAttributes(),
-				} ),
-			} );
+			const response = await fetch(
+				'/wp-json/goodblocks/v1/masonry-query',
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify( {
+						page: this.currentPage + 1,
+						blockId: this.settings.blockId,
+						attributes: this.getBlockAttributes(),
+					} ),
+				}
+			);
 
-			if ( ! response.ok ) throw new Error( 'Network error' );
+			if ( ! response.ok ) {
+				throw new Error( 'Network error' );
+			}
 
 			const data = await response.json();
 
 			if ( data.items && data.items.length > 0 ) {
 				const tempDiv = document.createElement( 'div' );
 				tempDiv.innerHTML = data.items.join( '' );
-				const newItems = Array.from( tempDiv.querySelectorAll( '.masonry-query__item' ) );
+				const newItems = Array.from(
+					tempDiv.querySelectorAll( '.masonry-query__item' )
+				);
 
 				newItems.forEach( ( item ) => {
 					item.style.opacity = '0';
@@ -628,12 +754,16 @@ class MasonryQueryBlock {
 		errorEl.className = 'masonry-query__error';
 		errorEl.innerHTML = `
 			<p>${ i18n.loadError || 'Could not load more items. Try again.' }</p>
-			<button class="masonry-query__retry" type="button">${ i18n.retry || 'Try again' }</button>
+			<button class="masonry-query__retry" type="button">${
+				i18n.retry || 'Try again'
+			}</button>
 		`;
-		errorEl.querySelector( '.masonry-query__retry' ).addEventListener( 'click', () => {
-			errorEl.remove();
-			this.loadMore();
-		} );
+		errorEl
+			.querySelector( '.masonry-query__retry' )
+			.addEventListener( 'click', () => {
+				errorEl.remove();
+				this.loadMore();
+			} );
 		this.pagination.parentNode.insertBefore( errorEl, this.pagination );
 	}
 
@@ -665,7 +795,9 @@ class MasonryQueryBlock {
 		const hash = window.location.hash;
 		if ( hash.startsWith( '#item-' ) ) {
 			const postId = hash.replace( '#item-', '' );
-			const itemIndex = this.items.findIndex( item => item.dataset.postId === postId );
+			const itemIndex = this.items.findIndex(
+				( item ) => item.dataset.postId === postId
+			);
 			if ( itemIndex !== -1 ) {
 				setTimeout( () => this.openModal( itemIndex ), 500 );
 			}
@@ -710,7 +842,9 @@ class MasonryQueryBlock {
 							y: 0,
 							scale: 1,
 							duration: 0.6,
-							delay: ( idx % 6 ) * ( this.settings.animationStagger / 1000 ),
+							delay:
+								( idx % 6 ) *
+								( this.settings.animationStagger / 1000 ),
 							ease: 'power2.out',
 						} );
 						observer.unobserve( item );
@@ -721,7 +855,10 @@ class MasonryQueryBlock {
 		);
 
 		items.forEach( ( item ) => observer.observe( item ) );
-		setTimeout( () => this.container.classList.add( 'masonry-query--loaded' ), 100 );
+		setTimeout(
+			() => this.container.classList.add( 'masonry-query--loaded' ),
+			100
+		);
 	}
 
 	destroy() {
@@ -733,7 +870,9 @@ class MasonryQueryBlock {
 
 // Initialize
 document.addEventListener( 'DOMContentLoaded', () => {
-	document.querySelectorAll( '.wp-block-goodblocks-masonry-query' ).forEach( block => {
-		new MasonryQueryBlock( block );
-	} );
+	document
+		.querySelectorAll( '.wp-block-goodblocks-masonry-query' )
+		.forEach( ( block ) => {
+			new MasonryQueryBlock( block );
+		} );
 } );

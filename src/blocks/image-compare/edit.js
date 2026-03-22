@@ -18,8 +18,16 @@ import {
 } from '@wordpress/components';
 
 const ICON = (
-	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-		<path d="M3 3h18v18H3V3zm1 1v16h7V4H4zm9 0v16h7V4h-7zm-1 7h2v2h-2v-2z" fill="currentColor" />
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		width="24"
+		height="24"
+	>
+		<path
+			d="M3 3h18v18H3V3zm1 1v16h7V4H4zm9 0v16h7V4h-7zm-1 7h2v2h-2v-2z"
+			fill="currentColor"
+		/>
 	</svg>
 );
 
@@ -69,7 +77,9 @@ export default function Edit( { attributes, setAttributes } ) {
 					<TextControl
 						label={ __( 'Before label', 'goodblocks' ) }
 						value={ beforeLabel }
-						onChange={ ( v ) => setAttributes( { beforeLabel: v } ) }
+						onChange={ ( v ) =>
+							setAttributes( { beforeLabel: v } )
+						}
 					/>
 				) }
 				{ showLabels && (
@@ -97,11 +107,18 @@ export default function Edit( { attributes, setAttributes } ) {
 		return (
 			<div { ...blockProps }>
 				{ inspector }
-				<div className="image-compare-editor__preview" style={ { position: 'relative' } }>
+				<div
+					className="image-compare-editor__preview"
+					style={ { position: 'relative' } }
+				>
 					<img
 						src={ afterUrl }
 						alt={ afterAlt }
-						style={ { display: 'block', width: '100%', height: 'auto' } }
+						style={ {
+							display: 'block',
+							width: '100%',
+							height: 'auto',
+						} }
 					/>
 					<div
 						className="image-compare-editor__before"
@@ -117,7 +134,12 @@ export default function Edit( { attributes, setAttributes } ) {
 						<img
 							src={ beforeUrl }
 							alt={ beforeAlt }
-							style={ { display: 'block', width: '100%', height: '100%', objectFit: 'cover' } }
+							style={ {
+								display: 'block',
+								width: '100%',
+								height: '100%',
+								objectFit: 'cover',
+							} }
 						/>
 					</div>
 					<div
@@ -154,8 +176,15 @@ export default function Edit( { attributes, setAttributes } ) {
 							allowedTypes={ [ 'image' ] }
 							value={ beforeId }
 							render={ ( { open } ) => (
-								<Button onClick={ open } variant="secondary" size="small">
-									{ __( 'Replace before image', 'goodblocks' ) }
+								<Button
+									onClick={ open }
+									variant="secondary"
+									size="small"
+								>
+									{ __(
+										'Replace before image',
+										'goodblocks'
+									) }
 								</Button>
 							) }
 						/>
@@ -166,8 +195,15 @@ export default function Edit( { attributes, setAttributes } ) {
 							allowedTypes={ [ 'image' ] }
 							value={ afterId }
 							render={ ( { open } ) => (
-								<Button onClick={ open } variant="secondary" size="small">
-									{ __( 'Replace after image', 'goodblocks' ) }
+								<Button
+									onClick={ open }
+									variant="secondary"
+									size="small"
+								>
+									{ __(
+										'Replace after image',
+										'goodblocks'
+									) }
 								</Button>
 							) }
 						/>
@@ -184,7 +220,10 @@ export default function Edit( { attributes, setAttributes } ) {
 			<Placeholder
 				icon={ ICON }
 				label={ __( 'Image Compare', 'goodblocks' ) }
-				instructions={ __( 'Select a before and after image to create a comparison slider.', 'goodblocks' ) }
+				instructions={ __(
+					'Select a before and after image to create a comparison slider.',
+					'goodblocks'
+				) }
 			>
 				<div className="image-compare-editor__selectors">
 					<MediaUploadCheck>
@@ -195,12 +234,19 @@ export default function Edit( { attributes, setAttributes } ) {
 							render={ ( { open } ) => (
 								<Button
 									onClick={ open }
-									variant={ beforeUrl ? 'secondary' : 'primary' }
+									variant={
+										beforeUrl ? 'secondary' : 'primary'
+									}
 								>
 									{ beforeUrl
-										? __( 'Before image selected', 'goodblocks' )
-										: __( 'Select before image', 'goodblocks' )
-									}
+										? __(
+												'Before image selected',
+												'goodblocks'
+										  )
+										: __(
+												'Select before image',
+												'goodblocks'
+										  ) }
 								</Button>
 							) }
 						/>
@@ -213,12 +259,19 @@ export default function Edit( { attributes, setAttributes } ) {
 							render={ ( { open } ) => (
 								<Button
 									onClick={ open }
-									variant={ afterUrl ? 'secondary' : 'primary' }
+									variant={
+										afterUrl ? 'secondary' : 'primary'
+									}
 								>
 									{ afterUrl
-										? __( 'After image selected', 'goodblocks' )
-										: __( 'Select after image', 'goodblocks' )
-									}
+										? __(
+												'After image selected',
+												'goodblocks'
+										  )
+										: __(
+												'Select after image',
+												'goodblocks'
+										  ) }
 								</Button>
 							) }
 						/>

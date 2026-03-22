@@ -5,7 +5,9 @@
  */
 
 function init() {
-	document.querySelectorAll( '.wp-block-goodblocks-image-compare' ).forEach( setup );
+	document
+		.querySelectorAll( '.wp-block-goodblocks-image-compare' )
+		.forEach( setup );
 }
 
 function setup( container ) {
@@ -53,18 +55,26 @@ function setup( container ) {
 	document.addEventListener( 'mouseup', onMouseUp );
 
 	// --- Touch ---
-	handle.addEventListener( 'touchstart', ( e ) => {
-		e.preventDefault();
-		startDrag();
-	}, { passive: false } );
+	handle.addEventListener(
+		'touchstart',
+		( e ) => {
+			e.preventDefault();
+			startDrag();
+		},
+		{ passive: false }
+	);
 
-	container.addEventListener( 'touchstart', ( e ) => {
-		if ( e.target === handle || handle.contains( e.target ) ) {
-			return;
-		}
-		startDrag();
-		updateFromEvent( e.touches[ 0 ] );
-	}, { passive: false } );
+	container.addEventListener(
+		'touchstart',
+		( e ) => {
+			if ( e.target === handle || handle.contains( e.target ) ) {
+				return;
+			}
+			startDrag();
+			updateFromEvent( e.touches[ 0 ] );
+		},
+		{ passive: false }
+	);
 
 	const onTouchMove = ( e ) => {
 		if ( ! isDragging ) {
@@ -86,7 +96,8 @@ function setup( container ) {
 	// --- Keyboard ---
 	handle.addEventListener( 'keydown', ( e ) => {
 		const step = e.shiftKey ? 10 : 1;
-		const current = parseFloat( handle.getAttribute( 'aria-valuenow' ) ) || 50;
+		const current =
+			parseFloat( handle.getAttribute( 'aria-valuenow' ) ) || 50;
 		let next;
 
 		switch ( e.key ) {

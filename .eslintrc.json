@@ -1,0 +1,14 @@
+{
+	"extends": "plugin:@wordpress/eslint-plugin/recommended",
+	"overrides": [
+		{
+			"files": ["src/**/view.js"],
+			"env": {
+				"browser": true
+			},
+			"rules": {
+				"no-console": "warn"
+			}
+		}
+	]
+}
