@@ -105,6 +105,8 @@ class MasonryQueryBlock {
 			getComputedStyle( this.container ).getPropertyValue( '--masonry-gap' )
 		) || 0;
 
+		// Temporarily use auto rows to measure natural item heights.
+		this.grid.style.gridAutoRows = 'auto';
 		this.items.forEach( ( item ) => {
 			// Reset span to measure natural height
 			item.style.gridRowEnd = '';
@@ -113,13 +115,18 @@ class MasonryQueryBlock {
 		// Force layout recalc
 		this.grid.offsetHeight; // eslint-disable-line no-unused-expressions
 
+		// Read natural heights while grid-auto-rows is auto.
+		const heights = this.items.map( ( item ) => item.getBoundingClientRect().height );
+
+		// Switch to 1px rows for tight masonry packing.
+		this.grid.style.gridAutoRows = '1px';
+
 		// grid-auto-rows is 1px, so row N occupies 1px + gap between rows.
 		// Total height for span S = S * 1 + (S - 1) * gap = S * (1 + gap) - gap.
 		// Solving for S: S = ceil( (height + gap) / (1 + gap) ).
 		const rowHeight = 1 + gap;
 
-		// Read all heights first (single reflow), then write all spans.
-		const heights = this.items.map( ( item ) => item.getBoundingClientRect().height );
+		// Write all spans (heights already measured above with auto rows).
 		this.items.forEach( ( item, idx ) => {
 			const span = Math.ceil( ( heights[ idx ] + gap ) / rowHeight );
 			item.style.gridRowEnd = `span ${ span }`;

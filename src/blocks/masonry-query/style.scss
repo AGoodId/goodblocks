@@ -51,7 +51,10 @@
 	// JS calculates each item's height and sets grid-row-end accordingly.
 	&.masonry-query--masonry {
 		.masonry-query__grid {
-			grid-auto-rows: 1px;
+			// grid-auto-rows: 1px is set by JS (view.js) when layout runs.
+			// Default to auto so items have natural height before JS loads
+			// (prevents subsequent content from rendering behind the grid).
+			grid-auto-rows: auto;
 			align-items: start;
 		}
 
