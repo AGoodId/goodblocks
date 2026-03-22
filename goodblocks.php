@@ -23,6 +23,10 @@ define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 // Masonry Query REST API for load-more pagination.
 require_once GOODBLOCKS_DIR . 'inc/masonry-rest-api.php';
 
+// GitHub-based auto-updater.
+require_once GOODBLOCKS_DIR . 'inc/github-updater.php';
+new GoodBlocks_GitHub_Updater( __FILE__, 'AGoodId/goodblocks' );
+
 /**
  * Register custom blocks.
  */
