@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.1.1
+ * Version: 1.1.2
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.1.1' );
+define( 'GOODBLOCKS_VERSION', '1.1.2' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
@@ -58,6 +58,24 @@ function goodblocks_register_blocks() {
 	}
 }
 add_action( 'init', 'goodblocks_register_blocks' );
+
+/**
+ * Run migrations on update (version check).
+ */
+function goodblocks_maybe_migrate() {
+	$stored = get_option( 'goodblocks_version', '0' );
+	if ( version_compare( $stored, GOODBLOCKS_VERSION, '>=' ) ) {
+		return;
+	}
+
+	if ( version_compare( $stored, '1.1.1', '<' ) ) {
+		goodblocks_migrate_namespace( 'agoodsite-fse', 'goodblocks' );
+		goodblocks_migrate_agoodblocks();
+	}
+
+	update_option( 'goodblocks_version', GOODBLOCKS_VERSION );
+}
+add_action( 'plugins_loaded', 'goodblocks_maybe_migrate' );
 
 /**
  * Enable categories and tags on Pages.
