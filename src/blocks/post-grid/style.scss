@@ -1,9 +1,31 @@
+// =============================================================================
+// POST GRID BLOCK — goodblocks/post-grid
+//
+// Layout variants: grid, list, people, timeline
+// Theme override: target `.wp-block-goodblocks-post-grid` in your theme CSS.
+//
+// Key classes for theme styling:
+//   .post-grid-item          — individual card wrapper
+//   .post-thumbnail          — image container (aspect-ratio via --aspect-ratio)
+//   .post-title              — heading (h3)
+//   .post-date               — publication date
+//   .post-author             — author name
+//   .post-excerpt            — truncated excerpt
+//   .post-meta               — metadata wrapper
+//   .post-venue              — event venue (Events Calendar)
+//   .post-grid-more-link     — "load more" / archive link
+// =============================================================================
+
 .wp-block-goodblocks-post-grid {
+
+	// =========================================================================
+	// GRID & PEOPLE LAYOUTS
+	// =========================================================================
 
 	&.grid,
 	&.people {
-		gap: 1rem;
 		display: grid;
+		gap: 1rem;
 		grid-template-columns: repeat(var(--posts-per-row, 3), 1fr);
 
 		@media (max-width: 992px) {
@@ -15,17 +37,17 @@
 		}
 	}
 
-	.timeline-line {
-		display: none;
-	}
+	// =========================================================================
+	// LIST LAYOUT
+	// =========================================================================
 
 	&.list {
 		.list-item {
-			border-bottom: 1px solid black;
-			padding: 2rem 0;
 			display: flex;
 			flex-flow: row-reverse;
 			gap: 2rem;
+			padding: 2rem 0;
+			border-bottom: 1px solid black;
 
 			&:first-child {
 				border-top: 1px solid black;
@@ -45,12 +67,18 @@
 		}
 	}
 
+	// =========================================================================
+	// TIMELINE LAYOUT
+	// =========================================================================
+
 	&.timeline {
 		position: relative;
 		display: table;
 		width: 100%;
 		opacity: 0;
 		transition: opacity 0.5s ease;
+
+		// --- Central line ---
 
 		.timeline-line {
 			display: block;
@@ -70,13 +98,15 @@
 			}
 		}
 
+		// --- Timeline items ---
+
 		.timeline-item {
 			position: absolute;
-			margin-bottom: 2rem;
 			width: 50%;
 			z-index: 2;
 			clear: both;
 			margin-top: 2rem;
+			margin-bottom: 2rem;
 
 			&:nth-child(3) {
 				margin-top: 12rem;
@@ -120,6 +150,8 @@
 				}
 			}
 		}
+
+		// --- Left / right positioning ---
 
 		.timeline-content {
 			display: flex;
@@ -169,6 +201,8 @@
 			}
 		}
 
+		// --- Timeline media ---
+
 		.timeline-thumbnail {
 			img {
 				object-fit: contain;
@@ -177,6 +211,8 @@
 				max-width: 600px;
 			}
 		}
+
+		// --- Dots on the timeline line ---
 
 		.timeline-dot {
 			position: absolute;
@@ -204,6 +240,8 @@
 			left: -5px;
 		}
 
+		// --- Timeline text ---
+
 		.timeline-title {
 			margin-bottom: 1rem;
 
@@ -213,8 +251,8 @@
 		}
 
 		.timeline-excerpt {
-			margin-bottom: 1rem;
 			margin-top: 1rem;
+			margin-bottom: 1rem;
 		}
 
 		.timeline-text,
@@ -227,7 +265,18 @@
 		}
 	}
 
+	// Hide timeline line in non-timeline layouts
+	.timeline-line {
+		display: none;
+	}
+
+	// =========================================================================
+	// POST GRID ITEM (shared across grid/list/people)
+	// =========================================================================
+
 	.post-grid-item {
+
+		// Spacing after thumbnail
 		.post-thumbnail + p,
 		.post-thumbnail + h3,
 		.post-thumbnail + div {
@@ -238,6 +287,7 @@
 			margin-top: 0;
 		}
 
+		// --- Thumbnail ---
 		.post-thumbnail {
 			width: 100%;
 			overflow: hidden;
@@ -251,6 +301,7 @@
 			}
 		}
 
+		// --- Typography ---
 		.post-title {
 			font-size: 1.5rem;
 		}
@@ -262,6 +313,10 @@
 			margin: 0;
 		}
 	}
+
+	// =========================================================================
+	// SHARED
+	// =========================================================================
 
 	a {
 		text-decoration: none;
