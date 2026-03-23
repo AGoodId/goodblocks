@@ -605,11 +605,18 @@ foreach ( $data_attrs as $key => $value ) {
 					<?php if ( ! empty( $hero_video_url ) ) : ?>
 						<video autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true" src="<?php echo esc_url( $hero_video_url ); ?>"></video>
 					<?php elseif ( $image_full ) : ?>
+						<?php
+					$img_w = $image_large[1] ?? $image_full[1];
+					$img_h = $image_large[2] ?? $image_full[2];
+					?>
 						<img
 							src="<?php echo esc_url( $image_large[0] ?? $image_full[0] ); ?>"
 							alt="<?php echo esc_attr( $image_alt ); ?>"
-							width="<?php echo esc_attr( $image_large[1] ?? $image_full[1] ); ?>"
-							height="<?php echo esc_attr( $image_large[2] ?? $image_full[2] ); ?>"
+							width="<?php echo esc_attr( $img_w ); ?>"
+							height="<?php echo esc_attr( $img_h ); ?>"
+							<?php if ( $img_w && $img_h && $image_ratio === 'original' ) : ?>
+								style="aspect-ratio: <?php echo esc_attr( $img_w ); ?> / <?php echo esc_attr( $img_h ); ?>"
+							<?php endif; ?>
 							loading="lazy"
 							decoding="async"
 						/>

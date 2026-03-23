@@ -69,7 +69,30 @@ class MasonryQueryBlock {
 			return;
 		}
 
-		const layout = () => this.layoutMasonryGrid();
+		this.isScrolling = false;
+		this.layoutPending = false;
+
+		// Track active touch/scroll to avoid layout during scroll (iOS fix).
+		let scrollTimer;
+		window.addEventListener( 'scroll', () => {
+			this.isScrolling = true;
+			clearTimeout( scrollTimer );
+			scrollTimer = setTimeout( () => {
+				this.isScrolling = false;
+				if ( this.layoutPending ) {
+					this.layoutPending = false;
+					this.layoutMasonryGrid();
+				}
+			}, 150 );
+		}, { passive: true } );
+
+		const layout = () => {
+			if ( this.isScrolling ) {
+				this.layoutPending = true;
+				return;
+			}
+			this.layoutMasonryGrid();
+		};
 
 		const images = this.grid.querySelectorAll( 'img' );
 		let loadedCount = 0;
@@ -97,13 +120,13 @@ class MasonryQueryBlock {
 			layout();
 		}
 
-		// Recalculate on resize
+		// Recalculate on resize (debounced, skip during scroll)
 		let resizeTimer;
 		window.addEventListener(
 			'resize',
 			() => {
 				clearTimeout( resizeTimer );
-				resizeTimer = setTimeout( layout, 100 );
+				resizeTimer = setTimeout( layout, 150 );
 			},
 			{ passive: true }
 		);
@@ -113,6 +136,9 @@ class MasonryQueryBlock {
 		if ( ! this.grid ) {
 			return;
 		}
+
+		// Preserve scroll position to prevent iOS scroll jumps during re-layout.
+		const scrollY = window.scrollY;
 
 		const gap =
 			parseFloat(
@@ -149,6 +175,11 @@ class MasonryQueryBlock {
 			const span = Math.ceil( ( heights[ idx ] + gap ) / rowHeight );
 			item.style.gridRowEnd = `span ${ span }`;
 		} );
+
+		// Restore scroll position after layout change (prevents iOS scroll jump).
+		if ( Math.abs( window.scrollY - scrollY ) > 1 ) {
+			window.scrollTo( 0, scrollY );
+		}
 	}
 
 	// ========================================
