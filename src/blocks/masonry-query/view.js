@@ -846,6 +846,16 @@ class MasonryQueryBlock {
 		}
 
 		const items = this.container.querySelectorAll( '.masonry-query__item' );
+
+		// Safety: if gsap failed to load, show items immediately.
+		if ( typeof gsap === 'undefined' || typeof gsap.set !== 'function' ) {
+			this.container.classList.add( 'masonry-query--loaded' );
+			items.forEach( ( item ) => {
+				item.style.opacity = '1';
+			} );
+			return;
+		}
+
 		const initialState = { opacity: 0 };
 
 		switch ( this.settings.animationType ) {
@@ -886,6 +896,18 @@ class MasonryQueryBlock {
 		);
 
 		items.forEach( ( item ) => observer.observe( item ) );
+
+		// Failsafe: if items haven't animated in after 5s, force them visible.
+		// Handles edge cases where IntersectionObserver doesn't fire (iOS bugs).
+		setTimeout( () => {
+			items.forEach( ( item ) => {
+				if ( getComputedStyle( item ).opacity === '0' ) {
+					item.style.opacity = '1';
+					item.style.transform = 'none';
+				}
+			} );
+		}, 5000 );
+
 		setTimeout(
 			() => this.container.classList.add( 'masonry-query--loaded' ),
 			100

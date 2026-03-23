@@ -10,7 +10,7 @@
 	margin-left: calc(50% - 50vw);
 	padding-left: var(--wp--style--root--padding-left, 20px);
 	padding-right: var(--wp--style--root--padding-right, 20px);
-	overflow-x: clip; // Prevent Safari 100vw scrollbar overflow
+	overflow-x: hidden; // Prevent 100vw scrollbar overflow (clip not supported on older iOS)
 
 	// CSS Custom Properties (set via PHP)
 	--masonry-cols-desktop: 4;
@@ -389,6 +389,20 @@
 		background: var(--wp--preset--color--surface-alt, #f5f5f5);
 		border-radius: var(--wp--custom--radius--md, 8px);
 	}
+}
+
+// Fallback: if JS never runs (or crashes), items are visible after 3s.
+// JS adds .masonry-query--loaded almost immediately, so this only fires
+// when something went wrong.
+@keyframes masonry-fallback-show {
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.wp-block-goodblocks-masonry-query:not(.masonry-query--loaded) .masonry-query__item {
+	animation: masonry-fallback-show 0s 3s forwards;
 }
 
 // =====================
