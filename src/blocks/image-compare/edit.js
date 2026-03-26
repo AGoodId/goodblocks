@@ -15,6 +15,7 @@ import {
 	RangeControl,
 	Button,
 	Placeholder,
+	SelectControl,
 } from '@wordpress/components';
 
 const ICON = (
@@ -43,10 +44,16 @@ export default function Edit( { attributes, setAttributes } ) {
 		afterLabel,
 		showLabels,
 		startPosition,
+		enableTease,
+		teaseSpeed,
+		teaseOnce,
+		orientation,
 	} = attributes;
 
+	const isVertical = orientation === 'vertical';
+
 	const blockProps = useBlockProps( {
-		className: 'image-compare-editor',
+		className: `image-compare-editor${ isVertical ? ' is-vertical' : '' }`,
 	} );
 
 	const onSelectBefore = ( media ) => {
@@ -67,7 +74,64 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const inspector = (
 		<InspectorControls>
-			<PanelBody title={ __( 'Settings', 'goodblocks' ) }>
+			<PanelBody title={ __( 'Slider', 'goodblocks' ) }>
+				<SelectControl
+					label={ __( 'Orientation', 'goodblocks' ) }
+					value={ orientation || 'horizontal' }
+					options={ [
+						{ label: __( 'Horizontal', 'goodblocks' ), value: 'horizontal' },
+						{ label: __( 'Vertical', 'goodblocks' ), value: 'vertical' },
+					] }
+					onChange={ ( v ) => setAttributes( { orientation: v } ) }
+				/>
+				<RangeControl
+					label={ __( 'Start position (%)', 'goodblocks' ) }
+					value={ startPosition }
+					min={ 10 }
+					max={ 90 }
+					onChange={ ( v ) => setAttributes( { startPosition: v } ) }
+				/>
+			</PanelBody>
+			<PanelBody title={ __( 'Auto-tease', 'goodblocks' ) }>
+				<ToggleControl
+					label={ __( 'Enable auto-tease animation', 'goodblocks' ) }
+					help={ __(
+						'Automatically slides back and forth to attract attention. Stops when the user interacts.',
+						'goodblocks'
+					) }
+					checked={ enableTease }
+					onChange={ ( v ) => setAttributes( { enableTease: v } ) }
+				/>
+				{ enableTease && (
+					<>
+						<RangeControl
+							label={ __( 'Speed (seconds per cycle)', 'goodblocks' ) }
+							value={ teaseSpeed }
+							min={ 1 }
+							max={ 8 }
+							step={ 0.5 }
+							onChange={ ( v ) =>
+								setAttributes( { teaseSpeed: v } )
+							}
+						/>
+						<ToggleControl
+							label={ __( 'Tease only once', 'goodblocks' ) }
+							help={ __(
+								'Run the animation once and then stop.',
+								'goodblocks'
+							) }
+							checked={ teaseOnce }
+							onChange={ ( v ) =>
+								setAttributes( { teaseOnce: v } )
+							}
+						/>
+					</>
+				) }
+			</PanelBody>
+			<PanelBody
+				title={ __( 'Labels', 'goodblocks' ) }
+				initialOpen={ false }
+			>
 				<ToggleControl
 					label={ __( 'Show labels', 'goodblocks' ) }
 					checked={ showLabels }
@@ -86,16 +150,11 @@ export default function Edit( { attributes, setAttributes } ) {
 					<TextControl
 						label={ __( 'After label', 'goodblocks' ) }
 						value={ afterLabel }
-						onChange={ ( v ) => setAttributes( { afterLabel: v } ) }
+						onChange={ ( v ) =>
+							setAttributes( { afterLabel: v } )
+						}
 					/>
 				) }
-				<RangeControl
-					label={ __( 'Start position (%)', 'goodblocks' ) }
-					value={ startPosition }
-					min={ 10 }
-					max={ 90 }
-					onChange={ ( v ) => setAttributes( { startPosition: v } ) }
-				/>
 			</PanelBody>
 		</InspectorControls>
 	);
@@ -103,6 +162,33 @@ export default function Edit( { attributes, setAttributes } ) {
 	// Preview mode — both images selected.
 	if ( beforeUrl && afterUrl ) {
 		const pos = startPosition || 50;
+		const clipBefore = isVertical
+			? `inset(0 0 ${ 100 - pos }% 0)`
+			: `inset(0 ${ 100 - pos }% 0 0)`;
+		const handleStyle = isVertical
+			? {
+					position: 'absolute',
+					left: 0,
+					right: 0,
+					top: `${ pos }%`,
+					height: '3px',
+					width: '100%',
+					background: '#fff',
+					boxShadow: '0 0 6px rgba(0,0,0,0.4)',
+					transform: 'translateY(-1.5px)',
+					pointerEvents: 'none',
+			  }
+			: {
+					position: 'absolute',
+					top: 0,
+					bottom: 0,
+					left: `${ pos }%`,
+					width: '2px',
+					background: '#fff',
+					boxShadow: '0 0 6px rgba(0,0,0,0.4)',
+					transform: 'translateX(-1px)',
+					pointerEvents: 'none',
+			  };
 
 		return (
 			<div { ...blockProps }>
@@ -128,7 +214,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							left: 0,
 							width: '100%',
 							height: '100%',
-							clipPath: `inset(0 ${ 100 - pos }% 0 0)`,
+							clipPath: clipBefore,
 						} }
 					>
 						<img
@@ -144,19 +230,9 @@ export default function Edit( { attributes, setAttributes } ) {
 					</div>
 					<div
 						className="image-compare-editor__handle"
-						style={ {
-							position: 'absolute',
-							top: 0,
-							bottom: 0,
-							left: `${ pos }%`,
-							width: '2px',
-							background: '#fff',
-							boxShadow: '0 0 6px rgba(0,0,0,0.4)',
-							transform: 'translateX(-1px)',
-							pointerEvents: 'none',
-						} }
+						style={ handleStyle }
 					>
-						<div className="image-compare-editor__knob" />
+						<div className={ `image-compare-editor__knob${ isVertical ? ' is-vertical' : '' }` } />
 					</div>
 					{ showLabels && (
 						<span className="image-compare-editor__label image-compare-editor__label--before">
@@ -166,6 +242,11 @@ export default function Edit( { attributes, setAttributes } ) {
 					{ showLabels && (
 						<span className="image-compare-editor__label image-compare-editor__label--after">
 							{ afterLabel }
+						</span>
+					) }
+					{ enableTease && (
+						<span className="image-compare-editor__tease-badge">
+							{ __( 'Auto-tease ON', 'goodblocks' ) }
 						</span>
 					) }
 				</div>

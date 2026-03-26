@@ -1,5 +1,8 @@
 /**
  * Image Compare Block — shared styles (editor + frontend).
+ *
+ * Supports horizontal (default) and vertical orientation.
+ * Auto-tease animation is driven by JS; CSS handles transitions.
  */
 
 .wp-block-goodblocks-image-compare {
@@ -35,7 +38,7 @@
 		}
 	}
 
-	// Handle bar.
+	// Handle bar (horizontal).
 	.image-compare__handle {
 		position: absolute;
 		top: 0;
@@ -64,12 +67,12 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: 40px;
-		height: 40px;
+		width: 44px;
+		height: 44px;
 		border-radius: 50%;
 		background: #fff;
 		border: 2px solid var(--wp--preset--color--primary, #2C5F2D);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -89,15 +92,15 @@
 
 		// Left arrow.
 		&::before {
-			left: 7px;
-			border-width: 5px 6px 5px 0;
+			left: 8px;
+			border-width: 6px 7px 6px 0;
 			border-color: transparent var(--wp--preset--color--primary, #2C5F2D) transparent transparent;
 		}
 
 		// Right arrow.
 		&::after {
-			right: 7px;
-			border-width: 5px 0 5px 6px;
+			right: 8px;
+			border-width: 6px 0 6px 7px;
 			border-color: transparent transparent transparent var(--wp--preset--color--primary, #2C5F2D);
 		}
 	}
@@ -106,9 +109,9 @@
 	.image-compare__label {
 		position: absolute;
 		top: 12px;
-		padding: 4px 12px;
+		padding: 4px 14px;
 		border-radius: 3px;
-		background: rgba(0, 0, 0, 0.55);
+		background: rgba(0, 0, 0, 0.6);
 		color: #fff;
 		font-family: var(--wp--preset--font-family--body, system-ui, sans-serif);
 		font-size: 0.7rem;
@@ -117,6 +120,8 @@
 		text-transform: uppercase;
 		pointer-events: none;
 		z-index: 5;
+		opacity: 1;
+		transition: opacity 0.3s ease;
 
 		&--before {
 			left: 12px;
@@ -127,20 +132,103 @@
 		}
 	}
 
-	// Smooth transition when not dragging.
-	&:not(.is-dragging) .image-compare__before {
-		transition: clip-path 0.1s ease;
+	// Smooth transition when not dragging and not teasing.
+	&:not(.is-dragging):not(.is-teasing) .image-compare__before {
+		transition: clip-path 0.15s ease;
 	}
 
-	&:not(.is-dragging) .image-compare__handle {
-		transition: left 0.1s ease;
+	&:not(.is-dragging):not(.is-teasing) .image-compare__handle {
+		transition: left 0.15s ease, top 0.15s ease;
+	}
+
+	// Teasing: knob pulses gently.
+	&.is-teasing .image-compare__handle-knob {
+		animation: image-compare-knob-pulse 2s ease-in-out infinite;
+	}
+
+	// =========================================================================
+	// VERTICAL ORIENTATION
+	// =========================================================================
+
+	&.is-vertical {
+		cursor: row-resize;
+
+		.image-compare__before {
+			clip-path: inset(0 0 50% 0);
+		}
+
+		.image-compare__handle {
+			top: 50%;
+			bottom: auto;
+			left: 0;
+			right: 0;
+			width: 100%;
+			height: 3px;
+			transform: translateY(-1.5px);
+			cursor: row-resize;
+		}
+
+		.image-compare__handle-knob {
+			// Up arrow.
+			&::before {
+				left: 50%;
+				top: 8px;
+				transform: translateX(-50%);
+				border-width: 0 6px 7px 6px;
+				border-color: transparent transparent var(--wp--preset--color--primary, #2C5F2D) transparent;
+			}
+
+			// Down arrow.
+			&::after {
+				left: 50%;
+				top: auto;
+				bottom: 8px;
+				right: auto;
+				transform: translateX(-50%);
+				border-width: 7px 6px 0 6px;
+				border-color: var(--wp--preset--color--primary, #2C5F2D) transparent transparent transparent;
+			}
+		}
+
+		.image-compare__label {
+			top: auto;
+			left: 50%;
+			transform: translateX(-50%);
+
+			&--before {
+				top: 12px;
+			}
+
+			&--after {
+				bottom: 12px;
+				right: auto;
+			}
+		}
+	}
+}
+
+// Knob pulse animation during tease.
+@keyframes image-compare-knob-pulse {
+	0%, 100% {
+		transform: translate(-50%, -50%) scale(1);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+	}
+	50% {
+		transform: translate(-50%, -50%) scale(1.1);
+		box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
 	}
 }
 
 // Reduced motion.
 @media (prefers-reduced-motion: reduce) {
-	.wp-block-goodblocks-image-compare .image-compare__before,
-	.wp-block-goodblocks-image-compare .image-compare__handle {
-		transition: none !important;
+	.wp-block-goodblocks-image-compare {
+		.image-compare__before,
+		.image-compare__handle {
+			transition: none !important;
+		}
+
+		.image-compare__handle-knob {
+			animation: none !important;
+		}
 	}
 }

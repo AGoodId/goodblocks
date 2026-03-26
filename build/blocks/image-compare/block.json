@@ -62,6 +62,26 @@
     "startPosition": {
       "type": "number",
       "default": 50
+    },
+    "enableTease": {
+      "type": "boolean",
+      "default": true
+    },
+    "teaseSpeed": {
+      "type": "number",
+      "default": 3
+    },
+    "teaseOnce": {
+      "type": "boolean",
+      "default": false
+    },
+    "orientation": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal"
     }
   },
   "editorScript": "file:./index.js",
