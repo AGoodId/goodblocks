@@ -4,7 +4,7 @@
 	"name": "goodblocks/image-compare",
 	"version": "1.0.0",
 	"title": "Image Compare",
-	"category": "media",
+	"category": "goodblocks",
 	"icon": "image-flip-horizontal",
 	"description": "Compare two images with a draggable slider — perfect for before/after views.",
 	"keywords": ["before", "after", "compare", "slider", "image"],
