@@ -70,6 +70,19 @@
 			"type": "string",
 			"enum": ["horizontal", "vertical"],
 			"default": "horizontal"
+		},
+		"aspectRatio": {
+			"type": "string",
+			"enum": ["original", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16"],
+			"default": "16:9"
+		},
+		"beforeFocalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
+		},
+		"afterFocalPoint": {
+			"type": "object",
+			"default": { "x": 0.5, "y": 0.5 }
 		}
 	},
 	"editorScript": "file:./index.js",

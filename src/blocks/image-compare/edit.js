@@ -16,6 +16,7 @@ import {
 	Button,
 	Placeholder,
 	SelectControl,
+	FocalPointPicker,
 } from '@wordpress/components';
 
 const ICON = (
@@ -31,6 +32,24 @@ const ICON = (
 		/>
 	</svg>
 );
+
+const ASPECT_RATIOS = [
+	{ label: __( 'Original', 'goodblocks' ), value: 'original' },
+	{ label: '16:9', value: '16:9' },
+	{ label: '4:3', value: '4:3' },
+	{ label: '3:2', value: '3:2' },
+	{ label: '1:1', value: '1:1' },
+	{ label: '2:3', value: '2:3' },
+	{ label: '3:4', value: '3:4' },
+	{ label: '9:16', value: '9:16' },
+];
+
+function getAspectRatioCSS( ratio ) {
+	if ( ! ratio || ratio === 'original' ) {
+		return undefined;
+	}
+	return ratio.replace( ':', ' / ' );
+}
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
@@ -48,9 +67,14 @@ export default function Edit( { attributes, setAttributes } ) {
 		teaseSpeed,
 		teaseOnce,
 		orientation,
+		aspectRatio,
+		beforeFocalPoint,
+		afterFocalPoint,
 	} = attributes;
 
 	const isVertical = orientation === 'vertical';
+	const arCSS = getAspectRatioCSS( aspectRatio );
+	const hasAR = !! arCSS;
 
 	const blockProps = useBlockProps( {
 		className: `image-compare-editor${ isVertical ? ' is-vertical' : '' }`,
@@ -72,9 +96,44 @@ export default function Edit( { attributes, setAttributes } ) {
 		} );
 	};
 
+	const bfp = beforeFocalPoint || { x: 0.5, y: 0.5 };
+	const afp = afterFocalPoint || { x: 0.5, y: 0.5 };
+
 	const inspector = (
 		<InspectorControls>
-			<PanelBody title={ __( 'Slider', 'goodblocks' ) }>
+			<PanelBody title={ __( 'Image', 'goodblocks' ) }>
+				<SelectControl
+					label={ __( 'Aspect ratio', 'goodblocks' ) }
+					value={ aspectRatio || '16:9' }
+					options={ ASPECT_RATIOS }
+					onChange={ ( v ) => setAttributes( { aspectRatio: v } ) }
+					help={ __(
+						'Controls the height of the comparison. Use "Original" to follow the image aspect ratio.',
+						'goodblocks'
+					) }
+				/>
+				{ beforeUrl && (
+					<FocalPointPicker
+						label={ __( 'Before image focal point', 'goodblocks' ) }
+						url={ beforeUrl }
+						value={ bfp }
+						onChange={ ( v ) =>
+							setAttributes( { beforeFocalPoint: v } )
+						}
+					/>
+				) }
+				{ afterUrl && (
+					<FocalPointPicker
+						label={ __( 'After image focal point', 'goodblocks' ) }
+						url={ afterUrl }
+						value={ afp }
+						onChange={ ( v ) =>
+							setAttributes( { afterFocalPoint: v } )
+						}
+					/>
+				) }
+			</PanelBody>
+			<PanelBody title={ __( 'Slider', 'goodblocks' ) } initialOpen={ false }>
 				<SelectControl
 					label={ __( 'Orientation', 'goodblocks' ) }
 					value={ orientation || 'horizontal' }
@@ -92,7 +151,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					onChange={ ( v ) => setAttributes( { startPosition: v } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Auto-tease', 'goodblocks' ) }>
+			<PanelBody title={ __( 'Auto-tease', 'goodblocks' ) } initialOpen={ false }>
 				<ToggleControl
 					label={ __( 'Enable auto-tease animation', 'goodblocks' ) }
 					help={ __(
@@ -190,20 +249,40 @@ export default function Edit( { attributes, setAttributes } ) {
 					pointerEvents: 'none',
 			  };
 
+		const containerStyle = {
+			position: 'relative',
+		};
+		if ( hasAR ) {
+			containerStyle.aspectRatio = arCSS;
+			containerStyle.overflow = 'hidden';
+		}
+
+		const imgStyle = hasAR
+			? {
+					display: 'block',
+					width: '100%',
+					height: '100%',
+					objectFit: 'cover',
+			  }
+			: {
+					display: 'block',
+					width: '100%',
+					height: 'auto',
+			  };
+
 		return (
 			<div { ...blockProps }>
 				{ inspector }
 				<div
 					className="image-compare-editor__preview"
-					style={ { position: 'relative' } }
+					style={ containerStyle }
 				>
 					<img
 						src={ afterUrl }
 						alt={ afterAlt }
 						style={ {
-							display: 'block',
-							width: '100%',
-							height: 'auto',
+							...imgStyle,
+							objectPosition: `${ afp.x * 100 }% ${ afp.y * 100 }%`,
 						} }
 					/>
 					<div
@@ -225,6 +304,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								width: '100%',
 								height: '100%',
 								objectFit: 'cover',
+								objectPosition: `${ bfp.x * 100 }% ${ bfp.y * 100 }%`,
 							} }
 						/>
 					</div>

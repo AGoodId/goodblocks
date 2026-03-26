@@ -24,20 +24,37 @@ $tease_speed   = floatval( $attributes['teaseSpeed'] ?? 3 );
 $tease_once    = $attributes['teaseOnce'] ?? false;
 $orientation   = $attributes['orientation'] ?? 'horizontal';
 $is_vertical   = $orientation === 'vertical';
+$aspect_ratio  = $attributes['aspectRatio'] ?? '16:9';
+$before_fp     = $attributes['beforeFocalPoint'] ?? [ 'x' => 0.5, 'y' => 0.5 ];
+$after_fp      = $attributes['afterFocalPoint'] ?? [ 'x' => 0.5, 'y' => 0.5 ];
 
 $classes = [];
 if ( $is_vertical ) {
 	$classes[] = 'is-vertical';
 }
+if ( $aspect_ratio && 'original' !== $aspect_ratio ) {
+	$classes[] = 'has-aspect-ratio';
+}
+
+// Build inline styles for aspect ratio.
+$inline_styles = '';
+if ( $aspect_ratio && 'original' !== $aspect_ratio ) {
+	$ar_css = str_replace( ':', ' / ', $aspect_ratio );
+	$inline_styles = 'aspect-ratio:' . esc_attr( $ar_css ) . ';';
+}
+
+$before_obj_pos = esc_attr( round( $before_fp['x'] * 100 ) . '% ' . round( $before_fp['y'] * 100 ) . '%' );
+$after_obj_pos  = esc_attr( round( $after_fp['x'] * 100 ) . '% ' . round( $after_fp['y'] * 100 ) . '%' );
 
 $wrapper_attributes = get_block_wrapper_attributes( [
-	'class'           => implode( ' ', $classes ),
-	'data-start'      => $start,
-	'data-tease'      => $enable_tease ? '1' : '0',
+	'class'            => implode( ' ', $classes ),
+	'style'            => $inline_styles,
+	'data-start'       => $start,
+	'data-tease'       => $enable_tease ? '1' : '0',
 	'data-tease-speed' => $tease_speed,
-	'data-tease-once' => $tease_once ? '1' : '0',
-	'role'            => 'group',
-	'aria-label'      => esc_attr__( 'Image comparison', 'goodblocks' ),
+	'data-tease-once'  => $tease_once ? '1' : '0',
+	'role'             => 'group',
+	'aria-label'       => esc_attr__( 'Image comparison', 'goodblocks' ),
 ] );
 
 $labels = '';
@@ -51,10 +68,10 @@ $handle_axis = $is_vertical ? 'vertical' : 'horizontal';
 
 <div <?php echo $wrapper_attributes; ?>>
 	<div class="image-compare__after">
-		<img src="<?php echo esc_url( $after_url ); ?>" alt="<?php echo $after_alt; ?>" loading="lazy" />
+		<img src="<?php echo esc_url( $after_url ); ?>" alt="<?php echo $after_alt; ?>" loading="lazy" style="object-position:<?php echo $after_obj_pos; ?>" />
 	</div>
 	<div class="image-compare__before">
-		<img src="<?php echo esc_url( $before_url ); ?>" alt="<?php echo $before_alt; ?>" loading="lazy" />
+		<img src="<?php echo esc_url( $before_url ); ?>" alt="<?php echo $before_alt; ?>" loading="lazy" style="object-position:<?php echo $before_obj_pos; ?>" />
 	</div>
 	<button
 		type="button"
