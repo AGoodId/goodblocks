@@ -30,6 +30,13 @@ module.exports = {
 		'blocks/mailchimp-signup/index': path.resolve(__dirname, 'src/blocks/mailchimp-signup/index.js'),
 		'blocks/post-grid/index': path.resolve(__dirname, 'src/blocks/post-grid/index.js'),
 		'blocks/post-grid/view': path.resolve(__dirname, 'src/blocks/post-grid/view.js'),
+		// Imported from agoodblocks
+		'blocks/hero/index': path.resolve(__dirname, 'src/blocks/hero/index.js'),
+		'blocks/slider/index': path.resolve(__dirname, 'src/blocks/slider/index.js'),
+		'blocks/slider/view': path.resolve(__dirname, 'src/blocks/slider/view.js'),
+		'blocks/slide/index': path.resolve(__dirname, 'src/blocks/slide/index.js'),
+		'blocks/product-carousel/index': path.resolve(__dirname, 'src/blocks/product-carousel/index.js'),
+		'blocks/product-carousel/view': path.resolve(__dirname, 'src/blocks/product-carousel/view.js'),
 	},
 	output: {
 		...defaultConfig.output,

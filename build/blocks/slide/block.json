@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/slide",
+  "title": "Slide",
+  "category": "goodblocks",
+  "parent": [
+    "goodblocks/slider"
+  ],
+  "icon": "slides",
+  "description": "A single slide within a slider — image or video with optional text overlay.",
+  "supports": {
+    "html": false,
+    "reusable": false,
+    "color": {
+      "gradient": true
+    }
+  },
+  "usesContext": [
+    "goodblocks/sliderClientId",
+    "goodblocks/layout"
+  ],
+  "attributes": {
+    "mediaId": {
+      "type": "number",
+      "default": 0
+    },
+    "mediaUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "mediaType": {
+      "type": "string",
+      "default": "image"
+    },
+    "caption": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "text": {
+      "type": "string",
+      "default": ""
+    },
+    "contentPosition": {
+      "type": "string",
+      "default": "center center"
+    },
+    "objectFit": {
+      "type": "string",
+      "default": "cover"
+    },
+    "showOverlay": {
+      "type": "boolean",
+      "default": false
+    },
+    "overlayColor": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "default": 0.3
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "linkTarget": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

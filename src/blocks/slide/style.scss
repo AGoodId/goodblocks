@@ -1,0 +1,101 @@
+.slide-item {
+	position: relative;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	aspect-ratio: inherit;
+
+	.slide-media {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+
+		img, video {
+			width: 100%;
+			height: 100%;
+			object-fit: var(--object-fit, cover);
+		}
+	}
+
+	.slide-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2;
+	}
+
+	.slide-content {
+		position: relative;
+		z-index: 3;
+		padding: 2rem;
+		color: white;
+		text-align: center;
+		width: 100%;
+		max-width: 800px;
+
+		.slide-heading {
+			font-size: 3rem;
+			font-weight: bold;
+			margin-bottom: 1rem;
+			color: white;
+		}
+
+		.slide-text {
+			font-size: 1.25rem;
+			color: white;
+		}
+	}
+
+	&.layout-below {
+		flex-direction: column;
+		align-items: stretch;
+		height: auto;
+		overflow: visible;
+
+		.slide-media {
+			position: relative;
+			top: auto;
+			left: auto;
+			width: 100%;
+			aspect-ratio: inherit;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			overflow: hidden;
+
+			img, video {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				object-fit: var(--object-fit, cover);
+			}
+		}
+
+		.slide-caption-content {
+			position: relative;
+			padding: 1rem 2rem;
+			text-align: center;
+			z-index: 10;
+
+			.slide-caption { margin: 0; }
+		}
+	}
+
+	// Position variations.
+	&.position-top-left .slide-content { position: absolute; top: 2rem; left: 2rem; text-align: left; }
+	&.position-top-center .slide-content { position: absolute; top: 2rem; left: 50%; transform: translateX(-50%); text-align: center; }
+	&.position-top-right .slide-content { position: absolute; top: 2rem; right: 2rem; text-align: right; }
+	&.position-center-left .slide-content { position: absolute; top: 50%; left: 2rem; transform: translateY(-50%); text-align: left; }
+	&.position-center-center .slide-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+	&.position-center-right .slide-content { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); text-align: right; }
+	&.position-bottom-left .slide-content { position: absolute; bottom: 2rem; left: 2rem; text-align: left; }
+	&.position-bottom-center .slide-content { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); text-align: center; }
+	&.position-bottom-right .slide-content { position: absolute; bottom: 2rem; right: 2rem; text-align: right; }
+}

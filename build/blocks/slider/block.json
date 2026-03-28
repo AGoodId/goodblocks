@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/slider",
+  "title": "Slider",
+  "category": "goodblocks",
+  "icon": "slides",
+  "description": "Image and video slider with multiple transition effects, autoplay, and navigation.",
+  "keywords": [
+    "slider",
+    "carousel",
+    "slideshow",
+    "gallery"
+  ],
+  "supports": {
+    "align": [
+      "full",
+      "wide"
+    ],
+    "html": false
+  },
+  "attributes": {
+    "showNavigation": {
+      "type": "boolean",
+      "default": false
+    },
+    "showPagination": {
+      "type": "boolean",
+      "default": false
+    },
+    "effect": {
+      "type": "string",
+      "default": "fade"
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": true
+    },
+    "autoplayDelay": {
+      "type": "number",
+      "default": 5000
+    },
+    "layout": {
+      "type": "string",
+      "default": "overlay"
+    },
+    "sliderHeight": {
+      "type": "number",
+      "default": 50
+    },
+    "aspectRatio": {
+      "type": "string",
+      "default": "16-9"
+    }
+  },
+  "providesContext": {
+    "goodblocks/sliderClientId": "clientId",
+    "goodblocks/layout": "layout"
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Post Grid, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.4.0' );
+define( 'GOODBLOCKS_VERSION', '1.4.1' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
@@ -30,10 +30,6 @@ require_once GOODBLOCKS_DIR . 'inc/helpers.php';
 // GitHub-based auto-updater.
 require_once GOODBLOCKS_DIR . 'inc/github-updater.php';
 new GoodBlocks_GitHub_Updater( __FILE__, 'AGoodId/goodblocks' );
-
-// AGoodMonitor — WordPress health reporting.
-require_once GOODBLOCKS_DIR . 'inc/agoodmonitor.php';
-new AGoodMonitor_Health();
 
 /**
  * Register custom blocks.
@@ -52,6 +48,10 @@ function goodblocks_register_blocks() {
 		'media-grid-item',
 		'mailchimp-signup',
 		'post-grid',
+		'hero',
+		'slider',
+		'slide',
+		'product-carousel',
 	];
 
 	foreach ( $blocks as $block ) {
@@ -191,6 +191,10 @@ function goodblocks_migrate_namespace( string $from, string $to ): void {
 		'media-grid-item',
 		'mailchimp-signup',
 		'post-grid',
+		'hero',
+		'slider',
+		'slide',
+		'product-carousel',
 	];
 
 	foreach ( $blocks as $block ) {

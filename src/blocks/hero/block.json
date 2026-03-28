@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/hero",
+	"title": "Hero",
+	"category": "goodblocks",
+	"icon": "star-filled",
+	"description": "Full-screen hero section with background image/video, text, overlay, and scroll-triggered animations.",
+	"keywords": ["hero", "banner", "fullscreen", "animation"],
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"],
+		"color": { "gradient": true },
+		"spacing": { "padding": true, "margin": true }
+	},
+	"attributes": {
+		"contentPosition": {
+			"type": "string",
+			"default": "center center"
+		},
+		"positionClass": {
+			"type": "string",
+			"default": ""
+		},
+		"animation": {
+			"type": "string",
+			"default": "ingen"
+		},
+		"height": {
+			"type": "string",
+			"default": "100svh"
+		},
+		"rubrik": {
+			"type": "string",
+			"default": ""
+		},
+		"text": {
+			"type": "string",
+			"default": ""
+		},
+		"button": {
+			"type": "string",
+			"default": ""
+		},
+		"reverseFlow": {
+			"type": "boolean",
+			"default": false
+		},
+		"backgroundMedia": {
+			"type": "object",
+			"default": null
+		},
+		"backgroundType": {
+			"type": "string",
+			"default": "image"
+		},
+		"dimRatio": {
+			"type": "number",
+			"default": 0
+		},
+		"overlayColor": {
+			"type": "string",
+			"default": "#000000"
+		},
+		"scrollArrow": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

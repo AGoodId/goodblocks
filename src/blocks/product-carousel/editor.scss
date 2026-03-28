@@ -1,0 +1,27 @@
+.wp-block-goodblocks-product-carousel {
+	.products {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		gap: 20px;
+		list-style: none;
+
+		.swiper-slide:nth-child(n+5) { display: none; }
+
+		.product {
+			background: #fafafa;
+
+			a { text-decoration: none; pointer-events: none; }
+
+			h2 {
+				font-size: calc(1.2625rem + 0.11vw) !important;
+				font-weight: normal;
+				margin: 0;
+			}
+
+			.price {
+				font-size: 0.875rem !important;
+				margin-top: 1rem;
+			}
+		}
+	}
+}

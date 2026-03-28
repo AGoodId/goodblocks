@@ -1,0 +1,34 @@
+.wp-block-goodblocks-hero {
+	height: 50vh;
+
+	.hero-block__video {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.hero-block__content {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 2;
+
+		.btn,
+		button {
+			color: inherit !important;
+			border-color: currentColor !important;
+		}
+
+		h2.block-editor-rich-text__editable.rich-text {
+			font-size: 80px;
+		}
+	}
+}
+
+.components-button + .components-button {
+	margin-left: 5px;
+}

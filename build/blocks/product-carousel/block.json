@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/product-carousel",
+  "title": "Product Carousel",
+  "category": "goodblocks",
+  "icon": "products",
+  "description": "WooCommerce product carousel with category, tag, and attribute filtering, or manual product selection.",
+  "keywords": [
+    "product",
+    "carousel",
+    "woocommerce",
+    "shop"
+  ],
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": {
+      "gradient": true
+    }
+  },
+  "attributes": {
+    "rubrik": {
+      "type": "string",
+      "default": ""
+    },
+    "text": {
+      "type": "string",
+      "default": ""
+    },
+    "orderBy": {
+      "type": "string",
+      "default": "menu_order"
+    },
+    "productsToShow": {
+      "type": "number",
+      "default": 8
+    },
+    "sourceType": {
+      "type": "string",
+      "default": "category"
+    },
+    "category": {
+      "type": "string",
+      "default": ""
+    },
+    "formgivare": {
+      "type": "string",
+      "default": ""
+    },
+    "attribute": {
+      "type": "string",
+      "default": ""
+    },
+    "typeOfAttribute": {
+      "type": "string",
+      "default": ""
+    },
+    "tag": {
+      "type": "string",
+      "default": ""
+    },
+    "manualMode": {
+      "type": "boolean",
+      "default": false
+    },
+    "manualProducts": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

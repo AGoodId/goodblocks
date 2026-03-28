@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@wordpress/icons": "^11.6.0",
-    "gsap": "^3.12.0"
+    "gsap": "^3.12.0",
+    "swiper": "^12.1.3"
   }
 }
