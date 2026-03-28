@@ -31,6 +31,10 @@ require_once GOODBLOCKS_DIR . 'inc/helpers.php';
 require_once GOODBLOCKS_DIR . 'inc/github-updater.php';
 new GoodBlocks_GitHub_Updater( __FILE__, 'AGoodId/goodblocks' );
 
+// AGoodMonitor — WordPress health reporting.
+require_once GOODBLOCKS_DIR . 'inc/agoodmonitor.php';
+new AGoodMonitor_Health();
+
 /**
  * Register custom blocks.
  */
