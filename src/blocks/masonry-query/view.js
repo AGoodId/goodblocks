@@ -71,6 +71,7 @@ class MasonryQueryBlock {
 
 		this.isScrolling = false;
 		this.layoutPending = false;
+		this.allImagesLoaded = false;
 
 		// Track active touch/scroll to avoid layout during scroll (iOS fix).
 		let scrollTimer;
@@ -100,14 +101,18 @@ class MasonryQueryBlock {
 
 		const onImageLoad = () => {
 			loadedCount++;
-			layout();
 			if ( loadedCount >= totalImages ) {
+				this.allImagesLoaded = true;
 				this.container.classList.add( 'masonry-query--loaded' );
 			}
+			layout();
 		};
 
+		// For lazy-loaded images that are off-screen, img.complete may be true
+		// but naturalHeight is 0 (no data yet). Only count as loaded if the
+		// image actually has dimensions.
 		images.forEach( ( img ) => {
-			if ( img.complete ) {
+			if ( img.complete && img.naturalHeight > 0 ) {
 				onImageLoad();
 			} else {
 				img.addEventListener( 'load', onImageLoad );
@@ -116,6 +121,7 @@ class MasonryQueryBlock {
 		} );
 
 		if ( totalImages === 0 ) {
+			this.allImagesLoaded = true;
 			this.container.classList.add( 'masonry-query--loaded' );
 			layout();
 		}
@@ -134,6 +140,31 @@ class MasonryQueryBlock {
 
 	layoutMasonryGrid() {
 		if ( ! this.grid ) {
+			return;
+		}
+
+		// Single-column layout (mobile): masonry packing is unnecessary —
+		// items fill the full width naturally. Just use auto rows.
+		const cols = parseInt(
+			getComputedStyle( this.grid ).gridTemplateColumns.split( ' ' ).length,
+			10
+		);
+		if ( cols <= 1 ) {
+			this.grid.style.gridAutoRows = 'auto';
+			this.items.forEach( ( item ) => {
+				item.style.gridRowEnd = '';
+			} );
+			return;
+		}
+
+		// Before all images are loaded, keep auto rows so items have natural
+		// height and remain visible. This prevents lazy-loaded images from
+		// collapsing to 0px and never scrolling into view (deadlock).
+		if ( ! this.allImagesLoaded ) {
+			this.grid.style.gridAutoRows = 'auto';
+			this.items.forEach( ( item ) => {
+				item.style.gridRowEnd = '';
+			} );
 			return;
 		}
 
