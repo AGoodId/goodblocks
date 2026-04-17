@@ -28,6 +28,7 @@ require_once GOODBLOCKS_DIR . 'inc/search-rest-api.php';
 require_once GOODBLOCKS_DIR . 'inc/agoodapp-settings.php';
 require_once GOODBLOCKS_DIR . 'inc/agoodapp-proxy.php';
 require_once GOODBLOCKS_DIR . 'inc/agoodapp-sideload.php';
+require_once GOODBLOCKS_DIR . 'inc/agoodapp-import.php';
 
 // Helper functions (template loader, thumbnail fallback).
 require_once GOODBLOCKS_DIR . 'inc/helpers.php';
