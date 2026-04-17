@@ -1,0 +1,122 @@
+.agoodapp-media-picker {
+	&__placeholder {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 200px;
+		border: 2px dashed #ddd;
+		border-radius: 4px;
+		background: #f8f9f9;
+	}
+
+	&__placeholder-btn {
+		padding: 10px 20px;
+		background: #1d2327;
+		color: #fff;
+		border: none;
+		border-radius: 3px;
+		cursor: pointer;
+		font-size: 13px;
+
+		&:hover {
+			background: #2c3338;
+		}
+	}
+
+	&__preview {
+		img,
+		video {
+			max-width: 100%;
+			display: block;
+		}
+	}
+
+	&__title {
+		font-size: 12px;
+		color: #646970;
+		margin: 6px 0 0;
+		text-align: center;
+	}
+}
+
+.agoodapp-modal {
+	.components-modal__content {
+		padding-top: 0;
+	}
+
+	&__search {
+		margin-bottom: 4px;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 8px;
+		padding: 16px 0 8px;
+	}
+
+	&__item {
+		position: relative;
+		padding: 0;
+		border: 2px solid transparent;
+		border-radius: 4px;
+		background: none;
+		cursor: pointer;
+		overflow: hidden;
+		aspect-ratio: 1;
+		transition: border-color 0.1s ease;
+
+		&:hover {
+			border-color: #007cba;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	&__thumbnail {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	&__video-thumb {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+
+	&__video-badge {
+		position: absolute;
+		bottom: 6px;
+		right: 6px;
+		background: rgba(0, 0, 0, 0.65);
+		color: #fff;
+		border-radius: 50%;
+		width: 22px;
+		height: 22px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 9px;
+		pointer-events: none;
+	}
+
+	&__loading,
+	&__sideloading {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		justify-content: center;
+		padding: 16px;
+		color: #646970;
+		font-size: 13px;
+	}
+
+	&__sentinel {
+		height: 1px;
+	}
+}

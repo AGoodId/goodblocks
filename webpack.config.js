@@ -37,6 +37,8 @@ module.exports = {
 		'blocks/slide/index': path.resolve(__dirname, 'src/blocks/slide/index.js'),
 		'blocks/product-carousel/index': path.resolve(__dirname, 'src/blocks/product-carousel/index.js'),
 		'blocks/product-carousel/view': path.resolve(__dirname, 'src/blocks/product-carousel/view.js'),
+		// AGoodApp Media Picker
+		'blocks/agoodapp-media-picker/index': path.resolve(__dirname, 'src/blocks/agoodapp-media-picker/index.js'),
 	},
 	output: {
 		...defaultConfig.output,

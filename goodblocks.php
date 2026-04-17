@@ -24,6 +24,11 @@ define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 require_once GOODBLOCKS_DIR . 'inc/masonry-rest-api.php';
 require_once GOODBLOCKS_DIR . 'inc/search-rest-api.php';
 
+// AGoodApp Media Picker integration.
+require_once GOODBLOCKS_DIR . 'inc/agoodapp-settings.php';
+require_once GOODBLOCKS_DIR . 'inc/agoodapp-proxy.php';
+require_once GOODBLOCKS_DIR . 'inc/agoodapp-sideload.php';
+
 // Helper functions (template loader, thumbnail fallback).
 require_once GOODBLOCKS_DIR . 'inc/helpers.php';
 
@@ -59,6 +64,12 @@ function goodblocks_register_blocks() {
 		if ( file_exists( $block_path . '/block.json' ) ) {
 			register_block_type( $block_path );
 		}
+	}
+
+	// AGoodApp Media Picker uses a separate namespace (agoodapp/media-picker).
+	$agoodapp_block = GOODBLOCKS_DIR . 'build/blocks/agoodapp-media-picker';
+	if ( file_exists( $agoodapp_block . '/block.json' ) ) {
+		register_block_type( $agoodapp_block );
 	}
 }
 add_action( 'init', 'goodblocks_register_blocks' );

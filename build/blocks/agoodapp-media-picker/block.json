@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "agoodapp/media-picker",
+  "title": "AGoodApp Media",
+  "category": "goodblocks",
+  "icon": "admin-media",
+  "description": "Pick and embed media from AGoodApp directly in the editor.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "attachmentId": {
+      "type": "number",
+      "default": 0
+    },
+    "mediaType": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video"
+      ],
+      "default": "image"
+    },
+    "agoodappSourceId": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "example": {},
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php"
+}

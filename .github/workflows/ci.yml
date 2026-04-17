@@ -75,9 +75,9 @@ jobs:
               errors=$((errors + 1))
             fi
 
-            # Verify namespace
-            if [[ "$name" != goodblocks/* ]]; then
-              echo "::error file=$f::Block name '$name' does not use goodblocks/ namespace"
+            # Verify namespace (goodblocks/* or agoodapp/*)
+            if [[ "$name" != goodblocks/* && "$name" != agoodapp/* ]]; then
+              echo "::error file=$f::Block name '$name' does not use goodblocks/ or agoodapp/ namespace"
               errors=$((errors + 1))
             fi
           done
