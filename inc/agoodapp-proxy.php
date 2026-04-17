@@ -96,7 +96,7 @@ function agoodapp_proxy_media( WP_REST_Request $request ): WP_REST_Response|WP_E
 	$data = json_decode( $body, true );
 
 	if ( ! isset( $data['items'] ) || ! is_array( $data['items'] ) ) {
-		return new WP_Error( 'agoodapp_invalid_response', __( 'Unexpected response from AGoodApp API.', 'goodblocks' ), [ 'status' => 502 ] );
+		return new WP_Error( 'agoodapp_invalid_response', 'Unexpected response. Body: ' . substr( $body, 0, 500 ), [ 'status' => 502 ] );
 	}
 
 	// Ensure thumbnail_path and web_path are absolute URLs.
