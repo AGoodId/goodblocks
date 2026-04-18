@@ -125,7 +125,10 @@ function goodblocks_event_dates_render( WP_Post $post ): void {
 			style="width:100%;" value="<?php echo esc_attr( $start_val ); ?>">
 	</p>
 	<p>
-		<label for="goodblocks_event_end"><strong><?php esc_html_e( 'End', 'goodblocks' ); ?></strong></label><br>
+		<label for="goodblocks_event_end">
+			<strong><?php esc_html_e( 'End', 'goodblocks' ); ?></strong>
+			<span style="font-weight:400;color:#757575;margin-left:4px;"><?php esc_html_e( '(valfritt)', 'goodblocks' ); ?></span>
+		</label><br>
 		<input type="<?php echo esc_attr( $input_type ); ?>" id="goodblocks_event_end" name="goodblocks_event_end"
 			style="width:100%;" value="<?php echo esc_attr( $end_val ); ?>">
 	</p>
