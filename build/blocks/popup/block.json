@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/popup",
+  "title": "Popup",
+  "category": "goodblocks",
+  "icon": "migrate",
+  "description": "Display a modal popup triggered by time delay, scroll, or exit intent.",
+  "supports": {
+    "html": false,
+    "align": false,
+    "inserter": true
+  },
+  "attributes": {
+    "trigger": {
+      "type": "string",
+      "default": "time",
+      "enum": [
+        "time",
+        "scroll",
+        "exit"
+      ]
+    },
+    "delay": {
+      "type": "number",
+      "default": 3
+    },
+    "scrollPercent": {
+      "type": "number",
+      "default": 50
+    },
+    "cookieName": {
+      "type": "string",
+      "default": "gb_popup_1"
+    },
+    "cookieDays": {
+      "type": "number",
+      "default": 7
+    }
+  },
+  "example": {},
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}

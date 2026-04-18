@@ -1,0 +1,19 @@
+.goodblocks-popup-editor {
+	border: 2px dashed #007cba;
+	border-radius: 4px;
+	padding: 1rem;
+	position: relative;
+
+	.popup-editor-label {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: #007cba;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-bottom: 0.75rem;
+	}
+
+	.popup-content-preview {
+		min-height: 60px;
+	}
+}
