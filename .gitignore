@@ -1,5 +1,11 @@
 # macOS
 .DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
 
 # Dependencies
 node_modules/
@@ -9,6 +15,7 @@ node_modules/
 
 # IDE
 .vscode/
+.idea/
 .history/
 *.swp
 *.swo

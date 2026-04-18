@@ -8,10 +8,14 @@
     "lint:js": "wp-scripts lint-js src/",
     "lint:css": "wp-scripts lint-style 'src/**/*.scss'",
     "lint": "npm run lint:js && npm run lint:css",
-    "packages-update": "wp-scripts packages-update"
+    "packages-update": "wp-scripts packages-update",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^30.0.0"
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@wordpress/scripts": "^30.0.0",
+    "husky": "^9.1.7"
   },
   "dependencies": {
     "@wordpress/icons": "^11.6.0",

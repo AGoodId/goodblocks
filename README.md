@@ -150,6 +150,27 @@ goodblocks/
     release.yml           Build zip + create GitHub Release on tag push
 ```
 
+### Branch-strategi
+
+| Branch | Syfte |
+|--------|-------|
+| `main` | Produktion — CI körs vid push, release vid tag |
+| `feature/[namn]` | Ny funktionalitet |
+| `fix/[namn]` | Buggfix |
+
+Merge alltid via Pull Request till `main`. Pusha aldrig direkt till `main`.
+
+### Commit-konventioner
+
+Vi använder [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat: lägg till quiz-block med mediabakgrund
+fix: korrigera masonry-paginering på mobil
+chore: uppdatera @wordpress/scripts till v30
+refactor: bryt ut template-loader till helpers.php
+```
+
 ### Releasing a new version
 
 1. Bump the version in `goodblocks.php` (both the header and `GOODBLOCKS_VERSION`)
