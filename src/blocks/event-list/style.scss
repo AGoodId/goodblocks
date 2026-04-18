@@ -1,0 +1,61 @@
+.wp-block-goodblocks-event-list {
+	&.grid {
+		display: grid;
+		grid-template-columns: repeat(var(--events-per-row, 3), 1fr);
+		gap: 1.5rem;
+	}
+
+	&.list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.event-thumbnail img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.event-date {
+		font-size: 0.875rem;
+		opacity: 0.7;
+		margin-bottom: 0.25rem;
+	}
+
+	.event-title {
+		margin: 0 0 0.5rem;
+		font-size: 1.125rem;
+
+		a {
+			text-decoration: none;
+			color: inherit;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.event-excerpt {
+		font-size: 0.9rem;
+	}
+
+	.event-list-item {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+
+		.event-thumbnail {
+			flex: 0 0 200px;
+		}
+
+		.event-content {
+			flex: 1;
+		}
+	}
+}
+
+.goodblocks-no-events {
+	opacity: 0.6;
+}

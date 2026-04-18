@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/event-list",
+  "title": "Event List",
+  "category": "goodblocks",
+  "icon": "calendar-alt",
+  "description": "Display events from the Events post type in a list or grid layout.",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "default": {
+      "align": "full"
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "viewMode": {
+      "type": "string",
+      "default": "grid",
+      "enum": [
+        "grid",
+        "list"
+      ]
+    },
+    "eventsToShow": {
+      "type": "number",
+      "default": 6
+    },
+    "eventsPerRow": {
+      "type": "number",
+      "default": 3
+    },
+    "showPast": {
+      "type": "boolean",
+      "default": false
+    },
+    "categorySlug": {
+      "type": "string",
+      "default": ""
+    },
+    "showFeaturedImage": {
+      "type": "boolean",
+      "default": true
+    },
+    "showExcerpt": {
+      "type": "boolean",
+      "default": true
+    },
+    "excerptLength": {
+      "type": "number",
+      "default": 100
+    },
+    "noEventsText": {
+      "type": "string",
+      "default": "Inga kommande händelser."
+    }
+  },
+  "example": {},
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

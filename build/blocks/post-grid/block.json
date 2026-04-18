@@ -41,6 +41,10 @@
       "type": "boolean",
       "default": true
     },
+    "showCategory": {
+      "type": "boolean",
+      "default": false
+    },
     "showAuthor": {
       "type": "boolean",
       "default": true
