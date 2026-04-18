@@ -10,10 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action( 'admin_notices', function() {
-	if ( ! isset( get_current_screen()->id ) ) return;
-	echo '<div class="notice notice-info"><p>AGoodApp import loaded. Screen: ' . esc_html( get_current_screen()->id ) . '</p></div>';
-} );
 add_filter( 'bulk_actions-upload', 'agoodapp_register_import_bulk_action' );
 add_filter( 'handle_bulk_actions-upload', 'agoodapp_handle_import_bulk_action', 10, 3 );
 add_action( 'admin_notices', 'agoodapp_import_admin_notice' );
