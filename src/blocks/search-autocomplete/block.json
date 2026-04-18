@@ -64,6 +64,17 @@
 			"type": "string",
 			"enum": ["icon", "text", "both"],
 			"default": "icon"
+		},
+		"suggestedLinks": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"label": { "type": "string" },
+					"url": { "type": "string" }
+				}
+			}
 		}
 	},
 	"editorScript": "file:./index.js",

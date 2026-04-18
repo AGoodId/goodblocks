@@ -18,6 +18,21 @@ $show_type      = $attributes['showType'] ?? true;
 $expandable     = $attributes['expandable'] ?? true;
 $button_style   = $attributes['buttonStyle'] ?? 'icon';
 
+$raw_links      = $attributes['suggestedLinks'] ?? [];
+$safe_links     = array_values( array_filter(
+	array_slice(
+		array_map( function ( $item ) {
+			return [
+				'label' => sanitize_text_field( $item['label'] ?? '' ),
+				'url'   => esc_url_raw( $item['url'] ?? '' ),
+			];
+		}, (array) $raw_links ),
+		0,
+		8
+	),
+	fn( $i ) => $i['label'] !== '' && $i['url'] !== ''
+) );
+
 $wrapper_attributes = get_block_wrapper_attributes( [
 	'class'                  => 'search-autocomplete' . ( $expandable ? ' search-autocomplete--expandable' : '' ),
 	'id'                     => esc_attr( $block_id ),
@@ -30,6 +45,7 @@ $wrapper_attributes = get_block_wrapper_attributes( [
 	'data-expandable'        => $expandable ? 'true' : 'false',
 	'data-api-url'           => esc_url( rest_url( apply_filters( 'goodblocks_search_rest_namespace', 'goodblocks/v1' ) . '/search' ) ),
 	'data-suggestions-url'   => esc_url( rest_url( apply_filters( 'goodblocks_search_rest_namespace', 'goodblocks/v1' ) . '/search/suggestions' ) ),
+	'data-suggested-links'   => wp_json_encode( $safe_links ),
 ] );
 
 $trigger_icon = '<svg class="search-autocomplete__trigger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>';

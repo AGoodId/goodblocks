@@ -9,6 +9,7 @@ import {
 	RangeControl,
 	ToggleControl,
 	SelectControl,
+	Button,
 } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 
@@ -24,6 +25,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		showType,
 		expandable,
 		buttonStyle,
+		suggestedLinks,
 	} = attributes;
 
 	// Set unique block ID
@@ -146,6 +148,92 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							setAttributes( { buttonStyle: value } )
 						}
 					/>
+				</PanelBody>
+
+				<PanelBody
+					title={ __( 'Föreslagna länkar', 'goodblocks' ) }
+					initialOpen={ false }
+				>
+					<p
+						style={ {
+							marginTop: 0,
+							fontSize: '12px',
+							color: '#757575',
+						} }
+					>
+						{ __(
+							'Visas vid focus när sökfältet är tomt. Max 8 länkar.',
+							'goodblocks'
+						) }
+					</p>
+					{ suggestedLinks.map( ( link, index ) => (
+						<div
+							key={ index }
+							style={ {
+								marginBottom: '12px',
+								padding: '8px',
+								background: '#f6f7f7',
+								borderRadius: '4px',
+							} }
+						>
+							<TextControl
+								label={ __( 'Etikett', 'goodblocks' ) }
+								value={ link.label }
+								onChange={ ( value ) => {
+									const updated = [ ...suggestedLinks ];
+									updated[ index ] = {
+										...updated[ index ],
+										label: value,
+									};
+									setAttributes( {
+										suggestedLinks: updated,
+									} );
+								} }
+							/>
+							<TextControl
+								label={ __( 'URL', 'goodblocks' ) }
+								value={ link.url }
+								onChange={ ( value ) => {
+									const updated = [ ...suggestedLinks ];
+									updated[ index ] = {
+										...updated[ index ],
+										url: value,
+									};
+									setAttributes( {
+										suggestedLinks: updated,
+									} );
+								} }
+							/>
+							<Button
+								isDestructive
+								variant="link"
+								onClick={ () =>
+									setAttributes( {
+										suggestedLinks: suggestedLinks.filter(
+											( _, i ) => i !== index
+										),
+									} )
+								}
+							>
+								{ __( 'Ta bort', 'goodblocks' ) }
+							</Button>
+						</div>
+					) ) }
+					{ suggestedLinks.length < 8 && (
+						<Button
+							variant="secondary"
+							onClick={ () =>
+								setAttributes( {
+									suggestedLinks: [
+										...suggestedLinks,
+										{ label: '', url: '' },
+									],
+								} )
+							}
+						>
+							{ __( '+ Lägg till länk', 'goodblocks' ) }
+						</Button>
+					) }
 				</PanelBody>
 			</InspectorControls>
 
