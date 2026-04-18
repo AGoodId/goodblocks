@@ -9,7 +9,6 @@ import {
 	InspectorControls,
 	MediaUpload,
 	MediaUploadCheck,
-	__experimentalLinkControl as LinkControl,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -17,10 +16,8 @@ import {
 	ToggleControl,
 	Button,
 	TextControl,
-	Popover,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 import { link as linkIcon } from '@wordpress/icons';
 
 import metadata from './block.json';
@@ -61,8 +58,6 @@ const Edit = ( { attributes, setAttributes } ) => {
 		metaText,
 		animation,
 	} = attributes;
-
-	const [ isLinkOpen, setIsLinkOpen ] = useState( false );
 
 	const blockProps = useBlockProps( {
 		className: `card-feature card-feature--${ layout } card-feature--hover-${ hoverEffect } card-feature--ratio-${ imageRatio }`,

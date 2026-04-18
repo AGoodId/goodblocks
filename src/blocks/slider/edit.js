@@ -82,15 +82,17 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	}, [ slideCount, currentSlide ] );
 
 	const nextSlide = () => {
-		if ( slideCount < 2 ) return;
+		if ( slideCount < 2 ) {
+			return;
+		}
 		setCurrentSlide( ( currentSlide + 1 ) % slideCount );
 	};
 
 	const prevSlide = () => {
-		if ( slideCount < 2 ) return;
-		setCurrentSlide(
-			( currentSlide - 1 + slideCount ) % slideCount
-		);
+		if ( slideCount < 2 ) {
+			return;
+		}
+		setCurrentSlide( ( currentSlide - 1 + slideCount ) % slideCount );
 	};
 
 	const addSlide = () => {
@@ -100,10 +102,14 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	};
 
 	const addSlidesFromMedia = ( media ) => {
-		if ( ! media ) return;
+		if ( ! media ) {
+			return;
+		}
 		const mediaArray = Array.isArray( media ) ? media : [ media ];
 		const valid = mediaArray.filter( ( item ) => item && item.id );
-		if ( ! valid.length ) return;
+		if ( ! valid.length ) {
+			return;
+		}
 
 		const newSlides = valid.map( ( item ) =>
 			createBlock( 'goodblocks/slide', {
@@ -144,10 +150,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							render={ ( { open } ) => (
 								<ToolbarButton
 									icon={ imageIcon }
-									label={ __(
-										'Add Images',
-										'goodblocks'
-									) }
+									label={ __( 'Add Images', 'goodblocks' ) }
 									onClick={ open }
 								/>
 							) }
@@ -170,8 +173,17 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						label={ __( 'Layout', 'goodblocks' ) }
 						value={ layout }
 						options={ [
-							{ label: __( 'Text Overlay', 'goodblocks' ), value: 'overlay' },
-							{ label: __( 'Text Below (with Caption)', 'goodblocks' ), value: 'below' },
+							{
+								label: __( 'Text Overlay', 'goodblocks' ),
+								value: 'overlay',
+							},
+							{
+								label: __(
+									'Text Below (with Caption)',
+									'goodblocks'
+								),
+								value: 'below',
+							},
 						] }
 						onChange={ ( v ) => setAttributes( { layout: v } ) }
 					/>
@@ -204,9 +216,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					<ToggleControl
 						label={ __( 'Enable Autoplay', 'goodblocks' ) }
 						checked={ autoplay }
-						onChange={ ( v ) =>
-							setAttributes( { autoplay: v } )
-						}
+						onChange={ ( v ) => setAttributes( { autoplay: v } ) }
 					/>
 					{ autoplay && (
 						<RangeControl
@@ -227,7 +237,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						label={ __( 'Aspect Ratio', 'goodblocks' ) }
 						value={ aspectRatio || '16-9' }
 						options={ [
-							{ label: __( 'None (use slider height)', 'goodblocks' ), value: 'none' },
+							{
+								label: __(
+									'None (use slider height)',
+									'goodblocks'
+								),
+								value: 'none',
+							},
 							{ label: '16:9', value: '16-9' },
 							{ label: '4:3', value: '4-3' },
 							{ label: '3:1', value: '3-1' },
@@ -238,10 +254,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					/>
 					{ ( aspectRatio === 'none' || ! aspectRatio ) && (
 						<RangeControl
-							label={ __(
-								'Slider Height (vh)',
-								'goodblocks'
-							) }
+							label={ __( 'Slider Height (vh)', 'goodblocks' ) }
 							value={ sliderHeight }
 							onChange={ ( v ) =>
 								setAttributes( { sliderHeight: v } )

@@ -44,9 +44,7 @@ function setup( container ) {
 	// --- Auto-tease animation ---
 
 	function easeInOutCubic( t ) {
-		return t < 0.5
-			? 4 * t * t * t
-			: 1 - Math.pow( -2 * t + 2, 3 ) / 2;
+		return t < 0.5 ? 4 * t * t * t : 1 - Math.pow( -2 * t + 2, 3 ) / 2;
 	}
 
 	function startTease() {
@@ -295,13 +293,11 @@ function setup( container ) {
 	function setPosition( pct ) {
 		pct = Math.max( 0, Math.min( 100, pct ) );
 		if ( isVertical ) {
-			before.style.clipPath =
-				'inset(0 0 ' + ( 100 - pct ) + '% 0)';
+			before.style.clipPath = 'inset(0 0 ' + ( 100 - pct ) + '% 0)';
 			handle.style.top = pct + '%';
 			handle.style.left = '';
 		} else {
-			before.style.clipPath =
-				'inset(0 ' + ( 100 - pct ) + '% 0 0)';
+			before.style.clipPath = 'inset(0 ' + ( 100 - pct ) + '% 0 0)';
 			handle.style.left = pct + '%';
 			handle.style.top = '';
 		}

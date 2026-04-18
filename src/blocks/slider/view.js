@@ -27,7 +27,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			const slides = sliderContainer.querySelectorAll(
 				'.wp-block-goodblocks-slide'
 			);
-			if ( ! slides.length ) return;
+			if ( ! slides.length ) {
+				return;
+			}
 
 			const showNavigation =
 				sliderContainer.dataset.showNavigation === 'true';
@@ -61,7 +63,8 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 					const caption = slide.dataset.caption;
 					if ( caption && caption.trim() !== '' ) {
-						const figcaption = document.createElement( 'figcaption' );
+						const figcaption =
+							document.createElement( 'figcaption' );
 						figcaption.className = 'slide-caption-content';
 						const captionP = document.createElement( 'p' );
 						captionP.className = 'slide-caption';

@@ -32,7 +32,6 @@ export default function Edit( { attributes, setAttributes } ) {
 		imageType,
 		textType,
 		link: itemLink,
-		height,
 		gridColumn,
 		gridRow,
 		textPosition,

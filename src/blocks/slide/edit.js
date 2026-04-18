@@ -6,7 +6,8 @@ import {
 	InspectorControls,
 	MediaUpload,
 	MediaUploadCheck,
-	__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl,
+	BlockAlignmentMatrixControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalLinkControl as LinkControl,
 } from '@wordpress/block-editor';
 import {
@@ -18,7 +19,11 @@ import {
 	RangeControl,
 	Popover,
 } from '@wordpress/components';
-import { image as imageIcon, link as linkIcon, linkOff } from '@wordpress/icons';
+import {
+	image as imageIcon,
+	link as linkIcon,
+	linkOff,
+} from '@wordpress/icons';
 import { useState, useRef } from '@wordpress/element';
 import './editor.scss';
 
@@ -90,7 +95,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							icon={ linkOff }
 							label={ __( 'Unlink', 'goodblocks' ) }
 							onClick={ () => {
-								setAttributes( { linkUrl: '', linkTarget: false } );
+								setAttributes( {
+									linkUrl: '',
+									linkTarget: false,
+								} );
 								setIsEditingLink( false );
 							} }
 						/>
@@ -99,9 +107,14 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				{ layout === 'overlay' && (
 					<ToolbarGroup>
 						<BlockAlignmentMatrixControl
-							label={ __( 'Change content position', 'goodblocks' ) }
+							label={ __(
+								'Change content position',
+								'goodblocks'
+							) }
 							value={ contentPosition }
-							onChange={ ( v ) => setAttributes( { contentPosition: v } ) }
+							onChange={ ( v ) =>
+								setAttributes( { contentPosition: v } )
+							}
 						/>
 					</ToolbarGroup>
 				) }
@@ -123,7 +136,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							} )
 						}
 						settings={ [
-							{ id: 'opensInNewTab', title: __( 'Open in new tab', 'goodblocks' ) },
+							{
+								id: 'opensInNewTab',
+								title: __( 'Open in new tab', 'goodblocks' ),
+							},
 						] }
 					/>
 				</Popover>
@@ -148,25 +164,44 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						<ToggleControl
 							label={ __( 'Show Overlay', 'goodblocks' ) }
 							checked={ showOverlay }
-							onChange={ ( v ) => setAttributes( { showOverlay: v } ) }
+							onChange={ ( v ) =>
+								setAttributes( { showOverlay: v } )
+							}
 						/>
 						{ showOverlay && (
 							<>
 								<div style={ { marginBottom: '16px' } }>
-									<label style={ { display: 'block', marginBottom: '8px', fontWeight: '500' } }>
+									<label
+										htmlFor="slide-overlay-color"
+										style={ {
+											display: 'block',
+											marginBottom: '8px',
+											fontWeight: '500',
+										} }
+									>
 										{ __( 'Overlay Color', 'goodblocks' ) }
 									</label>
 									<input
+										id="slide-overlay-color"
 										type="color"
 										value={ overlayColor }
 										onChange={ ( e ) =>
-											setAttributes( { overlayColor: e.target.value } )
+											setAttributes( {
+												overlayColor: e.target.value,
+											} )
 										}
-										style={ { width: '100%', height: '40px', cursor: 'pointer' } }
+										style={ {
+											width: '100%',
+											height: '40px',
+											cursor: 'pointer',
+										} }
 									/>
 								</div>
 								<RangeControl
-									label={ __( 'Overlay Opacity', 'goodblocks' ) }
+									label={ __(
+										'Overlay Opacity',
+										'goodblocks'
+									) }
 									value={ overlayOpacity }
 									onChange={ ( v ) =>
 										setAttributes( { overlayOpacity: v } )
@@ -188,7 +223,13 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							{ mediaType === 'image' ? (
 								<img src={ mediaUrl } alt="" />
 							) : (
-								<video src={ mediaUrl } autoPlay loop muted playsInline />
+								<video
+									src={ mediaUrl }
+									autoPlay
+									loop
+									muted
+									playsInline
+								/>
 							) }
 						</div>
 					) : (
@@ -203,7 +244,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							} }
 						>
 							<p style={ { color: '#999' } }>
-								{ __( 'Select an image or video', 'goodblocks' ) }
+								{ __(
+									'Select an image or video',
+									'goodblocks'
+								) }
 							</p>
 						</div>
 					) }
@@ -211,8 +255,14 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						{ caption ? (
 							<p className="slide-caption">{ caption }</p>
 						) : (
-							<p className="slide-caption" style={ { color: '#999' } }>
-								{ __( 'Caption from media library', 'goodblocks' ) }
+							<p
+								className="slide-caption"
+								style={ { color: '#999' } }
+							>
+								{ __(
+									'Caption from media library',
+									'goodblocks'
+								) }
 							</p>
 						) }
 					</figcaption>
@@ -224,7 +274,13 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							{ mediaType === 'image' ? (
 								<img src={ mediaUrl } alt="" />
 							) : (
-								<video src={ mediaUrl } autoPlay loop muted playsInline />
+								<video
+									src={ mediaUrl }
+									autoPlay
+									loop
+									muted
+									playsInline
+								/>
 							) }
 						</div>
 					) }
@@ -237,12 +293,16 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							} }
 						></div>
 					) }
-					<div className={ `slide-content position-${ positionClass }` }>
+					<div
+						className={ `slide-content position-${ positionClass }` }
+					>
 						<RichText
 							tagName="h2"
 							className="slide-heading"
 							value={ heading }
-							onChange={ ( v ) => setAttributes( { heading: v } ) }
+							onChange={ ( v ) =>
+								setAttributes( { heading: v } )
+							}
 							placeholder={ __( 'Slide heading…', 'goodblocks' ) }
 						/>
 						<RichText

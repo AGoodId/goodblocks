@@ -6,15 +6,15 @@ import {
 	MediaUploadCheck,
 	RichText,
 	BlockControls,
-	__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl,
+	BlockAlignmentMatrixControl,
 } from '@wordpress/block-editor';
 import {
 	Panel,
 	PanelBody,
 	SelectControl,
 	Button,
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
+	UnitControl,
+	useCustomUnits,
 	ToggleControl,
 	RangeControl,
 	ColorPalette,
@@ -76,11 +76,26 @@ export default function Edit( { attributes, setAttributes } ) {
 							label={ __( 'Animation', 'goodblocks' ) }
 							value={ animation }
 							options={ [
-								{ label: __( 'None', 'goodblocks' ), value: 'ingen' },
-								{ label: __( 'Standard', 'goodblocks' ), value: 'standard' },
-								{ label: __( 'Wild', 'goodblocks' ), value: 'wild' },
-								{ label: __( 'From right', 'goodblocks' ), value: 'from-right' },
-								{ label: __( 'From left', 'goodblocks' ), value: 'from-left' },
+								{
+									label: __( 'None', 'goodblocks' ),
+									value: 'ingen',
+								},
+								{
+									label: __( 'Standard', 'goodblocks' ),
+									value: 'standard',
+								},
+								{
+									label: __( 'Wild', 'goodblocks' ),
+									value: 'wild',
+								},
+								{
+									label: __( 'From right', 'goodblocks' ),
+									value: 'from-right',
+								},
+								{
+									label: __( 'From left', 'goodblocks' ),
+									value: 'from-left',
+								},
 							] }
 							onChange={ ( v ) =>
 								setAttributes( { animation: v } )
@@ -91,9 +106,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							max={ 100 }
 							label={ __( 'Height', 'goodblocks' ) }
 							value={ height }
-							onChange={ ( v ) =>
-								setAttributes( { height: v } )
-							}
+							onChange={ ( v ) => setAttributes( { height: v } ) }
 							units={ units }
 						/>
 						<ToggleControl
@@ -199,9 +212,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<RangeControl
 						label={ __( 'Overlay opacity' ) }
 						value={ dimRatio }
-						onChange={ ( v ) =>
-							setAttributes( { dimRatio: v } )
-						}
+						onChange={ ( v ) => setAttributes( { dimRatio: v } ) }
 						min={ 0 }
 						max={ 100 }
 						step={ 10 }
@@ -238,11 +249,15 @@ export default function Edit( { attributes, setAttributes } ) {
 					} }
 				></div>
 				<div
-					className={ `hero-block__content ${ getPositionClassName( contentPosition ) }` }
+					className={ `hero-block__content ${ getPositionClassName(
+						contentPosition
+					) }` }
 				>
 					<div>
 						<div
-							className={ `hero-block__text${ reverseFlow ? ' reverse-flow' : '' }` }
+							className={ `hero-block__text${
+								reverseFlow ? ' reverse-flow' : ''
+							}` }
 						>
 							<RichText
 								tagName="h2"
@@ -264,6 +279,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								) }
 							/>
 						</div>
+						{ /* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
 						<a className="btn">
 							<RichText
 								tagName="span"

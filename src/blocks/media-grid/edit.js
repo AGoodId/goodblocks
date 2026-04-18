@@ -37,15 +37,7 @@ const LAYOUT_OPTIONS = [
 ];
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const {
-		columns,
-		gap,
-		layout,
-		tabletColumns,
-		mobileColumns,
-		height,
-		borderRadius,
-	} = attributes;
+	const { columns, gap, layout, height, borderRadius } = attributes;
 
 	const [ showTemplateSelector, setShowTemplateSelector ] = useState( false );
 	const { replaceBlocks, updateBlockAttributes } =
@@ -54,16 +46,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		( select ) => select( 'core/block-editor' ).getBlockOrder( clientId ),
 		[ clientId ]
 	);
-	const innerBlocks = useSelect(
-		( select ) => select( 'core/block-editor' ).getBlocks( clientId ),
-		[ clientId ]
-	);
-
 	const getLargeItemSpan = ( cols ) => {
 		return Math.ceil( ( cols * 2 ) / 3 ) || 2;
 	};
 
+	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 	const getLayoutAttributes = ( layoutType, cols = 3 ) => {
+		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 		const largeSpan = getLargeItemSpan( cols );
 		const clearAttrs = { gridColumn: undefined, gridRow: undefined };
 		switch ( layoutType ) {
@@ -115,7 +104,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		}
 	};
 
+	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 	const getTemplate = ( layoutType, cols = 3 ) => {
+		// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 		const largeSpan = getLargeItemSpan( cols );
 		switch ( layoutType ) {
 			case 'grid':

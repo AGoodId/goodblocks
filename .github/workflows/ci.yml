@@ -21,10 +21,7 @@ jobs:
       - run: npm install
 
       - name: Lint JavaScript
-        # 16 legacy errors remain in card-feature, media-grid, masonry-query view.js
-        # Remove continue-on-error once cleaned up
         run: npx wp-scripts lint-js src/
-        continue-on-error: true
 
       - name: Build
         run: npm run build

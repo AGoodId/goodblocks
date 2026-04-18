@@ -133,13 +133,22 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				) }
 			</PanelBody>
-			<PanelBody title={ __( 'Slider', 'goodblocks' ) } initialOpen={ false }>
+			<PanelBody
+				title={ __( 'Slider', 'goodblocks' ) }
+				initialOpen={ false }
+			>
 				<SelectControl
 					label={ __( 'Orientation', 'goodblocks' ) }
 					value={ orientation || 'horizontal' }
 					options={ [
-						{ label: __( 'Horizontal', 'goodblocks' ), value: 'horizontal' },
-						{ label: __( 'Vertical', 'goodblocks' ), value: 'vertical' },
+						{
+							label: __( 'Horizontal', 'goodblocks' ),
+							value: 'horizontal',
+						},
+						{
+							label: __( 'Vertical', 'goodblocks' ),
+							value: 'vertical',
+						},
 					] }
 					onChange={ ( v ) => setAttributes( { orientation: v } ) }
 				/>
@@ -151,7 +160,10 @@ export default function Edit( { attributes, setAttributes } ) {
 					onChange={ ( v ) => setAttributes( { startPosition: v } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Auto-tease', 'goodblocks' ) } initialOpen={ false }>
+			<PanelBody
+				title={ __( 'Auto-tease', 'goodblocks' ) }
+				initialOpen={ false }
+			>
 				<ToggleControl
 					label={ __( 'Enable auto-tease animation', 'goodblocks' ) }
 					help={ __(
@@ -164,7 +176,10 @@ export default function Edit( { attributes, setAttributes } ) {
 				{ enableTease && (
 					<>
 						<RangeControl
-							label={ __( 'Speed (seconds per cycle)', 'goodblocks' ) }
+							label={ __(
+								'Speed (seconds per cycle)',
+								'goodblocks'
+							) }
 							value={ teaseSpeed }
 							min={ 1 }
 							max={ 8 }
@@ -209,9 +224,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<TextControl
 						label={ __( 'After label', 'goodblocks' ) }
 						value={ afterLabel }
-						onChange={ ( v ) =>
-							setAttributes( { afterLabel: v } )
-						}
+						onChange={ ( v ) => setAttributes( { afterLabel: v } ) }
 					/>
 				) }
 			</PanelBody>
@@ -282,7 +295,9 @@ export default function Edit( { attributes, setAttributes } ) {
 						alt={ afterAlt }
 						style={ {
 							...imgStyle,
-							objectPosition: `${ afp.x * 100 }% ${ afp.y * 100 }%`,
+							objectPosition: `${ afp.x * 100 }% ${
+								afp.y * 100
+							}%`,
 						} }
 					/>
 					<div
@@ -304,7 +319,9 @@ export default function Edit( { attributes, setAttributes } ) {
 								width: '100%',
 								height: '100%',
 								objectFit: 'cover',
-								objectPosition: `${ bfp.x * 100 }% ${ bfp.y * 100 }%`,
+								objectPosition: `${ bfp.x * 100 }% ${
+									bfp.y * 100
+								}%`,
 							} }
 						/>
 					</div>
@@ -312,7 +329,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						className="image-compare-editor__handle"
 						style={ handleStyle }
 					>
-						<div className={ `image-compare-editor__knob${ isVertical ? ' is-vertical' : '' }` } />
+						<div
+							className={ `image-compare-editor__knob${
+								isVertical ? ' is-vertical' : ''
+							}` }
+						/>
 					</div>
 					{ showLabels && (
 						<span className="image-compare-editor__label image-compare-editor__label--before">

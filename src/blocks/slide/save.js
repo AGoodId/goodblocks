@@ -34,7 +34,13 @@ export default function save( { attributes } ) {
 					{ mediaType === 'image' ? (
 						<img src={ mediaUrl } alt="" />
 					) : (
-						<video src={ mediaUrl } autoPlay loop muted playsInline />
+						<video
+							src={ mediaUrl }
+							autoPlay
+							loop
+							muted
+							playsInline
+						/>
 					) }
 				</div>
 			) }
@@ -48,8 +54,16 @@ export default function save( { attributes } ) {
 				></div>
 			) }
 			<div className={ `slide-content position-${ positionClass }` }>
-				<RichText.Content tagName="h2" className="slide-heading" value={ heading } />
-				<RichText.Content tagName="p" className="slide-text" value={ text } />
+				<RichText.Content
+					tagName="h2"
+					className="slide-heading"
+					value={ heading }
+				/>
+				<RichText.Content
+					tagName="p"
+					className="slide-text"
+					value={ text }
+				/>
 			</div>
 		</>
 	);

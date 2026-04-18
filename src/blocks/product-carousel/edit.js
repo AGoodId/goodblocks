@@ -172,17 +172,12 @@ export default function Edit( { attributes, setAttributes } ) {
 					<ToggleControl
 						label={ __( 'Manual product selection', 'goodblocks' ) }
 						checked={ manualMode }
-						onChange={ ( v ) =>
-							setAttributes( { manualMode: v } )
-						}
+						onChange={ ( v ) => setAttributes( { manualMode: v } ) }
 					/>
 					{ ! manualMode && (
 						<>
 							<RangeControl
-								label={ __(
-									'Products to show',
-									'goodblocks'
-								) }
+								label={ __( 'Products to show', 'goodblocks' ) }
 								value={ productsToShow }
 								onChange={ ( v ) =>
 									setAttributes( { productsToShow: v } )
@@ -227,12 +222,36 @@ export default function Edit( { attributes, setAttributes } ) {
 								label={ __( 'Sort by', 'goodblocks' ) }
 								value={ orderBy || 'menu_order' }
 								options={ [
-									{ label: __( 'Default', 'goodblocks' ), value: 'menu_order' },
-									{ label: __( 'Title A-Z', 'goodblocks' ), value: 'title-asc' },
-									{ label: __( 'Title Z-A', 'goodblocks' ), value: 'title-desc' },
-									{ label: __( 'Popularity', 'goodblocks' ), value: 'popularity' },
-									{ label: __( 'Price: Low to High', 'goodblocks' ), value: 'price' },
-									{ label: __( 'Price: High to Low', 'goodblocks' ), value: 'price-desc' },
+									{
+										label: __( 'Default', 'goodblocks' ),
+										value: 'menu_order',
+									},
+									{
+										label: __( 'Title A-Z', 'goodblocks' ),
+										value: 'title-asc',
+									},
+									{
+										label: __( 'Title Z-A', 'goodblocks' ),
+										value: 'title-desc',
+									},
+									{
+										label: __( 'Popularity', 'goodblocks' ),
+										value: 'popularity',
+									},
+									{
+										label: __(
+											'Price: Low to High',
+											'goodblocks'
+										),
+										value: 'price',
+									},
+									{
+										label: __(
+											'Price: High to Low',
+											'goodblocks'
+										),
+										value: 'price-desc',
+									},
 								] }
 								onChange={ ( v ) =>
 									setAttributes( { orderBy: v } )
@@ -252,7 +271,9 @@ export default function Edit( { attributes, setAttributes } ) {
 										( p ) => p.id === id
 									);
 									return prod
-										? `${ decodeEntities( prod.name ) } - ${ prod.id }`
+										? `${ decodeEntities( prod.name ) } - ${
+												prod.id
+										  }`
 										: `${ id }`;
 								} ) }
 								suggestions={ productSuggestions }
@@ -275,73 +296,81 @@ export default function Edit( { attributes, setAttributes } ) {
 											minHeight: 40,
 										} }
 									>
-										{ manualProductObjects.map( ( prod ) => (
-											<li
-												key={ prod.id }
-												draggable
-												onDragStart={ ( e ) =>
-													e.dataTransfer.setData(
-														'text/plain',
-														prod.id
-													)
-												}
-												onDragOver={ ( e ) =>
-													e.preventDefault()
-												}
-												onDrop={ ( e ) => {
-													const draggedId = Number(
-														e.dataTransfer.getData(
-															'text/plain'
+										{ manualProductObjects.map(
+											( prod ) => (
+												<li
+													key={ prod.id }
+													draggable
+													onDragStart={ ( e ) =>
+														e.dataTransfer.setData(
+															'text/plain',
+															prod.id
 														)
-													);
-													if (
-														draggedId !== prod.id
-													) {
-														const oldIdx =
-															manualProducts.indexOf(
-																draggedId
-															);
-														const newIdx =
-															manualProducts.indexOf(
-																prod.id
+													}
+													onDragOver={ ( e ) =>
+														e.preventDefault()
+													}
+													onDrop={ ( e ) => {
+														const draggedId =
+															Number(
+																e.dataTransfer.getData(
+																	'text/plain'
+																)
 															);
 														if (
-															oldIdx !== -1 &&
-															newIdx !== -1
+															draggedId !==
+															prod.id
 														) {
-															const newOrder =
-																Array.from(
-																	manualProducts
+															const oldIdx =
+																manualProducts.indexOf(
+																	draggedId
 																);
-															const [ removed ] =
+															const newIdx =
+																manualProducts.indexOf(
+																	prod.id
+																);
+															if (
+																oldIdx !== -1 &&
+																newIdx !== -1
+															) {
+																const newOrder =
+																	Array.from(
+																		manualProducts
+																	);
+																const [
+																	removed,
+																] =
+																	newOrder.splice(
+																		oldIdx,
+																		1
+																	);
 																newOrder.splice(
-																	oldIdx,
-																	1
+																	newIdx,
+																	0,
+																	removed
 																);
-															newOrder.splice(
-																newIdx,
-																0,
-																removed
-															);
-															setAttributes( {
-																manualProducts:
-																	newOrder,
-															} );
+																setAttributes( {
+																	manualProducts:
+																		newOrder,
+																} );
+															}
 														}
-													}
-												} }
-												style={ {
-													marginBottom: 4,
-													background: '#f8f8f8',
-													border: '1px solid #ddd',
-													borderRadius: 3,
-													padding: 6,
-													cursor: 'grab',
-												} }
-											>
-												{ decodeEntities( prod.name ) }
-											</li>
-										) ) }
+													} }
+													style={ {
+														marginBottom: 4,
+														background: '#f8f8f8',
+														border: '1px solid #ddd',
+														borderRadius: 3,
+														padding: 6,
+														cursor: 'grab',
+													} }
+												>
+													{ decodeEntities(
+														prod.name
+													) }
+												</li>
+											)
+										) }
 									</ul>
 								</div>
 							) }

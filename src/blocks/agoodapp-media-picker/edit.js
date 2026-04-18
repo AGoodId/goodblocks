@@ -1,3 +1,4 @@
+/* global IntersectionObserver */
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, BlockControls } from '@wordpress/block-editor';
 import {
@@ -20,51 +21,70 @@ const LIMIT = 24;
 export default function Edit( { attributes, setAttributes } ) {
 	const { attachmentId, mediaType, title: mediaTitle } = attributes;
 
-	const [ isModalOpen, setIsModalOpen ]       = useState( false );
-	const [ items, setItems ]                   = useState( [] );
-	const [ page, setPage ]                     = useState( 1 );
-	const [ hasMore, setHasMore ]               = useState( true );
-	const [ isLoading, setIsLoading ]           = useState( false );
-	const [ isSideloading, setIsSideloading ]   = useState( false );
-	const [ error, setError ]                   = useState( null );
-	const [ search, setSearch ]                 = useState( '' );
+	const [ isModalOpen, setIsModalOpen ] = useState( false );
+	const [ items, setItems ] = useState( [] );
+	const [ page, setPage ] = useState( 1 );
+	const [ hasMore, setHasMore ] = useState( true );
+	const [ isLoading, setIsLoading ] = useState( false );
+	const [ isSideloading, setIsSideloading ] = useState( false );
+	const [ error, setError ] = useState( null );
+	const [ search, setSearch ] = useState( '' );
 
 	const isLoadingRef = useRef( false );
-	const sentinelRef  = useRef( null );
-	const searchTimer  = useRef( null );
-	const blockProps   = useBlockProps();
+	const sentinelRef = useRef( null );
+	const searchTimer = useRef( null );
+	const blockProps = useBlockProps();
 
 	const mediaItem = useSelect(
-		( select ) => attachmentId ? select( coreStore ).getMedia( attachmentId ) : null,
+		( select ) =>
+			attachmentId ? select( coreStore ).getMedia( attachmentId ) : null,
 		[ attachmentId ]
 	);
 
-	const previewUrl = mediaType === 'video'
-		? mediaItem?.source_url
-		: ( mediaItem?.media_details?.sizes?.medium?.source_url ?? mediaItem?.source_url );
+	const previewUrl =
+		mediaType === 'video'
+			? mediaItem?.source_url
+			: mediaItem?.media_details?.sizes?.medium?.source_url ??
+			  mediaItem?.source_url;
 
 	// Fetch one page whenever page, search, or modal visibility changes.
 	useEffect( () => {
-		if ( ! isModalOpen ) return;
+		if ( ! isModalOpen ) {
+			return;
+		}
 
 		let cancelled = false;
 		isLoadingRef.current = true;
 		setIsLoading( true );
 		setError( null );
 
-		const searchParam = search ? `&search=${ encodeURIComponent( search ) }` : '';
-		apiFetch( { path: `/goodblocks/v1/agoodapp/media?page=${ page }&limit=${ LIMIT }${ searchParam }` } )
+		const searchParam = search
+			? `&search=${ encodeURIComponent( search ) }`
+			: '';
+		apiFetch( {
+			path: `/goodblocks/v1/agoodapp/media?page=${ page }&limit=${ LIMIT }${ searchParam }`,
+		} )
 			.then( ( data ) => {
-				if ( cancelled ) return;
-				setItems( ( prev ) => page === 1 ? data.items : [ ...prev, ...data.items ] );
+				if ( cancelled ) {
+					return;
+				}
+				setItems( ( prev ) =>
+					page === 1 ? data.items : [ ...prev, ...data.items ]
+				);
 				setHasMore( data.hasMore );
 			} )
 			.catch( ( err ) => {
-				if ( cancelled ) return;
-				setError( err.message || __( 'Could not load media.', 'goodblocks' ) );
+				if ( cancelled ) {
+					return;
+				}
+				setError(
+					err.message || __( 'Could not load media.', 'goodblocks' )
+				);
 			} )
 			.finally( () => {
-				if ( cancelled ) return;
+				if ( cancelled ) {
+					return;
+				}
 				isLoadingRef.current = false;
 				setIsLoading( false );
 			} );
@@ -76,11 +96,17 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	// Sentinel-based infinite scroll — reconnect when hasMore changes.
 	useEffect( () => {
-		if ( ! isModalOpen || ! sentinelRef.current ) return;
+		if ( ! isModalOpen || ! sentinelRef.current ) {
+			return;
+		}
 
 		const observer = new IntersectionObserver(
 			( entries ) => {
-				if ( entries[ 0 ].isIntersecting && ! isLoadingRef.current && hasMore ) {
+				if (
+					entries[ 0 ].isIntersecting &&
+					! isLoadingRef.current &&
+					hasMore
+				) {
 					setPage( ( p ) => p + 1 );
 				}
 			},
@@ -115,21 +141,21 @@ export default function Edit( { attributes, setAttributes } ) {
 		setError( null );
 		try {
 			const data = await apiFetch( {
-				path:   '/goodblocks/v1/agoodapp/sideload',
+				path: '/goodblocks/v1/agoodapp/sideload',
 				method: 'POST',
-				data:   {
-					source_id:  String( item.id ),
-					url:        item.web_path,
-					title:      item.title,
-					filename:   item.filename,
+				data: {
+					source_id: String( item.id ),
+					url: item.web_path,
+					title: item.title,
+					filename: item.filename,
 					media_type: item.file_type ?? 'image',
 				},
 			} );
 			setAttributes( {
-				attachmentId:     data.attachment_id,
-				mediaType:        data.media_type,
+				attachmentId: data.attachment_id,
+				mediaType: data.media_type,
 				agoodappSourceId: String( item.id ),
-				title:            item.title,
+				title: item.title,
 			} );
 			setIsModalOpen( false );
 		} catch ( err ) {
@@ -203,7 +229,10 @@ export default function Edit( { attributes, setAttributes } ) {
 					{ isSideloading && (
 						<div className="agoodapp-modal__sideloading">
 							<Spinner />
-							{ __( 'Uploading to media library…', 'goodblocks' ) }
+							{ __(
+								'Uploading to media library…',
+								'goodblocks'
+							) }
 						</div>
 					) }
 					<div className="agoodapp-modal__grid">
@@ -247,7 +276,10 @@ export default function Edit( { attributes, setAttributes } ) {
 							<Spinner />
 						</div>
 					) }
-					<div ref={ sentinelRef } className="agoodapp-modal__sentinel" />
+					<div
+						ref={ sentinelRef }
+						className="agoodapp-modal__sentinel"
+					/>
 				</Modal>
 			) }
 		</>

@@ -327,6 +327,7 @@ class SearchAutocompleteBlock {
 			this.cache.set( cacheKey, data );
 			this.renderSuggestions( data, normalizedQuery );
 		} catch ( error ) {
+			// eslint-disable-next-line no-console
 			console.error( 'Suggestions error:', error );
 			this.closeResults();
 		} finally {
@@ -375,6 +376,7 @@ class SearchAutocompleteBlock {
 			this.renderResults( data, query );
 		} catch ( error ) {
 			if ( error.name !== 'AbortError' ) {
+				// eslint-disable-next-line no-console
 				console.error( 'Search error:', error );
 				this.renderError();
 			}

@@ -132,8 +132,8 @@ const Edit = ( { attributes, setAttributes } ) => {
 				{ answers.map( ( answer, index ) => (
 					<TextControl
 						key={ index }
-						/* translators: %d: answer number */
 						label={ sprintf(
+							/* translators: %d: answer number */
 							__( 'Answer %d', 'goodblocks' ),
 							index + 1
 						) }
@@ -141,8 +141,8 @@ const Edit = ( { attributes, setAttributes } ) => {
 						onChange={ ( newAnswer ) =>
 							updateAnswer( index, newAnswer )
 						}
-						/* translators: %d: answer number */
 						placeholder={ sprintf(
+							/* translators: %d: answer number */
 							__( 'Answer %d here…', 'goodblocks' ),
 							index + 1
 						) }

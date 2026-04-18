@@ -21,7 +21,6 @@ const Edit = ( { attributes, setAttributes } ) => {
 		showExcerpt,
 		excerptLength,
 		showDate,
-		showCategory,
 		showAuthor,
 		aspectRatio,
 		postsToShow,

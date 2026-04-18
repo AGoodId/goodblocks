@@ -33,10 +33,18 @@ const Edit = ( { attributes, setAttributes } ) => {
 						label={ __( 'View mode', 'goodblocks' ) }
 						value={ viewMode }
 						options={ [
-							{ label: __( 'Grid', 'goodblocks' ), value: 'grid' },
-							{ label: __( 'List', 'goodblocks' ), value: 'list' },
+							{
+								label: __( 'Grid', 'goodblocks' ),
+								value: 'grid',
+							},
+							{
+								label: __( 'List', 'goodblocks' ),
+								value: 'list',
+							},
 						] }
-						onChange={ ( val ) => setAttributes( { viewMode: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { viewMode: val } )
+						}
 					/>
 					{ viewMode === 'grid' && (
 						<RangeControl
@@ -44,7 +52,9 @@ const Edit = ( { attributes, setAttributes } ) => {
 							value={ eventsPerRow }
 							min={ 1 }
 							max={ 6 }
-							onChange={ ( val ) => setAttributes( { eventsPerRow: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( { eventsPerRow: val } )
+							}
 						/>
 					) }
 					<RangeControl
@@ -52,19 +62,28 @@ const Edit = ( { attributes, setAttributes } ) => {
 						value={ eventsToShow }
 						min={ 1 }
 						max={ 48 }
-						onChange={ ( val ) => setAttributes( { eventsToShow: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { eventsToShow: val } )
+						}
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'Content', 'goodblocks' ) } initialOpen={ false }>
+				<PanelBody
+					title={ __( 'Content', 'goodblocks' ) }
+					initialOpen={ false }
+				>
 					<ToggleControl
 						label={ __( 'Show featured image', 'goodblocks' ) }
 						checked={ showFeaturedImage }
-						onChange={ ( val ) => setAttributes( { showFeaturedImage: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { showFeaturedImage: val } )
+						}
 					/>
 					<ToggleControl
 						label={ __( 'Show excerpt', 'goodblocks' ) }
 						checked={ showExcerpt }
-						onChange={ ( val ) => setAttributes( { showExcerpt: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { showExcerpt: val } )
+						}
 					/>
 					{ showExcerpt && (
 						<RangeControl
@@ -72,26 +91,40 @@ const Edit = ( { attributes, setAttributes } ) => {
 							value={ excerptLength }
 							min={ 20 }
 							max={ 300 }
-							onChange={ ( val ) => setAttributes( { excerptLength: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( { excerptLength: val } )
+							}
 						/>
 					) }
 				</PanelBody>
-				<PanelBody title={ __( 'Filter', 'goodblocks' ) } initialOpen={ false }>
+				<PanelBody
+					title={ __( 'Filter', 'goodblocks' ) }
+					initialOpen={ false }
+				>
 					<ToggleControl
 						label={ __( 'Show past events', 'goodblocks' ) }
 						checked={ showPast }
-						onChange={ ( val ) => setAttributes( { showPast: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { showPast: val } )
+						}
 					/>
 					<TextControl
 						label={ __( 'Category slug', 'goodblocks' ) }
 						value={ categorySlug }
-						onChange={ ( val ) => setAttributes( { categorySlug: val } ) }
-						help={ __( 'Filter by event_category slug. Leave empty to show all.', 'goodblocks' ) }
+						onChange={ ( val ) =>
+							setAttributes( { categorySlug: val } )
+						}
+						help={ __(
+							'Filter by event_category slug. Leave empty to show all.',
+							'goodblocks'
+						) }
 					/>
 					<TextControl
 						label={ __( 'No events text', 'goodblocks' ) }
 						value={ noEventsText }
-						onChange={ ( val ) => setAttributes( { noEventsText: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { noEventsText: val } )
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>

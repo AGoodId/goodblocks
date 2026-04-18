@@ -75,17 +75,21 @@ class MasonryQueryBlock {
 
 		// Track active touch/scroll to avoid layout during scroll (iOS fix).
 		let scrollTimer;
-		window.addEventListener( 'scroll', () => {
-			this.isScrolling = true;
-			clearTimeout( scrollTimer );
-			scrollTimer = setTimeout( () => {
-				this.isScrolling = false;
-				if ( this.layoutPending ) {
-					this.layoutPending = false;
-					this.layoutMasonryGrid();
-				}
-			}, 150 );
-		}, { passive: true } );
+		window.addEventListener(
+			'scroll',
+			() => {
+				this.isScrolling = true;
+				clearTimeout( scrollTimer );
+				scrollTimer = setTimeout( () => {
+					this.isScrolling = false;
+					if ( this.layoutPending ) {
+						this.layoutPending = false;
+						this.layoutMasonryGrid();
+					}
+				}, 150 );
+			},
+			{ passive: true }
+		);
 
 		const layout = () => {
 			if ( this.isScrolling ) {
@@ -146,7 +150,8 @@ class MasonryQueryBlock {
 		// Single-column layout (mobile): masonry packing is unnecessary —
 		// items fill the full width naturally. Just use auto rows.
 		const cols = parseInt(
-			getComputedStyle( this.grid ).gridTemplateColumns.split( ' ' ).length,
+			getComputedStyle( this.grid ).gridTemplateColumns.split( ' ' )
+				.length,
 			10
 		);
 		if ( cols <= 1 ) {
@@ -338,9 +343,11 @@ class MasonryQueryBlock {
 			const first = focusable[ 0 ];
 			const last = focusable[ focusable.length - 1 ];
 
+			// eslint-disable-next-line @wordpress/no-global-active-element
 			if ( e.shiftKey && document.activeElement === first ) {
 				e.preventDefault();
 				last.focus();
+				// eslint-disable-next-line @wordpress/no-global-active-element
 			} else if ( ! e.shiftKey && document.activeElement === last ) {
 				e.preventDefault();
 				first.focus();
@@ -410,6 +417,7 @@ class MasonryQueryBlock {
 		this.currentGallery = this.getProjectGallery( item );
 		this.currentSlideIndex = 0;
 		this.originalUrl = window.location.pathname + window.location.search;
+		// eslint-disable-next-line @wordpress/no-global-active-element
 		this.lastFocusedElement = document.activeElement;
 
 		this.updateModalContent( true );
@@ -799,6 +807,7 @@ class MasonryQueryBlock {
 				this.loadMoreBtn.style.display = 'none';
 			}
 		} catch ( error ) {
+			// eslint-disable-next-line no-console
 			console.error( 'Error loading more items:', error );
 			this.showLoadError();
 		} finally {
