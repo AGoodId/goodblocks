@@ -80,41 +80,26 @@ function agoodapp_handle_import_bulk_action( string $redirect_url, string $actio
 }
 
 function agoodapp_push_file( int $attachment_id, string $api_key, string $org_id, string $base_url ): WP_Error|array {
-	$file_path = get_attached_file( $attachment_id );
+	$source_url = wp_get_attachment_url( $attachment_id );
 
-	if ( ! $file_path || ! file_exists( $file_path ) ) {
-		return new WP_Error( 'file_not_found', "Attachment $attachment_id not found on disk." );
+	if ( ! $source_url ) {
+		return new WP_Error( 'attachment_not_found', "Attachment $attachment_id has no URL." );
 	}
 
-	$filename  = basename( $file_path );
-	$mime_type = wp_check_filetype( $filename )['type'] ?: 'application/octet-stream';
-	$boundary  = wp_generate_password( 24, false );
-
-	// Build multipart body manually — wp_remote_post doesn't support file uploads natively.
-	$fields = [
-		'organization_id' => $org_id,
-		'wp_attachment_id' => (string) $attachment_id,
-		'wp_site_url'      => get_site_url(),
-	];
-
-	$body = '';
-	foreach ( $fields as $name => $value ) {
-		$body .= "--{$boundary}\r\n";
-		$body .= "Content-Disposition: form-data; name=\"{$name}\"\r\n\r\n";
-		$body .= $value . "\r\n";
-	}
-	$body .= "--{$boundary}\r\n";
-	$body .= "Content-Disposition: form-data; name=\"file\"; filename=\"{$filename}\"\r\n";
-	$body .= "Content-Type: {$mime_type}\r\n\r\n";
-	$body .= file_get_contents( $file_path ) . "\r\n"; // phpcs:ignore WordPress.WP.AlternativeFunctions
-	$body .= "--{$boundary}--\r\n";
+	$mime_type = get_post_mime_type( $attachment_id ) ?: 'application/octet-stream';
 
 	return wp_remote_post( $base_url . '/api/upload', [
 		'headers' => [
 			'Authorization' => 'Bearer ' . $api_key,
-			'Content-Type'  => 'multipart/form-data; boundary=' . $boundary,
+			'Content-Type'  => 'application/json',
 		],
-		'body'    => $body,
+		'body'    => wp_json_encode( [
+			'source_url'      => $source_url,
+			'mime_type'       => $mime_type,
+			'organization_id' => $org_id,
+			'wp_attachment_id' => (string) $attachment_id,
+			'wp_site_url'     => get_site_url(),
+		] ),
 		'timeout' => 60,
 	] );
 }
