@@ -40,17 +40,20 @@ function agoodapp_handle_import_bulk_action( string $redirect_url, string $actio
 	$uploaded   = 0;
 	$duplicates = 0;
 	$failed     = 0;
+	$last_error = '';
 
 	foreach ( $post_ids as $attachment_id ) {
 		$result = agoodapp_push_file( (int) $attachment_id, $api_key, $org_id, $base_url );
 
 		if ( is_wp_error( $result ) ) {
 			$failed++;
+			$last_error = $result->get_error_message();
 			continue;
 		}
 
-		$status = wp_remote_retrieve_response_code( $result );
-		$body   = json_decode( wp_remote_retrieve_body( $result ), true );
+		$status      = wp_remote_retrieve_response_code( $result );
+		$raw_body    = wp_remote_retrieve_body( $result );
+		$body        = json_decode( $raw_body, true );
 
 		if ( ( $status === 200 || $status === 201 ) && ! empty( $body['success'] ) ) {
 			if ( ! empty( $body['duplicate'] ) ) {
@@ -60,17 +63,20 @@ function agoodapp_handle_import_bulk_action( string $redirect_url, string $actio
 			}
 		} else {
 			$failed++;
+			$last_error = "HTTP {$status}: " . wp_strip_all_tags( $raw_body );
 		}
 	}
 
-	return add_query_arg(
-		[
-			'agoodapp_uploaded'   => $uploaded,
-			'agoodapp_duplicates' => $duplicates,
-			'agoodapp_failed'     => $failed,
-		],
-		$redirect_url
-	);
+	$args = [
+		'agoodapp_uploaded'   => $uploaded,
+		'agoodapp_duplicates' => $duplicates,
+		'agoodapp_failed'     => $failed,
+	];
+	if ( $last_error ) {
+		$args['agoodapp_last_error'] = rawurlencode( substr( $last_error, 0, 200 ) );
+	}
+
+	return add_query_arg( $args, $redirect_url );
 }
 
 function agoodapp_push_file( int $attachment_id, string $api_key, string $org_id, string $base_url ): WP_Error|array {
@@ -155,6 +161,10 @@ function agoodapp_import_admin_notice(): void {
 				_n( '%d file failed.', '%d files failed.', $failed, 'goodblocks' ),
 				$failed
 			);
+		}
+
+		if ( isset( $_GET['agoodapp_last_error'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$parts[] = '— ' . sanitize_text_field( rawurldecode( $_GET['agoodapp_last_error'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 
 		$type = $failed > 0 && $uploaded === 0 ? 'notice-error' : ( $failed > 0 ? 'notice-warning' : 'notice-success' );
