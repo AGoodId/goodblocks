@@ -39,8 +39,7 @@ module.exports = {
 		'blocks/product-carousel/view': path.resolve(__dirname, 'src/blocks/product-carousel/view.js'),
 		// Events
 		'blocks/event-list/index': path.resolve(__dirname, 'src/blocks/event-list/index.js'),
-		// Popup / conversion
-		'blocks/popup/index': path.resolve(__dirname, 'src/blocks/popup/index.js'),
+		// Popup / conversion (CPT-based, no block editor — only view script)
 		'blocks/popup/view': path.resolve(__dirname, 'src/blocks/popup/view.js'),
 		// AGoodApp Media Picker
 		'blocks/agoodapp-media-picker/index': path.resolve(__dirname, 'src/blocks/agoodapp-media-picker/index.js'),
