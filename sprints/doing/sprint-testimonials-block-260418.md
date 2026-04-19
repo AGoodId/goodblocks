@@ -83,15 +83,15 @@ Starta med Fas 0. Regler:
 
 ### 0B. Återanvändningskoll
 
-- [ ] Genomsök `slider/view.js` och `product-carousel/view.js` — lista exakt vilka Swiper-moduler och CSS-importer som behövs <!-- brian:id=tsk_086c5b9d gh:https://github.com/AGoodId/goodblocks/issues/2 -->
-- [ ] Beslut: Swiper med Navigation + Pagination + Autoplay + EffectFade — bekräfta att detta täcker scope <!-- brian:id=tsk_1471fdce gh:https://github.com/AGoodId/goodblocks/issues/3 -->
+- [x] Genomsök `slider/view.js` och `product-carousel/view.js` — lista exakt vilka Swiper-moduler och CSS-importer som behövs <!-- brian:id=tsk_086c5b9d gh:https://github.com/AGoodId/goodblocks/issues/2 -->
+- [x] Beslut: Swiper med Navigation + Pagination + Autoplay + EffectFade — bekräfta att detta täcker scope <!-- brian:id=tsk_1471fdce gh:https://github.com/AGoodId/goodblocks/issues/3 -->
 
 ### 0C. Spec
 
-- [ ] **Problemspec:** Vilka exakta Spectra-features används på golfhallen.info som vi måste matcha? (kör Playwright mot golfhallen.info om nödvändigt) <!-- brian:id=tsk_e387e8a1 gh:https://github.com/AGoodId/goodblocks/issues/4 -->
-- [ ] **Lösningsspec:** Datamodell, HTML-struktur, Swiper-config, CSS-variabler, block-attribut med defaultvärden <!-- brian:id=tsk_05bf6eb9 gh:https://github.com/AGoodId/goodblocks/issues/5 -->
-- [ ] **Antaganden:** Vilka WordPress/Swiper-versioner förutsätts? Hur hanteras 0 items i editor? <!-- brian:id=tsk_44ba0fde gh:https://github.com/AGoodId/goodblocks/issues/6 -->
-- [ ] **Acceptanskriterier:** Konkreta, verifierbara påståenden (se förslag nedan) <!-- brian:id=tsk_035022c2 gh:https://github.com/AGoodId/goodblocks/issues/7 -->
+- [x] **Problemspec:** Vilka exakta Spectra-features används på golfhallen.info som vi måste matcha? (kör Playwright mot golfhallen.info om nödvändigt) <!-- brian:id=tsk_e387e8a1 gh:https://github.com/AGoodId/goodblocks/issues/4 -->
+- [x] **Lösningsspec:** Datamodell, HTML-struktur, Swiper-config, CSS-variabler, block-attribut med defaultvärden <!-- brian:id=tsk_05bf6eb9 gh:https://github.com/AGoodId/goodblocks/issues/5 -->
+- [x] **Antaganden:** Vilka WordPress/Swiper-versioner förutsätts? Hur hanteras 0 items i editor? <!-- brian:id=tsk_44ba0fde gh:https://github.com/AGoodId/goodblocks/issues/6 -->
+- [x] **Acceptanskriterier:** Konkreta, verifierbara påståenden (se förslag nedan) <!-- brian:id=tsk_035022c2 gh:https://github.com/AGoodId/goodblocks/issues/7 -->
 
   Förslag på acceptanskriterier:
   1. Blocket finns i block-väljaren under kategorin "goodblocks"
@@ -105,18 +105,18 @@ Starta med Fas 0. Regler:
 
 ### 0D. Tester definieras från spec
 
-- [ ] **Enhet:** Swiper initieras korrekt — navigation, pagination, autoplay konfigurerade enligt data-attribut <!-- brian:id=tsk_e82eab7a gh:https://github.com/AGoodId/goodblocks/issues/8 -->
-- [ ] **Integration:** Block sparas i editor med 2+ items → render.php genererar korrekt HTML med data-attribut → view.js initierar Swiper på rendered output <!-- brian:id=tsk_af9e4f48 gh:https://github.com/AGoodId/goodblocks/issues/9 -->
-- [ ] **E2E / manuellt:** Öppna sida med blocket → citaten synliga → klicka nästa-pil → andra citatet visas → dot uppdateras → klicka dot 1 → första citatet visas igen <!-- brian:id=tsk_811fa31e gh:https://github.com/AGoodId/goodblocks/issues/10 -->
-- [ ] **Regression:** `slider`-blocket fungerar fortfarande (delar Swiper-dependency), `npm run build` utan fel <!-- brian:id=tsk_5b612787 gh:https://github.com/AGoodId/goodblocks/issues/11 -->
+- [x] **Enhet:** Swiper initieras korrekt — navigation, pagination, autoplay konfigurerade enligt data-attribut <!-- brian:id=tsk_e82eab7a gh:https://github.com/AGoodId/goodblocks/issues/8 -->
+- [x] **Integration:** Block sparas i editor med 2+ items → render.php genererar korrekt HTML med data-attribut → view.js initierar Swiper på rendered output <!-- brian:id=tsk_af9e4f48 gh:https://github.com/AGoodId/goodblocks/issues/9 -->
+- [x] **E2E / manuellt:** Öppna sida med blocket → citaten synliga → klicka nästa-pil → andra citatet visas → dot uppdateras → klicka dot 1 → första citatet visas igen <!-- brian:id=tsk_811fa31e gh:https://github.com/AGoodId/goodblocks/issues/10 -->
+- [x] **Regression:** `slider`-blocket fungerar fortfarande (delar Swiper-dependency), `npm run build` utan fel <!-- brian:id=tsk_5b612787 gh:https://github.com/AGoodId/goodblocks/issues/11 -->
 
 ### 0E. Pre-mortem
 
-- [ ] Kör pre-mortem — lista riskerna: <!-- brian:id=tsk_a45009a9 gh:https://github.com/AGoodId/goodblocks/issues/12 -->
+- [x] Kör pre-mortem — lista riskerna: <!-- brian:id=tsk_a45009a9 gh:https://github.com/AGoodId/goodblocks/issues/12 -->
   1. Swiper-version conflict — slider och testimonials importerar olika moduler; CSS kan kollidera
   2. items-repeater i editor kan bli klumpig med många citat — överväg max-gräns
   3. Swiper initieras innan DOM är redo om blocket laddas asynkront (FSE/query-block)
-- [ ] Beslut: förändras scope eller spec baserat på riskerna? <!-- brian:id=tsk_19c9e56e gh:https://github.com/AGoodId/goodblocks/issues/13 -->
+- [x] Beslut: förändras scope eller spec baserat på riskerna? <!-- brian:id=tsk_19c9e56e gh:https://github.com/AGoodId/goodblocks/issues/13 -->
 
 ---
 
@@ -125,11 +125,11 @@ Starta med Fas 0. Regler:
 > Ge Claude spec + tester, inte problemet.
 > Markera AI-genererade tasks med 🤖.
 
-- [ ] 🤖 `block.json` + registrering i `goodblocks.php` (namespace `goodblocks/testimonials`, kategori `goodblocks`, attribut enligt spec) <!-- brian:id=tsk_d7f17999 gh:https://github.com/AGoodId/goodblocks/issues/14 -->
-- [ ] 🤖 `render.php` — wrapper med data-attribut, Swiper-HTML-struktur (`.swiper`, `.swiper-wrapper`, `.swiper-slide` per item, navigation, pagination) <!-- brian:id=tsk_0c2a9a19 gh:https://github.com/AGoodId/goodblocks/issues/15 -->
-- [ ] 🤖 `edit.js` — InspectorControls med items-repeater (quote textarea, author, role) + statisk förhandsvisning av första citatet <!-- brian:id=tsk_663fafae gh:https://github.com/AGoodId/goodblocks/issues/16 -->
-- [ ] 🤖 `view.js` — Swiper-init med Navigation, Pagination, Autoplay, EffectFade; läser inställningar från data-attribut <!-- brian:id=tsk_1c95ed34 gh:https://github.com/AGoodId/goodblocks/issues/17 -->
-- [ ] 🤖 `style.scss` — minimalistisk layout, citat centrerat, author under, pilar utanför, dots under; CSS-variabler för färg och typografi <!-- brian:id=tsk_cb5ccb59 gh:https://github.com/AGoodId/goodblocks/issues/18 -->
+- [x] 🤖 `block.json` + registrering i `goodblocks.php` (namespace `goodblocks/testimonials`, kategori `goodblocks`, attribut enligt spec) <!-- brian:id=tsk_d7f17999 gh:https://github.com/AGoodId/goodblocks/issues/14 -->
+- [x] 🤖 `render.php` — wrapper med data-attribut, Swiper-HTML-struktur (`.swiper`, `.swiper-wrapper`, `.swiper-slide` per item, navigation, pagination) <!-- brian:id=tsk_0c2a9a19 gh:https://github.com/AGoodId/goodblocks/issues/15 -->
+- [x] 🤖 `edit.js` — InspectorControls med items-repeater (quote textarea, author, role) + statisk förhandsvisning av första citatet <!-- brian:id=tsk_663fafae gh:https://github.com/AGoodId/goodblocks/issues/16 -->
+- [x] 🤖 `view.js` — Swiper-init med Navigation, Pagination, Autoplay, EffectFade; läser inställningar från data-attribut <!-- brian:id=tsk_1c95ed34 gh:https://github.com/AGoodId/goodblocks/issues/17 -->
+- [x] 🤖 `style.scss` — minimalistisk layout, citat centrerat, author under, pilar utanför, dots under; CSS-variabler för färg och typografi <!-- brian:id=tsk_cb5ccb59 gh:https://github.com/AGoodId/goodblocks/issues/18 -->
 
 ---
 
@@ -140,12 +140,12 @@ Starta med Fas 0. Regler:
 - [ ] Enhetstester gröna — Swiper initieras med rätt config <!-- brian:id=tsk_99662f62 gh:https://github.com/AGoodId/goodblocks/issues/19 -->
 - [ ] Integrationstester gröna — block editor → render.php → view.js-flöde <!-- brian:id=tsk_f5f3f53c gh:https://github.com/AGoodId/goodblocks/issues/20 -->
 - [ ] E2E-scenario verifierat: navigation, dots, autoplay (från 0D) <!-- brian:id=tsk_3995793f gh:https://github.com/AGoodId/goodblocks/issues/21 -->
-- [ ] Regressionstester gröna — slider-blocket fungerar, build utan fel, lint utan nya errors <!-- brian:id=tsk_2b279e90 gh:https://github.com/AGoodId/goodblocks/issues/22 -->
+- [x] Regressionstester gröna — slider-blocket fungerar, build utan fel, lint utan nya errors <!-- brian:id=tsk_2b279e90 gh:https://github.com/AGoodId/goodblocks/issues/22 -->
 
 ### 2B. Comprehension Gate
 
-- [ ] `/comprehension-gate` på `src/blocks/testimonials/` — verdict: CLEAR / REVIEW / HOLD <!-- brian:id=tsk_9cd11f16 gh:https://github.com/AGoodId/goodblocks/issues/23 -->
-- [ ] Kan du förklara hur Swiper-instansen initieras och vad som händer om blocket visas utanför DOMContentLoaded? <!-- brian:id=tsk_1a0a65b5 gh:https://github.com/AGoodId/goodblocks/issues/24 -->
+- [x] `/comprehension-gate` på `src/blocks/testimonials/` — verdict: CLEAR <!-- brian:id=tsk_9cd11f16 gh:https://github.com/AGoodId/goodblocks/issues/23 -->
+- [x] Kan du förklara hur Swiper-instansen initieras och vad som händer om blocket visas utanför DOMContentLoaded? <!-- brian:id=tsk_1a0a65b5 gh:https://github.com/AGoodId/goodblocks/issues/24 -->
 
 ### 2C. Eval — Uppfylldes specen?
 
@@ -157,13 +157,13 @@ Starta med Fas 0. Regler:
 
 ## Definition of Done
 
-- [ ] Fas 0 komplett — spec och tester definierade innan implementation
-- [ ] Alla Fas 1-tasks klara
+- [x] Fas 0 komplett — spec och tester definierade innan implementation
+- [x] Alla Fas 1-tasks klara
 - [ ] Tester gröna (2A)
 - [ ] Comprehension gate: CLEAR (2B)
 - [ ] Alla 8 acceptanskriterier uppfyllda (2C)
-- [ ] `npm run lint` — 0 errors
-- [ ] `npm run build` — successful
+- [x] `npm run lint` — 0 errors
+- [x] `npm run build` — successful
 
 ---
 

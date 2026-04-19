@@ -62,6 +62,7 @@ function goodblocks_register_blocks() {
 		'mailchimp-signup',
 		'post-grid',
 		'event-list',
+		'testimonials',
 		'hero',
 		'slider',
 		'slide',
