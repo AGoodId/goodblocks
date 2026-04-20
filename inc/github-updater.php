@@ -132,6 +132,7 @@ class GoodBlocks_GitHub_Updater {
 		global $wp_filesystem;
 
 		$proper_destination = WP_PLUGIN_DIR . '/' . dirname( $this->slug );
+		$wp_filesystem->delete( $proper_destination, true );
 		$wp_filesystem->move( $result['destination'], $proper_destination );
 		$result['destination'] = $proper_destination;
 
