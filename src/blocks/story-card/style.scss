@@ -1,0 +1,283 @@
+.wp-block-goodblocks-story-card {
+
+	// Smooth-expand progressive enhancement — scoped till blocket, inte :root.
+	// `interpolate-size` är inherited så descendants (story-card__body) får det.
+	@supports (interpolate-size: allow-keywords) {
+		interpolate-size: allow-keywords;
+	}
+
+
+	// ── CSS-variabler — defaults utan brand-opinion ─────────────────────────
+	// Inga font-family, ingen letter-spacing, ingen text-transform: uppercase
+
+	--story-card-bg: transparent;
+	--story-card-fg: currentcolor;
+	--story-card-padding-block: clamp(2rem, 5vw, 4rem);
+	--story-card-padding-inline: clamp(1rem, 4vw, 3rem);
+	--story-card-gap: clamp(1.5rem, 4vw, 3rem);
+	--story-card-stack-gap: clamp(1rem, 2vw, 1.5rem);
+	--story-card-text-padding: clamp(1rem, 4vw, 3rem);
+	--story-card-content-max-width: 64rem;
+
+	--story-card-kicker-size: clamp(0.75rem, 0.5vw + 0.625rem, 0.875rem);
+	--story-card-title-size: clamp(1.5rem, 3vw + 1rem, 2.5rem);
+	--story-card-title-line-height: 1.2;
+	--story-card-excerpt-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
+	--story-card-summary-size: 0.95rem;
+	--story-card-label-size: 0.75rem;
+
+	--story-card-disclosure-padding: 1rem;
+	--story-card-summary-bg: transparent;
+	--story-card-summary-border: 1px solid color-mix(in srgb, currentcolor 25%, transparent);
+
+	--story-card-action-padding: 0.75rem 1.5rem;
+	--story-card-action-bg: var(--story-card-fg);
+	--story-card-action-fg: var(--story-card-bg);
+	--story-card-action-border-radius: 2px;
+
+	--story-card-bg-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.1));
+	--story-card-bg-padding: clamp(2rem, 6vw, 5rem);
+	--story-card-bg-min-height: clamp(400px, 60vh, 720px);
+
+	--story-card-disclosure-duration: 0.4s;
+	--story-card-disclosure-easing: ease-out;
+
+	background: var(--story-card-bg);
+	color: var(--story-card-fg);
+	padding: var(--story-card-padding-block) var(--story-card-padding-inline);
+	position: relative;
+
+	// ── Layout-shell ─────────────────────────────────────────────────────────
+
+	.story-card__inner {
+		display: grid;
+		grid-template-columns: 1fr; // mobile-first
+		gap: var(--story-card-gap);
+		max-width: var(--story-card-content-max-width);
+		margin-inline: auto;
+		position: relative;
+	}
+
+	.story-card__text {
+		display: flex;
+		flex-direction: column;
+		gap: var(--story-card-stack-gap);
+		min-width: 0; // tillåt grid-cell att krympa
+	}
+
+	// ── Header / text ────────────────────────────────────────────────────────
+
+	.story-card__header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.story-card__kicker {
+		font-size: var(--story-card-kicker-size);
+		opacity: 0.8;
+		display: block;
+	}
+
+	.story-card__title {
+		font-size: var(--story-card-title-size);
+		line-height: var(--story-card-title-line-height);
+		margin: 0;
+		// inget font-family, ingen letter-spacing, ingen font-weight — temat äger
+	}
+
+	.story-card__excerpt {
+		font-size: var(--story-card-excerpt-size);
+		line-height: 1.6;
+		margin: 0;
+		max-width: 48rem;
+	}
+
+	// ── Labels ───────────────────────────────────────────────────────────────
+
+	.story-card__labels {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.story-card__label {
+		font-size: var(--story-card-label-size);
+		padding: 0.25rem 0.75rem;
+		border: 1px solid color-mix(in srgb, currentcolor 30%, transparent);
+		border-radius: 999px;
+		opacity: 0.85;
+	}
+
+	// ── Action ───────────────────────────────────────────────────────────────
+
+	.story-card__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.story-card__action {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px; // touch-target
+		min-width: 44px;
+		padding: var(--story-card-action-padding);
+		background: var(--story-card-action-bg);
+		color: var(--story-card-action-fg);
+		text-decoration: none;
+		border-radius: var(--story-card-action-border-radius);
+
+		&:focus-visible {
+			outline: 2px solid currentcolor;
+			outline-offset: 2px;
+		}
+	}
+
+	// ── Media ────────────────────────────────────────────────────────────────
+
+	.story-card__media {
+		margin: 0;
+
+		.story-card__media-element {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+	}
+
+	// ── Disclosure — editor preview ──────────────────────────────────────────
+	// Editor använder INTE <details> runt InnerBlocks (skulle kunna toggleas bort).
+	// Body är alltid synlig som vanlig <div> i editor; native <details> aktiveras
+	// först i render.php på frontend.
+
+	.story-card__disclosure-editor {
+
+		.story-card__summary-preview {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			min-height: 44px;
+			padding: 0.5rem 1rem;
+			background: var(--story-card-summary-bg);
+			border: var(--story-card-summary-border);
+			border-radius: 2px;
+			font-size: var(--story-card-summary-size);
+			margin-bottom: var(--story-card-disclosure-padding);
+			opacity: 0.85;
+		}
+
+		.story-card__summary-preview-icon {
+			display: inline-block;
+		}
+	}
+
+	// ── Disclosure — frontend (render.php) ───────────────────────────────────
+
+	.story-card__disclosure {
+
+		// Reset native marker (browsers visar default triangel/disc)
+		> .story-card__summary {
+			list-style: none;
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			min-height: 44px; // touch-target
+			padding: 0.5rem 1rem;
+			background: var(--story-card-summary-bg);
+			border: var(--story-card-summary-border);
+			border-radius: 2px;
+			font-size: var(--story-card-summary-size);
+
+			&::-webkit-details-marker {
+				display: none;
+			}
+
+			&::before {
+				content: "▸";
+				display: inline-block;
+				transition: transform 0.2s ease;
+			}
+
+			&:focus-visible {
+				outline: 2px solid currentcolor;
+				outline-offset: 2px;
+			}
+		}
+
+		&[open] > .story-card__summary::before {
+			transform: rotate(90deg);
+		}
+
+		.story-card__body {
+			padding-top: var(--story-card-disclosure-padding);
+		}
+	}
+
+	// Smooth-expand när browsern stöder interpolate-size
+	@supports (interpolate-size: allow-keywords) {
+
+		.story-card__disclosure {
+
+			.story-card__body {
+				block-size: 0;
+				overflow: hidden;
+				transition:
+					block-size var(--story-card-disclosure-duration) var(--story-card-disclosure-easing),
+					padding-top var(--story-card-disclosure-duration) var(--story-card-disclosure-easing);
+				padding-top: 0;
+			}
+
+			&[open] .story-card__body {
+				block-size: auto;
+				padding-top: var(--story-card-disclosure-padding);
+			}
+		}
+	}
+
+	// prefers-reduced-motion — inga transitions
+	@media (prefers-reduced-motion: reduce) {
+
+		.story-card__disclosure .story-card__body,
+		.story-card__disclosure > .story-card__summary::before {
+			transition: none;
+		}
+	}
+
+	// ── Layout: default ──────────────────────────────────────────────────────
+
+	&.story-card--default {
+
+		.story-card__inner {
+
+			@media (min-width: 960px) {
+				grid-template-columns: 1fr 1fr;
+				align-items: center;
+			}
+		}
+	}
+
+	// Layouts reverse / split-* / bg-full implementeras i Etapp 2.
+
+	// ── Tema-varianter (Sprint A-konvention) ─────────────────────────────────
+
+	&.story-card--light {
+		--story-card-bg: var(--wp--preset--color--base, #f5f5f5);
+		--story-card-fg: var(--wp--preset--color--contrast, #111);
+	}
+
+	&.story-card--dark {
+		--story-card-bg: var(--wp--preset--color--contrast, #111);
+		--story-card-fg: var(--wp--preset--color--base, #fff);
+	}
+
+	&.story-card--accent {
+		--story-card-bg: var(--wp--preset--color--accent, #e0e0e0);
+		--story-card-fg: currentcolor;
+	}
+}

@@ -1,13 +1,16 @@
 ---
 priority: 2
-status: doing
+status: done
 start: 2026-04-29
+end: 2026-04-30
 tags: [sprint, feature]
 ---
 
 # Sprint A: report-foundation-blocks
 
-> Detta är **Sprint A** av en två-sprintssekvens. Sprint B (`sprint-report-story-card-260429.md` i backlog) hanterar `goodblocks/story-card` separat eftersom det är en arkitektoniskt tyngre fråga (InnerBlocks + disclosure + no-JS + a11y).
+> Detta är **Sprint A** av en två-sprintssekvens. Sprint B (`sprint-report-story-card-260429.md` — nu i doing) hanterar `goodblocks/story-card` separat.
+>
+> **Status: STÄNGD 2026-04-30** — v1.12.0 deployad och testad mot densiqgroup.com/sustainability-2025/. Empirisk feedback från Codex: kpi-grid funkar bäst, section-header behöver tema-CSS för brand-match (by-design), hero behöver mer kontext för exakt ASR-match. Story-delen är blockerande → Sprint B aktiverad.
 
 ## Bakgrund
 

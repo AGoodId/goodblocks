@@ -1,0 +1,126 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/story-card",
+  "title": "Story Card",
+  "category": "goodblocks",
+  "icon": "format-aside",
+  "description": "Long-form story with optional media, action button and a disclosure (Read more) for body content. Body uses InnerBlocks.",
+  "keywords": [
+    "story",
+    "card",
+    "disclosure",
+    "long-form"
+  ],
+  "supports": {
+    "anchor": true,
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "layout": {
+      "type": "string",
+      "default": "default",
+      "enum": [
+        "default",
+        "reverse",
+        "split-left",
+        "split-right",
+        "bg-full"
+      ]
+    },
+    "theme": {
+      "type": "string",
+      "default": "light",
+      "enum": [
+        "light",
+        "dark",
+        "accent"
+      ]
+    },
+    "kicker": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": ""
+    },
+    "excerpt": {
+      "type": "string",
+      "default": ""
+    },
+    "mediaId": {
+      "type": "number",
+      "default": 0
+    },
+    "mediaUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "mediaAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "mediaType": {
+      "type": "string",
+      "default": "image",
+      "enum": [
+        "image",
+        "video"
+      ]
+    },
+    "actionUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "actionLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "actionTarget": {
+      "type": "string",
+      "default": "_self",
+      "enum": [
+        "_self",
+        "_blank"
+      ]
+    },
+    "labels": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    },
+    "summaryLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "openByDefault": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "example": {
+    "attributes": {
+      "kicker": "01",
+      "title": "A sustainable strategy",
+      "excerpt": "Built into how we work.",
+      "layout": "default",
+      "theme": "light"
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

@@ -140,6 +140,11 @@ module.exports = {
 			__dirname,
 			'src/blocks/kpi-grid/index.js'
 		),
+		// Story card (Sprint B — dynamic + InnerBlocks)
+		'blocks/story-card/index': path.resolve(
+			__dirname,
+			'src/blocks/story-card/index.js'
+		),
 		// Popup / conversion (CPT-based, no block editor — only view script)
 		'blocks/popup/view': path.resolve(
 			__dirname,
