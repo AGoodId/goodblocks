@@ -31,13 +31,9 @@
       "type": "string",
       "default": "center center"
     },
-    "positionClass": {
-      "type": "string",
-      "default": ""
-    },
     "animation": {
       "type": "string",
-      "default": "ingen"
+      "default": "none"
     },
     "height": {
       "type": "string",
@@ -63,10 +59,6 @@
       "type": "object",
       "default": null
     },
-    "backgroundType": {
-      "type": "string",
-      "default": "image"
-    },
     "dimRatio": {
       "type": "number",
       "default": 0
@@ -84,5 +76,6 @@
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
   "render": "file:./render.php"
 }

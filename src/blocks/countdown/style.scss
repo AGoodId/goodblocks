@@ -1,4 +1,5 @@
 .wp-block-goodblocks-countdown {
+
 	.countdown-display {
 		display: flex;
 		gap: 2rem;
@@ -82,6 +83,7 @@
 	}
 
 	@media (max-width: 768px) {
+
 		.countdown-display {
 			gap: 1.5rem;
 		}
@@ -92,6 +94,7 @@
 	}
 
 	@media (max-width: 480px) {
+
 		.countdown-display {
 			gap: 1rem;
 		}

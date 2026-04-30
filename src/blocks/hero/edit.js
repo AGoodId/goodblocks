@@ -27,7 +27,6 @@ export default function Edit( { attributes, setAttributes } ) {
 		animation,
 		rubrik,
 		text,
-		backgroundColor,
 		backgroundMedia,
 		height,
 		contentPosition,
@@ -38,15 +37,10 @@ export default function Edit( { attributes, setAttributes } ) {
 		scrollArrow,
 	} = attributes;
 
-	const imageType = backgroundMedia?.type || 'color';
-
-	const backgroundStyle = {};
-	if ( imageType === 'image' && backgroundMedia?.url ) {
+	const backgroundStyle = { height };
+	if ( backgroundMedia?.type === 'image' && backgroundMedia?.url ) {
 		backgroundStyle.backgroundImage = `url(${ backgroundMedia.url })`;
-	} else if ( imageType === 'color' ) {
-		backgroundStyle.backgroundColor = backgroundColor;
 	}
-	backgroundStyle.height = height;
 
 	const blockProps = useBlockProps( { style: backgroundStyle } );
 
@@ -63,10 +57,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Change content position' ) }
 						value={ contentPosition }
 						onChange={ ( v ) =>
-							setAttributes( {
-								contentPosition: v,
-								positionClass: getPositionClassName( v ),
-							} )
+							setAttributes( { contentPosition: v } )
 						}
 					/>
 				</BlockControls>
@@ -78,23 +69,15 @@ export default function Edit( { attributes, setAttributes } ) {
 							options={ [
 								{
 									label: __( 'None', 'goodblocks' ),
-									value: 'ingen',
+									value: 'none',
 								},
 								{
-									label: __( 'Standard', 'goodblocks' ),
-									value: 'standard',
+									label: __( 'Fade up', 'goodblocks' ),
+									value: 'fade-up',
 								},
 								{
-									label: __( 'Wild', 'goodblocks' ),
-									value: 'wild',
-								},
-								{
-									label: __( 'From right', 'goodblocks' ),
-									value: 'from-right',
-								},
-								{
-									label: __( 'From left', 'goodblocks' ),
-									value: 'from-left',
+									label: __( 'Split words', 'goodblocks' ),
+									value: 'split-words',
 								},
 							] }
 							onChange={ ( v ) =>
@@ -230,7 +213,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div className="hero-block">
-				{ imageType === 'video' && !! backgroundMedia && (
+				{ backgroundMedia?.type === 'video' && (
 					<video
 						autoPlay
 						muted
@@ -279,8 +262,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								) }
 							/>
 						</div>
-						{ /* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
-						<a className="btn">
+						<button type="button" className="btn btn-large">
 							<RichText
 								tagName="span"
 								value={ button }
@@ -292,9 +274,25 @@ export default function Edit( { attributes, setAttributes } ) {
 									'goodblocks'
 								) }
 							/>
-						</a>
+						</button>
 					</div>
 				</div>
+				{ !! scrollArrow && (
+					<span
+						className="hero-block__scroll-arrow"
+						aria-hidden="true"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							height="24px"
+							viewBox="0 -960 960 960"
+							width="24px"
+							fill="currentColor"
+						>
+							<path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z" />
+						</svg>
+					</span>
+				) }
 			</div>
 		</div>
 	);

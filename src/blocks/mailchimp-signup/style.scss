@@ -1,4 +1,5 @@
 .wp-block-goodblocks-mailchimp-signup {
+
 	.content-wrapper {
 		padding: 80px;
 		margin: 0 auto;
@@ -27,7 +28,7 @@
 				margin-left: 10px;
 			}
 
-			@media(max-width: 768px) {
+			@media (max-width: 768px) {
 				flex-direction: column;
 
 				input[type="email"] {

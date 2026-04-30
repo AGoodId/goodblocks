@@ -1,4 +1,5 @@
 .wp-block-goodblocks-event-list {
+
 	&.grid {
 		display: grid;
 		grid-template-columns: repeat(var(--events-per-row, 3), 1fr);

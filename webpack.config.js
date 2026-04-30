@@ -92,6 +92,10 @@ module.exports = {
 			__dirname,
 			'src/blocks/hero/index.js'
 		),
+		'blocks/hero/view': path.resolve(
+			__dirname,
+			'src/blocks/hero/view.js'
+		),
 		'blocks/slider/index': path.resolve(
 			__dirname,
 			'src/blocks/slider/index.js'
@@ -125,6 +129,16 @@ module.exports = {
 		'blocks/testimonials/view': path.resolve(
 			__dirname,
 			'src/blocks/testimonials/view.js'
+		),
+		// Section header (foundation block, Sprint A)
+		'blocks/section-header/index': path.resolve(
+			__dirname,
+			'src/blocks/section-header/index.js'
+		),
+		// KPI grid (foundation block, Sprint A)
+		'blocks/kpi-grid/index': path.resolve(
+			__dirname,
+			'src/blocks/kpi-grid/index.js'
 		),
 		// Popup / conversion (CPT-based, no block editor — only view script)
 		'blocks/popup/view': path.resolve(

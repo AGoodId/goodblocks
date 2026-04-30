@@ -7,9 +7,13 @@
  * @var WP_Block $block      Block instance.
  */
 
-$animation_class = 'hero-block--' . esc_attr( $attributes['animation'] ?? 'ingen' );
-$image_type      = 'color';
+// Animation: graceful degradation for legacy values (ingen/standard/wild/from-right/from-left).
+$animation = $attributes['animation'] ?? 'none';
+if ( ! in_array( $animation, [ 'none', 'fade-up', 'split-words' ], true ) ) {
+	$animation = 'none';
+}
 
+$image_type = 'color';
 if ( ! empty( $attributes['backgroundMedia'] ) ) {
 	$image_type = $attributes['backgroundMedia']['type'];
 }
@@ -28,47 +32,30 @@ if ( ! empty( $attributes['backgroundMedia'] ) && 'image' === $image_type ) {
 $height = $attributes['height'] ?? '100svh';
 $inline_style .= 'height:' . ( '100svh' !== $height
 	? esc_attr( $height )
-	: 'calc(' . esc_attr( $height ) . ' - var(--wp-admin--admin-bar--height))' ) . ';';
+	: 'calc(' . esc_attr( $height ) . ' - var(--wp-admin--admin-bar--height, 0px))' ) . ';';
 
-// Build animated title.
-$title     = '';
-$animation = $attributes['animation'] ?? 'ingen';
-$rubrik    = $attributes['rubrik'] ?? '';
+// Position class derived from contentPosition (no longer cached).
+$position_map = [
+	'top left'      => 'is-position-top-left',
+	'top center'    => 'is-position-top-center',
+	'top right'     => 'is-position-top-right',
+	'center left'   => 'is-position-center-left',
+	'center center' => '',
+	'center'        => '',
+	'center right'  => 'is-position-center-right',
+	'bottom left'   => 'is-position-bottom-left',
+	'bottom center' => 'is-position-bottom-center',
+	'bottom right'  => 'is-position-bottom-right',
+];
+$content_position = $attributes['contentPosition'] ?? 'center center';
+$position_class   = $position_map[ $content_position ] ?? '';
 
-if ( 'standard' === $animation || 'wild' === $animation ) {
-	$lines = explode( '<br>', str_replace( '||br||', '<br>', $rubrik ) );
-	$title = '<h2>';
-	foreach ( $lines as $line ) {
-		$letters = mb_str_split( $line );
-		foreach ( $letters as $index => $letter ) {
-			$position  = $index + 1;
-			$isSpecial = ( 3 === $position || 0 === ( $position - 3 ) % 8 );
-			if ( $isSpecial ) {
-				$class = ( 0 === ( $position - 3 ) % 16 ) ? 'inline-block vertical-flip' : 'inline-block spin-right';
-			} else {
-				$class = 'inline-block';
-			}
-			if ( '*' === $letter ) {
-				$class = 'inline-block pulse';
-			}
-			$title .= '<span class="' . $class . '">';
-			$title .= ' ' === $letter ? '&nbsp;' : esc_html( $letter );
-			$title .= '</span>';
-		}
-		$title .= '<br>';
-	}
-	$title .= '</h2>';
-} elseif ( 'from-right' === $animation ) {
-	$title = '<h2 class="from-right">' . wp_kses_post( $rubrik ) . '</h2>';
-} elseif ( 'from-left' === $animation ) {
-	$title = '<h2 class="from-left">' . wp_kses_post( $rubrik ) . '</h2>';
-} else {
-	$title = '<h2>' . wp_kses_post( $rubrik ) . '</h2>';
-}
-
-$position_class = esc_attr( $attributes['positionClass'] ?? '' );
+$wrapper_attrs = get_block_wrapper_attributes( [
+	'class' => 'hero-block hero-block--' . $animation,
+	'style' => $inline_style,
+] );
 ?>
-<div <?php echo get_block_wrapper_attributes( [ 'style' => $inline_style ] ); ?>>
+<div <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 	<?php if ( 'video' === $image_type && ! empty( $attributes['backgroundMedia'] ) ) : ?>
 		<video autoplay muted loop playsinline class="hero-block__video">
 			<source
@@ -77,28 +64,28 @@ $position_class = esc_attr( $attributes['positionClass'] ?? '' );
 		</video>
 	<?php endif; ?>
 	<div class="hero-block__overlay" style="<?php echo esc_attr( $overlay_style ); ?>"></div>
-	<div class="hero-block__content <?php echo $animation_class; ?> <?php echo $position_class; ?>">
+	<div class="hero-block__content <?php echo esc_attr( $position_class ); ?>">
 		<div class="hero-block__container">
 			<div class="hero-block__text<?php echo ! empty( $attributes['reverseFlow'] ) ? ' reverse-flow' : ''; ?>">
-				<?php if ( ! empty( $rubrik ) ) : ?>
-					<?php echo $title; ?>
+				<?php if ( ! empty( $attributes['rubrik'] ) ) : ?>
+					<h2><?php echo wp_kses_post( $attributes['rubrik'] ); ?></h2>
 				<?php endif; ?>
 				<?php if ( ! empty( $attributes['text'] ) ) : ?>
 					<p><?php echo wp_kses_post( $attributes['text'] ); ?></p>
 				<?php endif; ?>
 			</div>
 			<?php if ( ! empty( $attributes['button'] ) ) : ?>
-				<button class="btn btn-large">
+				<button type="button" class="btn btn-large">
 					<span><?php echo wp_kses_post( $attributes['button'] ); ?></span>
 				</button>
 			<?php endif; ?>
 		</div>
 	</div>
 	<?php if ( ! empty( $attributes['scrollArrow'] ) ) : ?>
-		<span class="hero-block__scroll-arrow">
+		<button type="button" class="hero-block__scroll-arrow" aria-label="<?php esc_attr_e( 'Scroll down', 'goodblocks' ); ?>">
 			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
 				<path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z" />
 			</svg>
-		</span>
+		</button>
 	<?php endif; ?>
 </div>

@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/section-header",
+	"title": "Section Header",
+	"category": "goodblocks",
+	"icon": "heading",
+	"description": "Display section header with optional kicker/number, title and lead. Theme-agnostic typography.",
+	"keywords": ["section", "header", "heading", "display"],
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"attributes": {
+		"kicker": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"lead": {
+			"type": "string",
+			"default": ""
+		},
+		"alignment": {
+			"type": "string",
+			"default": "left",
+			"enum": [ "left", "center" ]
+		},
+		"numberPosition": {
+			"type": "string",
+			"default": "none",
+			"enum": [ "before", "after", "none" ]
+		},
+		"theme": {
+			"type": "string",
+			"default": "light",
+			"enum": [ "light", "dark", "accent" ]
+		}
+	},
+	"example": {
+		"attributes": {
+			"kicker": "01",
+			"title": "A sustainable strategy",
+			"lead": "Built into how we work.",
+			"alignment": "left",
+			"numberPosition": "before",
+			"theme": "dark"
+		}
+	},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

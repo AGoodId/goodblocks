@@ -1,4 +1,5 @@
 .agoodapp-media-picker {
+
 	&__placeholder {
 		display: flex;
 		align-items: center;
@@ -24,6 +25,7 @@
 	}
 
 	&__preview {
+
 		img,
 		video {
 			max-width: 100%;
@@ -40,6 +42,7 @@
 }
 
 .agoodapp-modal {
+
 	.components-modal__content {
 		padding-top: 0;
 	}

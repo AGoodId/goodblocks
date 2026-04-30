@@ -114,5 +114,86 @@ add_filter( 'agoodsite_fse_showcase_blocks', function ( $blocks ) {
 		'note'     => 'Mailchimp Signup kräver API-nyckel och list-ID konfigurerade i plugin-inställningarna.',
 	];
 
+	// ── Sprint A foundation blocks (260429) ──────────────────────────────────────
+
+	$blocks[] = [
+		'slug'     => 'goodblocks/hero',
+		'help_key' => 'hero',
+		'live'     => false,
+		'note'     => 'Hero kräver bakgrundsmedia (bild eller video) och fungerar bäst i full sidkontext.',
+	];
+
+	$blocks[] = [
+		'slug'     => 'goodblocks/section-header',
+		'help_key' => 'section-header',
+		'live'     => true,
+		'configs'  => [
+			[
+				'label' => 'Light, vänsterställd med kicker',
+				'attrs' => [
+					'kicker'         => '01',
+					'title'          => 'A sustainable strategy',
+					'lead'           => 'Built into how we work.',
+					'alignment'      => 'left',
+					'numberPosition' => 'before',
+					'theme'          => 'light',
+				],
+			],
+			[
+				'label' => 'Dark, centrerad utan kicker',
+				'attrs' => [
+					'title'          => 'Clear targets. Quarterly accountability.',
+					'alignment'      => 'center',
+					'numberPosition' => 'none',
+					'theme'          => 'dark',
+				],
+			],
+			[
+				'label' => 'Accent (för kapitelintron)',
+				'attrs' => [
+					'title'          => 'Materiality Assessment & Stakeholder Engagement',
+					'alignment'      => 'left',
+					'numberPosition' => 'none',
+					'theme'          => 'accent',
+				],
+			],
+		],
+	];
+
+	$blocks[] = [
+		'slug'     => 'goodblocks/kpi-grid',
+		'help_key' => 'kpi-grid',
+		'live'     => true,
+		'configs'  => [
+			[
+				'label' => '3 tiles med prefix/suffix-mix',
+				'attrs' => [
+					'columns' => 'auto',
+					'theme'   => 'light',
+					'items'   => [
+						[ 'id' => 'sg-kpi-1', 'prefix' => '−', 'value' => '71', 'suffix' => '%', 'label' => 'SCOPE 1 & 2 VS 2022' ],
+						[ 'id' => 'sg-kpi-2', 'value' => '2025', 'label' => 'TARGET REACHED' ],
+						[ 'id' => 'sg-kpi-3', 'value' => '5', 'suffix' => 'yrs', 'label' => 'AHEAD OF SCHEDULE' ],
+					],
+				],
+			],
+			[
+				'label' => '6 tiles på accent-bakgrund',
+				'attrs' => [
+					'columns' => 'auto',
+					'theme'   => 'accent',
+					'items'   => [
+						[ 'id' => 'sg-kpi-4', 'value' => '2',     'label' => 'LOST TIME INCIDENTS' ],
+						[ 'id' => 'sg-kpi-5', 'value' => '5',     'label' => 'TOTAL INJURIES' ],
+						[ 'id' => 'sg-kpi-6', 'value' => '↑',     'label' => 'NEAR MISSES' ],
+						[ 'id' => 'sg-kpi-7', 'value' => '30',    'suffix' => '%', 'label' => 'HVO SHARE' ],
+						[ 'id' => 'sg-kpi-8', 'prefix' => '−',    'value' => '39', 'suffix' => '%', 'label' => 'SCOPE 1 VS 2022' ],
+						[ 'id' => 'sg-kpi-9', 'value' => '1 444', 'suffix' => 't', 'label' => 'SCOPE 3 CO₂E' ],
+					],
+				],
+			],
+		],
+	];
+
 	return $blocks;
 } );

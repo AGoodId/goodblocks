@@ -1,4 +1,8 @@
 .wp-block-goodblocks-hero {
+	--hero-fade-distance: 1.5rem;
+	--hero-fade-duration: 0.6s;
+	--hero-split-stagger: 0.05s;
+
 	position: relative;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -22,15 +26,74 @@
 		padding: 3rem;
 		z-index: 2;
 
-		&.is-position-top-left { align-items: flex-start; justify-content: flex-start; }
-		&.is-position-top-center { align-items: flex-start; justify-content: center; .hero-block__text { align-items: center; } }
-		&.is-position-top-right { align-items: flex-start; justify-content: flex-end; .hero-block__text { align-items: flex-end; } }
-		&.is-position-center-left { align-items: center; justify-content: flex-start; }
-		&.is-position-center-center { align-items: center; justify-content: center; .hero-block__text { align-items: center; } }
-		&.is-position-center-right { align-items: center; justify-content: flex-end; .hero-block__text { align-items: flex-end; } }
-		&.is-position-bottom-left { align-items: flex-end; justify-content: flex-start; }
-		&.is-position-bottom-center { align-items: flex-end; justify-content: center; .hero-block__text { align-items: center; } }
-		&.is-position-bottom-right { align-items: flex-end; justify-content: flex-end; .hero-block__text { align-items: flex-end; } }
+		&.is-position-top-left {
+			align-items: flex-start;
+			justify-content: flex-start;
+		}
+
+		&.is-position-top-center {
+			align-items: flex-start;
+			justify-content: center;
+
+			.hero-block__text {
+				align-items: center;
+			}
+		}
+
+		&.is-position-top-right {
+			align-items: flex-start;
+			justify-content: flex-end;
+
+			.hero-block__text {
+				align-items: flex-end;
+			}
+		}
+
+		&.is-position-center-left {
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		&.is-position-center-center {
+			align-items: center;
+			justify-content: center;
+
+			.hero-block__text {
+				align-items: center;
+			}
+		}
+
+		&.is-position-center-right {
+			align-items: center;
+			justify-content: flex-end;
+
+			.hero-block__text {
+				align-items: flex-end;
+			}
+		}
+
+		&.is-position-bottom-left {
+			align-items: flex-end;
+			justify-content: flex-start;
+		}
+
+		&.is-position-bottom-center {
+			align-items: flex-end;
+			justify-content: center;
+
+			.hero-block__text {
+				align-items: center;
+			}
+		}
+
+		&.is-position-bottom-right {
+			align-items: flex-end;
+			justify-content: flex-end;
+
+			.hero-block__text {
+				align-items: flex-end;
+			}
+		}
 	}
 
 	h2 {
@@ -38,11 +101,6 @@
 		margin-top: 0;
 		margin-bottom: 1rem;
 		z-index: 2;
-
-		&.from-right,
-		&.from-left {
-			white-space: nowrap;
-		}
 	}
 
 	p {
@@ -50,9 +108,6 @@
 		font-size: 30px;
 		z-index: 2;
 	}
-
-	span.inline-block { color: inherit; }
-	.inline-block { display: inline-block; }
 
 	.hero-block__text {
 		display: flex;
@@ -83,11 +138,11 @@
 		display: block;
 		max-width: fit-content;
 		color: inherit;
-		border-color: currentColor;
+		border-color: currentcolor;
 
 		&:hover {
-			background-color: currentColor;
-			border-color: currentColor;
+			background-color: currentcolor;
+			border-color: currentcolor;
 
 			span {
 				background-clip: text;
@@ -103,16 +158,98 @@
 		transform: translateX(-50%);
 		z-index: 2;
 		animation: hero-bounce 1s infinite ease-in-out;
+		background: none;
+		border: 0;
+		padding: 10px;
+		cursor: pointer;
+		color: inherit;
+		min-width: 44px;
+		min-height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&:focus-visible {
+			outline: 2px solid currentcolor;
+			outline-offset: 2px;
+		}
 
 		svg {
 			width: 2rem;
 			height: 2rem;
-			fill: currentColor;
+			fill: currentcolor;
 		}
 	}
 
 	@keyframes hero-bounce {
-		0%, 100% { transform: translate(-50%, 0); }
-		50% { transform: translate(-50%, -10px); }
+
+		0%,
+		100% {
+			transform: translate(-50%, 0);
+		}
+
+		50% {
+			transform: translate(-50%, -10px);
+		}
+	}
+
+	// Animation: fade-up — whole text block fades in from below.
+	// Initial-hidden state gated on `.goodblocks-js` (set by view.js) to
+	// guarantee text is visible if JS is disabled or fails to load.
+	&.hero-block--fade-up {
+
+		.hero-block__text {
+			transition:
+				opacity var(--hero-fade-duration) ease-out,
+				transform var(--hero-fade-duration) ease-out;
+		}
+	}
+
+	// split-words: spans are JS-injected, so without JS there are no
+	// .hero-block__word elements — plain h2 renders untouched. Initial-hidden
+	// state therefore only applies when JS has run.
+
+	// JS-gated initial states (prevents invisible hero text without JS)
+	:where(.goodblocks-js) &.hero-block--fade-up .hero-block__text {
+		opacity: 0;
+		transform: translateY(var(--hero-fade-distance));
+	}
+
+	:where(.goodblocks-js) &.hero-block--fade-up.is-in-view .hero-block__text {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	&.hero-block--split-words {
+
+		.hero-block__word {
+			display: inline-block;
+			opacity: 0;
+			transform: translateY(var(--hero-fade-distance));
+			transition:
+				opacity var(--hero-fade-duration) ease-out,
+				transform var(--hero-fade-duration) ease-out;
+			transition-delay: calc(var(--word-index, 0) * var(--hero-split-stagger));
+		}
+
+		&.is-in-view .hero-block__word {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	// Respect user motion preference: disable all hero animations
+	@media (prefers-reduced-motion: reduce) {
+
+		&.hero-block--fade-up .hero-block__text,
+		&.hero-block--split-words .hero-block__word {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+
+		.hero-block__scroll-arrow {
+			animation: none;
+		}
 	}
 }

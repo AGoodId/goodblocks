@@ -1,0 +1,60 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/kpi-grid",
+	"title": "KPI Grid",
+	"category": "goodblocks",
+	"icon": "chart-bar",
+	"description": "Grid of 1–6 KPI tiles with value, label and optional prefix/suffix.",
+	"keywords": ["kpi", "stats", "numbers", "metrics", "facts"],
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"attributes": {
+		"items": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"value": { "type": "string" },
+					"label": { "type": "string" },
+					"prefix": { "type": "string" },
+					"suffix": { "type": "string" }
+				}
+			}
+		},
+		"columns": {
+			"type": "string",
+			"default": "auto",
+			"enum": [ "auto", "2", "3", "4", "5", "6" ]
+		},
+		"theme": {
+			"type": "string",
+			"default": "light",
+			"enum": [ "light", "dark", "accent" ]
+		}
+	},
+	"example": {
+		"attributes": {
+			"items": [
+				{ "id": "ex-1", "prefix": "−", "value": "71", "suffix": "%", "label": "SCOPE 1 & 2 VS 2022" },
+				{ "id": "ex-2", "value": "2025", "label": "TARGET REACHED" },
+				{ "id": "ex-3", "value": "5", "suffix": "yrs", "label": "AHEAD OF SCHEDULE" }
+			],
+			"columns": "auto",
+			"theme": "light"
+		}
+	},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

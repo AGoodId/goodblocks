@@ -9,6 +9,7 @@
 
 	&[data-layout="overlay"] {
 		min-height: auto;
+
 		.wp-block-goodblocks-slide {
 			position: absolute;
 			top: 0;
@@ -20,6 +21,7 @@
 
 	&[data-layout="below"] {
 		min-height: auto;
+
 		.wp-block-goodblocks-slide {
 			position: relative;
 			width: 100%;

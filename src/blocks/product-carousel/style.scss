@@ -3,8 +3,14 @@
 	margin-bottom: 2rem !important;
 
 	.products {
-		.swiper-slide { height: auto; }
-		.product { height: 100%; }
+
+		.swiper-slide {
+			height: auto;
+		}
+
+		.product {
+			height: 100%;
+		}
 	}
 
 	--swiper-navigation-size: 24px;
@@ -36,8 +42,13 @@
 		gap: 20px;
 	}
 
-	.products-count-2 { --product-count: 2; }
-	.products-count-3 { --product-count: 3; }
+	.products-count-2 {
+		--product-count: 2;
+	}
+
+	.products-count-3 {
+		--product-count: 3;
+	}
 
 	.products-count-2 .swiper-slide,
 	.products-count-3 .swiper-slide {

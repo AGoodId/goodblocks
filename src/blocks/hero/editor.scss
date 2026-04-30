@@ -1,5 +1,4 @@
 .wp-block-goodblocks-hero {
-	height: 50vh;
 
 	.hero-block__video {
 		position: absolute;
@@ -20,11 +19,7 @@
 		.btn,
 		button {
 			color: inherit !important;
-			border-color: currentColor !important;
-		}
-
-		h2.block-editor-rich-text__editable.rich-text {
-			font-size: 80px;
+			border-color: currentcolor !important;
 		}
 	}
 }

@@ -1,0 +1,136 @@
+.wp-block-goodblocks-kpi-grid {
+	// Tema-agnostiska defaults — inga font-family, ingen letter-spacing
+	--kpi-bg: transparent;
+	--kpi-fg: currentcolor;
+	--kpi-tile-bg: transparent;
+	--kpi-tile-fg: currentcolor;
+	--kpi-tile-border: 1px solid color-mix(in srgb, currentcolor 20%, transparent);
+	--kpi-tile-padding: clamp(1rem, 3vw, 2rem);
+	--kpi-tile-gap: clamp(0.5rem, 2vw, 1rem);
+	--kpi-grid-gap: clamp(0.5rem, 1.5vw, 1rem);
+	--kpi-value-size: clamp(2rem, 5vw, 3.5rem);
+	--kpi-value-line-height: 1;
+	--kpi-affix-size: 0.6em;
+	--kpi-label-size: clamp(0.75rem, 0.5vw + 0.625rem, 0.875rem);
+	--kpi-label-letter-spacing: 0;
+	--kpi-label-text-transform: none;
+	--kpi-padding-block: clamp(2rem, 5vw, 4rem);
+	--kpi-padding-inline: clamp(1rem, 4vw, 3rem);
+
+	background: var(--kpi-bg);
+	color: var(--kpi-fg);
+	padding: var(--kpi-padding-block) var(--kpi-padding-inline);
+
+	.kpi-grid__inner {
+		display: grid;
+		grid-template-columns: 1fr; // mobile-first: 1 kolumn
+		gap: var(--kpi-grid-gap);
+	}
+
+	.kpi-grid__empty {
+		padding: 2rem;
+		text-align: center;
+		border: 1px dashed color-mix(in srgb, currentcolor 30%, transparent);
+		border-radius: 4px;
+	}
+
+	.kpi-grid__tile {
+		display: flex;
+		flex-direction: column;
+		gap: var(--kpi-tile-gap);
+		padding: var(--kpi-tile-padding);
+		background: var(--kpi-tile-bg);
+		color: var(--kpi-tile-fg);
+		border: var(--kpi-tile-border);
+		border-radius: 2px;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		min-height: 100%;
+	}
+
+	.kpi-grid__value {
+		font-size: var(--kpi-value-size);
+		line-height: var(--kpi-value-line-height);
+		display: flex;
+		align-items: baseline;
+		gap: 0.05em;
+	}
+
+	.kpi-grid__prefix,
+	.kpi-grid__suffix {
+		font-size: var(--kpi-affix-size);
+		opacity: 0.85;
+	}
+
+	.kpi-grid__label {
+		font-size: var(--kpi-label-size);
+		letter-spacing: var(--kpi-label-letter-spacing);
+		text-transform: var(--kpi-label-text-transform);
+		opacity: 0.85;
+		max-width: 16em;
+	}
+
+	// Responsiv layout — bryter upp på 640px och 960px
+	@media (min-width: 640px) {
+
+		&.kpi-grid--cols-2 .kpi-grid__inner {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		&.kpi-grid--cols-3 .kpi-grid__inner {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		&.kpi-grid--cols-4 .kpi-grid__inner {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		&.kpi-grid--cols-5 .kpi-grid__inner {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		&.kpi-grid--cols-6 .kpi-grid__inner {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media (min-width: 960px) {
+
+		&.kpi-grid--cols-2 .kpi-grid__inner {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		&.kpi-grid--cols-3 .kpi-grid__inner {
+			grid-template-columns: repeat(3, 1fr);
+		}
+
+		&.kpi-grid--cols-4 .kpi-grid__inner {
+			grid-template-columns: repeat(4, 1fr);
+		}
+
+		&.kpi-grid--cols-5 .kpi-grid__inner {
+			grid-template-columns: repeat(5, 1fr);
+		}
+
+		&.kpi-grid--cols-6 .kpi-grid__inner {
+			grid-template-columns: repeat(6, 1fr);
+		}
+	}
+
+	// Tema-varianter — fallback-värden så blocket ser OK ut även utan tema-tokens
+	&.kpi-grid--light {
+		--kpi-bg: var(--wp--preset--color--base, #f5f5f5);
+		--kpi-fg: var(--wp--preset--color--contrast, #111);
+	}
+
+	&.kpi-grid--dark {
+		--kpi-bg: var(--wp--preset--color--contrast, #111);
+		--kpi-fg: var(--wp--preset--color--base, #fff);
+	}
+
+	&.kpi-grid--accent {
+		--kpi-bg: var(--wp--preset--color--accent, #e0e0e0);
+		--kpi-fg: currentcolor;
+	}
+}

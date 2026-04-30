@@ -7,9 +7,11 @@
 @use "../_shared/tokens" as sharedTokens;
 
 .wp-block-goodblocks-card-feature {
+
 	@include cardFeatureBase.card-feature-base;
 
-	transition: transform var(--wp--custom--transition--base),
+	transition:
+		transform var(--wp--custom--transition--base),
 		box-shadow var(--wp--custom--transition--base);
 	text-decoration: none;
 	color: inherit;
@@ -30,6 +32,7 @@
 		.card-feature__content {
 			position: relative;
 			z-index: 1;
+
 			@include sharedMixins.overlay-gradient(0.8);
 			color: var(--wp--preset--color--surface);
 			margin-top: auto;

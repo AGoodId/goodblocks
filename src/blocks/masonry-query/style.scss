@@ -50,6 +50,7 @@
 	// for tight packing with horizontal (left-to-right) flow.
 	// JS calculates each item's height and sets grid-row-end accordingly.
 	&.masonry-query--masonry {
+
 		.masonry-query__grid {
 			// grid-auto-rows: 1px is set by JS (view.js) when layout runs.
 			// Default to auto so items have natural height before JS loads
@@ -111,10 +112,10 @@
 			transition: transform 0.4s ease;
 		}
 
-			video::-webkit-media-controls {
-				display: none;
-			}
+		video::-webkit-media-controls {
+			display: none;
 		}
+	}
 
 	// =====================
 	// OVERLAY STYLES
@@ -152,22 +153,23 @@
 	}
 
 	// Below image — content flows under the image as a card
-		&.masonry-query--overlay-pos-below {
-			.masonry-query__item .masonry-query__overlay {
-				position: relative;
-				z-index: auto;
-				background: none;
-				backdrop-filter: none;
-				padding: var(--wp--preset--spacing--sm, 0.5rem) 0 0;
-				opacity: 1;
-			}
+	&.masonry-query--overlay-pos-below {
+
+		.masonry-query__item .masonry-query__overlay {
+			position: relative;
+			z-index: auto;
+			background: none;
+			backdrop-filter: none;
+			padding: var(--wp--preset--spacing--sm, 0.5rem) 0 0;
+			opacity: 1;
+		}
 
 		.masonry-query__content {
 			color: var(--wp--preset--color--text, #1a1a1a);
 		}
 
 		.masonry-query__category {
-			color: var(--wp--preset--color--primary, #F5D547);
+			color: var(--wp--preset--color--primary, #f5d547);
 			opacity: 1;
 		}
 
@@ -204,6 +206,7 @@
 
 	// Overlay visibility
 	&.masonry-query--overlay-vis-hover {
+
 		.masonry-query__overlay {
 			opacity: 0;
 		}
@@ -233,14 +236,14 @@
 		margin-bottom: var(--wp--preset--spacing--xs, 0.25rem);
 	}
 
-		.masonry-query__title {
-			margin: 0;
-			font-family: inherit;
-			color: inherit;
-			font-size: 0.875rem;
-			font-weight: 500;
-			line-height: 1.3;
-		}
+	.masonry-query__title {
+		margin: 0;
+		font-family: inherit;
+		color: inherit;
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.3;
+	}
 
 	.masonry-query__excerpt {
 		margin: var(--wp--preset--spacing--xs, 0.25rem) 0 0;
@@ -270,6 +273,7 @@
 	}
 
 	&.masonry-query--hover-grayscale {
+
 		.masonry-query__item img,
 		.masonry-query__item video {
 			filter: grayscale(100%);
@@ -283,6 +287,7 @@
 	}
 
 	&.masonry-query--hover-brightness {
+
 		.masonry-query__item img,
 		.masonry-query__item video {
 			filter: brightness(0.9);
@@ -395,6 +400,7 @@
 // JS adds .masonry-query--loaded almost immediately, so this only fires
 // when something went wrong.
 @keyframes masonry-fallback-show {
+
 	to {
 		opacity: 1;
 		transform: none;
@@ -554,6 +560,7 @@
 
 	// Tags — subtle dark variant
 	&__tags {
+
 		.portfolio-meta__pill {
 			background: rgba(255, 255, 255, 0.06);
 			border-color: rgba(255, 255, 255, 0.1);
@@ -645,6 +652,7 @@
 
 	// Mobile: stack vertically
 	@media (max-width: 768px) {
+
 		&__container {
 			flex-direction: column;
 		}
@@ -674,6 +682,7 @@
 		}
 
 		&__nav {
+
 			&--prev {
 				left: 8px;
 			}
@@ -706,7 +715,7 @@
 
 .masonry-query__retry {
 	background: none;
-	border: 1px solid currentColor;
+	border: 1px solid currentcolor;
 	color: inherit;
 	padding: 0.4rem 1rem;
 	border-radius: 4px;

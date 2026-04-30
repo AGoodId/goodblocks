@@ -45,6 +45,7 @@
 
 	// With fixed aspect ratio: both images fill the container.
 	&.has-aspect-ratio {
+
 		.image-compare__after img {
 			height: 100%;
 			object-fit: cover;
@@ -70,7 +71,7 @@
 		appearance: none;
 
 		&:focus-visible {
-			box-shadow: 0 0 0 3px var(--wp--preset--color--primary, #2C5F2D);
+			box-shadow: 0 0 0 3px var(--wp--preset--color--primary, #2c5f2d);
 		}
 	}
 
@@ -84,7 +85,7 @@
 		height: 44px;
 		border-radius: 50%;
 		background: #fff;
-		border: 2px solid var(--wp--preset--color--primary, #2C5F2D);
+		border: 2px solid var(--wp--preset--color--primary, #2c5f2d);
 		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 		display: flex;
 		align-items: center;
@@ -93,7 +94,7 @@
 		// Arrow icons (CSS-only).
 		&::before,
 		&::after {
-			content: '';
+			content: "";
 			display: block;
 			width: 0;
 			height: 0;
@@ -107,14 +108,14 @@
 		&::before {
 			left: 8px;
 			border-width: 6px 7px 6px 0;
-			border-color: transparent var(--wp--preset--color--primary, #2C5F2D) transparent transparent;
+			border-color: transparent var(--wp--preset--color--primary, #2c5f2d) transparent transparent;
 		}
 
 		// Right arrow.
 		&::after {
 			right: 8px;
 			border-width: 6px 0 6px 7px;
-			border-color: transparent transparent transparent var(--wp--preset--color--primary, #2C5F2D);
+			border-color: transparent transparent transparent var(--wp--preset--color--primary, #2c5f2d);
 		}
 	}
 
@@ -188,7 +189,7 @@
 				top: 8px;
 				transform: translateX(-50%);
 				border-width: 0 6px 7px 6px;
-				border-color: transparent transparent var(--wp--preset--color--primary, #2C5F2D) transparent;
+				border-color: transparent transparent var(--wp--preset--color--primary, #2c5f2d) transparent;
 			}
 
 			// Down arrow.
@@ -199,7 +200,7 @@
 				right: auto;
 				transform: translateX(-50%);
 				border-width: 7px 6px 0 6px;
-				border-color: var(--wp--preset--color--primary, #2C5F2D) transparent transparent transparent;
+				border-color: var(--wp--preset--color--primary, #2c5f2d) transparent transparent transparent;
 			}
 		}
 
@@ -222,10 +223,13 @@
 
 // Knob pulse animation during tease.
 @keyframes image-compare-knob-pulse {
-	0%, 100% {
+
+	0%,
+ 100% {
 		transform: translate(-50%, -50%) scale(1);
 		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 	}
+
 	50% {
 		transform: translate(-50%, -50%) scale(1.1);
 		box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
@@ -234,7 +238,9 @@
 
 // Reduced motion.
 @media (prefers-reduced-motion: reduce) {
+
 	.wp-block-goodblocks-image-compare {
+
 		.image-compare__before,
 		.image-compare__handle {
 			transition: none !important;

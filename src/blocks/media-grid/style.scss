@@ -20,6 +20,7 @@
 	}
 
 	&[data-layout="bento-large-top"] {
+
 		.wp-block-goodblocks-media-grid-item:first-child {
 			grid-column: 1 / -1;
 			grid-row: 1 / 2;
@@ -33,6 +34,7 @@
 		gap: var(--gap, 20px);
 
 		.wp-block-goodblocks-media-grid-item {
+
 			&[style*="aspect-ratio"] {
 				grid-auto-rows: auto;
 			}
@@ -41,6 +43,6 @@
 
 	.wp-block-goodblocks-media-grid-item {
 		margin: 0;
-		border-radius: var(--border-radius, 0px);
+		border-radius: var(--border-radius, 0);
 	}
 }

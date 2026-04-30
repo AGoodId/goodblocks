@@ -8,8 +8,9 @@
  * @package GoodBlocks
  */
 
-$event_start = get_post_meta( get_the_ID(), '_event_start', true );
-$event_end   = get_post_meta( get_the_ID(), '_event_end', true );
+$event_start   = get_post_meta( get_the_ID(), '_event_start', true );
+$event_end     = get_post_meta( get_the_ID(), '_event_end', true );
+$event_all_day = (bool) get_post_meta( get_the_ID(), '_event_all_day', true );
 ?>
 <div class="event-list-item">
 
@@ -21,7 +22,7 @@ $event_end   = get_post_meta( get_the_ID(), '_event_end', true );
 
 	<div class="event-content">
 		<?php if ( $event_start ) : ?>
-			<div class="event-date"><?php echo esc_html( goodblocks_format_event_date( $event_start, $event_end ) ); ?></div>
+			<div class="event-date"><?php echo esc_html( goodblocks_format_event_date( $event_start, $event_end, $event_all_day ) ); ?></div>
 		<?php endif; ?>
 
 		<h3 class="event-title">

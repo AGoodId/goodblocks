@@ -4,7 +4,7 @@
 
 .search-autocomplete {
 	--search-height: 56px;
-	--search-radius: 0px;
+	--search-radius: 0;
 	--search-close-width: 56px;
 	--search-form-gap: 0.625rem;
 	--search-font-family: "Untitled Sans", var(--wp--preset--font-family--body, system-ui), sans-serif;
@@ -75,6 +75,7 @@
 	}
 
 	&--expandable {
+
 		.search-autocomplete__form {
 			position: fixed;
 			top: var(--search-overlay-top);
@@ -94,6 +95,7 @@
 		}
 
 		&.is-expanded {
+
 			.search-autocomplete__trigger {
 				opacity: 0;
 				visibility: hidden;
@@ -264,12 +266,13 @@
 		-webkit-backdrop-filter: blur(6px);
 		z-index: 1003;
 
-			&[hidden] {
-				display: none;
-			}
+		&[hidden] {
+			display: none;
 		}
+	}
 
 	&--expandable {
+
 		.search-autocomplete__results {
 			left: 0;
 			width: calc(100% - var(--search-close-width) - var(--search-form-gap));
@@ -472,6 +475,7 @@
 }
 
 @media (max-width: 782px) {
+
 	.search-autocomplete {
 		--search-height: 52px;
 		--search-close-width: 44px;
@@ -491,7 +495,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.search-autocomplete {
+
 		&__form,
 		&__trigger,
 		&__field,
