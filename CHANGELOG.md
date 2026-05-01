@@ -10,6 +10,24 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.3] — 2026-05-01
+
+### Etapp 2: visual fidelity-pass och layoutpolish
+
+> Tredje RC. Fokus på proportioner, full-width-beteende och att få story-card att läsa mer som editorial-modul än generiskt kort.
+
+### Changed
+- **Default-layout omkalibrerad** med bredare editorial-shell, tydligare text/media-proportion och starkare vertikal rytm.
+- **Full align-beteende förbättrat** så blocket kan bära en riktig full-width story-yta i stället för att kännas inträngt i contentkolumnen.
+- **Typografin tajtad**: rubriken balanseras bättre i boxen och ingressen får lugnare radlängd.
+- **Media-ytan stärkt** i `default` och `reverse` med mer konsekvent höjd och `object-fit: cover` på desktop.
+- **Action/disclosure-spacing** integrerad tydligare i kompositionen.
+
+### Fixed
+- `split-right` har nu explicit ordning för text/media på desktop.
+- `bg-full` får preview av bakgrundsmedia i editorn, så layouten går att bedöma utan frontend-gissning.
+- Mobil-layouten släpper textens maxbredd renare och minskar glapp mellan text- och mediaflöde.
+
 ## [1.13.0-rc.2] — 2026-05-01
 
 ### Etapp 2: alla 5 layouts + visual fidelity-pass (default)
@@ -83,4 +101,3 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ### Known limitations
 - `goodblocks/hero` har inga aktiva URL-attribut för CTA-knappen (`buttonUrl`/`buttonTarget` är specade men inte implementerade i v1.12.0). Knappen renderas som `<button type="button">` utan länkbeteende — får sin funktion via custom JS eller utökas i v1.13.
-

@@ -359,6 +359,26 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<article { ...blockProps }>
+				{ mediaUrl && layout === 'bg-full' && (
+					<div className="story-card__bg" aria-hidden="true">
+						{ mediaType === 'video' ? (
+							<video
+								className="story-card__bg-media"
+								src={ mediaUrl }
+								autoPlay
+								muted
+								loop
+								playsInline
+							/>
+						) : (
+							<img
+								className="story-card__bg-media"
+								src={ mediaUrl }
+								alt=""
+							/>
+						) }
+					</div>
+				) }
 				<div className="story-card__inner">
 					<div className="story-card__text">
 						<header className="story-card__header">
