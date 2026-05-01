@@ -10,6 +10,22 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.4] — 2026-05-01
+
+### Etapp 2b: DENSIQ-aligned layout polish
+
+> Fjärde RC. Tajtar story-card mot DENSIQ:s faktiska story-module-geometri i stället för att bara se “generellt editorial” ut.
+
+### Changed
+- **Default och reverse följer nu rakare DENSIQ-grid** med 50/50-kolumner, tydligare kolumnpadding och markerad skiljelinje mellan text och media.
+- **Disclosure-raden kalibrerad mot ASR-mönstret**: mindre, mer självsäker “Read more”-behandling med versaler, tätare tracking och bättre relation till actions-raden.
+- **Body-typografi för disclosure** tajtad med tydligare nivåer för `h2`/`h3`/`h4`, så utvikt innehåll känns mer som rapportmodul än standard-WP-text.
+- **Bg-full närmare originalstrukturen** med 50/50-inner grid och tydligare textpadding ovanpå bakgrundsmedia.
+
+### Fixed
+- Mobilcollapse följer nu DENSIQ närmare: text först, media efter, renare paddings och stabilare mediahöjder i default/split/bg-full.
+- `story-card` använder nu samma maxbreddslogik som DENSIQ:s story-modules (`1600px`) i stället för en friare shell-bredd.
+
 ## [1.13.0-rc.3] — 2026-05-01
 
 ### Etapp 2: visual fidelity-pass och layoutpolish
