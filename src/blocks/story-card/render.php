@@ -91,11 +91,19 @@ $classes = [
 	'story-card--' . $theme,
 ];
 
+$anchor = isset( $attributes['anchor'] ) ? sanitize_title( (string) $attributes['anchor'] ) : '';
+
+$wrapper_options = [
+	'class' => implode( ' ', $classes ),
+];
+
+if ( $anchor !== '' ) {
+	$wrapper_options['id'] = $anchor;
+}
+
 // get_block_wrapper_attributes() inkluderar automatiskt id="..." om
 // supports.anchor är satt och redaktör angivit ankare.
-$wrapper_attrs = get_block_wrapper_attributes( [
-	'class' => implode( ' ', $classes ),
-] );
+$wrapper_attrs = get_block_wrapper_attributes( $wrapper_options );
 ?>
 <article <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 

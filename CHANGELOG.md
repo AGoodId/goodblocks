@@ -10,6 +10,16 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.5] — 2026-05-01
+
+### Anchor reliability fix
+
+> Femte RC. Liten men viktig server-side-fix för story-card när block används som ersättare för befintliga storymoduler med deeplinks.
+
+### Fixed
+- `goodblocks/story-card` sätter nu `id` explicit från blockets `anchor`-attribut i `render.php`, i stället för att enbart förlita sig på att wrapper-attributen alltid injicerar ankaret automatiskt.
+- Gör blocket säkrare för DENSIQ-migrering där befintliga story-id:n behöver följa med till den blockbaserade sidan.
+
 ## [1.13.0-rc.4] — 2026-05-01
 
 ### Etapp 2b: DENSIQ-aligned layout polish
