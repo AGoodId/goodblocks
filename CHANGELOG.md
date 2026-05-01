@@ -10,6 +10,20 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.6] — 2026-05-01
+
+### Special visual slot for story-card
+
+> Sjätte RC. Gör story-card användbart för fler av DENSIQ:s storymoduler genom att tillåta HTML-baserad visualisering i högerspalten, inte bara bild/video.
+
+### Added
+- `visualHtml`-attribut på `goodblocks/story-card` för server-renderad visual-slot i storyns sekundärkolumn.
+- Gör det möjligt att bära över befintliga ASR-visualer som countdowns, stat-panels och before/after-kompositioner utan att först bygga separata block för varje variant.
+
+### Fixed
+- `story-card` kan nu rendera en meningsfull högerspalt även när modulen saknar bild/video men har strukturerad visual-HTML.
+- text-only-fallet får en renare enkelkolumnslayout i stället för att riskera en tom högerspalt.
+
 ## [1.13.0-rc.5] — 2026-05-01
 
 ### Anchor reliability fix

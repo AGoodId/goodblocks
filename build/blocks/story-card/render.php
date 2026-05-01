@@ -48,6 +48,9 @@ $media_url = isset( $attributes['mediaUrl'] ) ? (string) $attributes['mediaUrl']
 $media_alt = isset( $attributes['mediaAlt'] ) ? (string) $attributes['mediaAlt'] : '';
 $has_media = $media_url !== '';
 
+$visual_html = isset( $attributes['visualHtml'] ) ? (string) $attributes['visualHtml'] : '';
+$has_visual  = trim( $visual_html ) !== '';
+
 // ─── Action ─────────────────────────────────────────────────────────────────
 
 $action_url   = isset( $attributes['actionUrl'] )   ? (string) $attributes['actionUrl']   : '';
@@ -77,7 +80,7 @@ $open_by_default    = ! empty( $attributes['openByDefault'] );
 
 $has_content    = trim( (string) $content ) !== '';
 $has_any_text   = $title !== '' || $kicker !== '' || $excerpt !== '';
-$has_anything   = $has_any_text || $has_action || ! empty( $labels ) || $has_media || $has_content;
+$has_anything   = $has_any_text || $has_action || ! empty( $labels ) || $has_media || $has_visual || $has_content;
 
 if ( ! $has_anything ) {
 	return;
@@ -91,11 +94,23 @@ $classes = [
 	'story-card--' . $theme,
 ];
 
+if ( ! $has_media && ! $has_visual ) {
+	$classes[] = 'story-card--text-only';
+}
+
+$anchor = isset( $attributes['anchor'] ) ? sanitize_title( (string) $attributes['anchor'] ) : '';
+
+$wrapper_options = [
+	'class' => implode( ' ', $classes ),
+];
+
+if ( $anchor !== '' ) {
+	$wrapper_options['id'] = $anchor;
+}
+
 // get_block_wrapper_attributes() inkluderar automatiskt id="..." om
 // supports.anchor är satt och redaktör angivit ankare.
-$wrapper_attrs = get_block_wrapper_attributes( [
-	'class' => implode( ' ', $classes ),
-] );
+$wrapper_attrs = get_block_wrapper_attributes( $wrapper_options );
 ?>
 <article <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 
@@ -171,6 +186,20 @@ $wrapper_attrs = get_block_wrapper_attributes( [
 						loading="lazy" />
 				<?php endif; ?>
 			</figure>
+		<?php elseif ( $has_visual && $layout !== 'bg-full' ) : ?>
+			<div class="story-card__visual story-card__visual--html">
+				<div class="story-card__visual-inner">
+					<?php echo $visual_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( $has_visual && $layout === 'bg-full' ) : ?>
+			<div class="story-card__visual story-card__visual--html">
+				<div class="story-card__visual-inner">
+					<?php echo $visual_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+			</div>
 		<?php endif; ?>
 
 	</div>

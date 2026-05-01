@@ -59,6 +59,10 @@
 			"default": "image",
 			"enum": [ "image", "video" ]
 		},
+		"visualHtml": {
+			"type": "string",
+			"default": ""
+		},
 		"actionUrl": {
 			"type": "string",
 			"default": ""

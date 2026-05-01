@@ -196,6 +196,17 @@
 		}
 	}
 
+	.story-card__visual {
+		min-width: 0;
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.story-card__visual-inner {
+		width: 100%;
+	}
+
 	// ── Disclosure — editor preview (no <details>) ───────────────────────────
 
 	.story-card__disclosure-editor {
@@ -382,7 +393,8 @@
 			}
 		}
 
-		.story-card__media {
+		.story-card__media,
+		.story-card__visual {
 
 			@media (min-width: 769px) {
 				align-self: stretch;
@@ -423,7 +435,8 @@
 				}
 			}
 
-			.story-card__media {
+			.story-card__media,
+			.story-card__visual {
 
 				@media (min-width: 769px) {
 					order: 1;
@@ -469,7 +482,8 @@
 			}
 		}
 
-		.story-card__media {
+		.story-card__media,
+		.story-card__visual {
 			position: relative;
 			overflow: hidden;
 
@@ -581,6 +595,16 @@
 			}
 		}
 
+		.story-card__visual {
+			position: relative;
+			z-index: 1;
+			padding: var(--story-card-bg-padding) var(--story-card-padding-inline) var(--story-card-bg-padding) var(--story-card-column-padding);
+
+			@media (min-width: 769px) {
+				align-self: stretch;
+			}
+		}
+
 		// Text + alla relaterade element är ljusa över bakgrundsmedia
 		.story-card__title,
 		.story-card__excerpt,
@@ -603,6 +627,25 @@
 
 		.story-card__disclosure {
 			border-top-color: rgba(255, 255, 255, 0.2);
+		}
+	}
+
+	&.story-card--text-only {
+
+		.story-card__inner {
+
+			@media (min-width: 769px) {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.story-card__text {
+
+			@media (min-width: 769px) {
+				max-width: min(56rem, 100%);
+				padding-left: 0;
+				padding-right: 0;
+			}
 		}
 	}
 	/* stylelint-enable no-descending-specificity */
@@ -653,10 +696,18 @@
 			}
 		}
 
+		.story-card__visual {
+			border-left: 0;
+			border-right: 0;
+			padding-left: 0;
+			padding-right: 0;
+		}
+
 		&.story-card--default,
 		&.story-card--reverse {
 
-			.story-card__media {
+			.story-card__media,
+			.story-card__visual {
 				min-height: 260px;
 			}
 		}
@@ -668,7 +719,8 @@
 				padding-bottom: 1.5rem;
 			}
 
-			.story-card__media {
+			.story-card__media,
+			.story-card__visual {
 				min-height: 280px;
 			}
 		}
