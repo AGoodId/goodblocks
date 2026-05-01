@@ -119,10 +119,6 @@ export default function Edit( { attributes, setAttributes } ) {
 							},
 						] }
 						onChange={ ( v ) => setAttributes( { layout: v } ) }
-						help={ __(
-							'Layouts utöver default implementeras i Etapp 2.',
-							'goodblocks'
-						) }
 					/>
 				</PanelBody>
 

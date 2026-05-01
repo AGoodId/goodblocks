@@ -1,99 +1,115 @@
 .wp-block-goodblocks-story-card {
 
-	// Smooth-expand progressive enhancement — scoped till blocket, inte :root.
-	// `interpolate-size` är inherited så descendants (story-card__body) får det.
-	@supports (interpolate-size: allow-keywords) {
-		interpolate-size: allow-keywords;
-	}
-
-
-	// ── CSS-variabler — defaults utan brand-opinion ─────────────────────────
-	// Inga font-family, ingen letter-spacing, ingen text-transform: uppercase
+	// ── CSS-variabler — proportions matchar DENSIQ-målbild ──────────────────
+	// Editorial-modul, inte standardkort.
+	// Inga font-family, letter-spacing, text-transform: uppercase i defaults.
 
 	--story-card-bg: transparent;
 	--story-card-fg: currentcolor;
-	--story-card-padding-block: clamp(2rem, 5vw, 4rem);
-	--story-card-padding-inline: clamp(1rem, 4vw, 3rem);
-	--story-card-gap: clamp(1.5rem, 4vw, 3rem);
-	--story-card-stack-gap: clamp(1rem, 2vw, 1.5rem);
-	--story-card-text-padding: clamp(1rem, 4vw, 3rem);
-	--story-card-content-max-width: 64rem;
+	--story-card-border-color: color-mix(in srgb, currentcolor 12%, transparent);
+	--story-card-border-color-strong: color-mix(in srgb, currentcolor 20%, transparent);
 
-	--story-card-kicker-size: clamp(0.75rem, 0.5vw + 0.625rem, 0.875rem);
-	--story-card-title-size: clamp(1.5rem, 3vw + 1rem, 2.5rem);
-	--story-card-title-line-height: 1.2;
-	--story-card-excerpt-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
-	--story-card-summary-size: 0.95rem;
-	--story-card-label-size: 0.75rem;
+	// Spacing — generös och deliberate
+	--story-card-padding-block: clamp(56px, 6vw, 96px);
+	--story-card-padding-inline: clamp(24px, 5vw, 80px);
+	--story-card-content-max-width: 1600px;
+	--story-card-text-max-width: 32rem; // optimal ~640px för läsbarhet
+	--story-card-column-gap: clamp(32px, 4vw, 64px);
 
-	--story-card-disclosure-padding: 1rem;
-	--story-card-summary-bg: transparent;
-	--story-card-summary-border: 1px solid color-mix(in srgb, currentcolor 25%, transparent);
+	// Vertical rhythm — större gap mellan major sections
+	--story-card-rhythm-tight: 0.75rem;   // mellan kicker → title → excerpt
+	--story-card-rhythm-base: 1.5rem;     // mellan header → labels/actions
+	--story-card-rhythm-loose: 2.5rem;    // mellan content → disclosure
 
-	--story-card-action-padding: 0.75rem 1.5rem;
+	// Typografi — DENSIQ:s skala men utan brand-opinion
+	--story-card-kicker-size: clamp(0.6875rem, 0.5vw + 0.5rem, 0.8125rem);
+	--story-card-title-size: clamp(2rem, 4vw + 0.5rem, 3.75rem);
+	--story-card-title-line-height: 1.0;
+	--story-card-excerpt-size: clamp(1.0625rem, 0.5vw + 0.875rem, 1.25rem);
+	--story-card-excerpt-line-height: 1.55;
+	--story-card-summary-size: 0.9375rem;
+	--story-card-label-size: 0.6875rem;
+	--story-card-body-size: 1.0625rem;
+	--story-card-body-line-height: 1.7;
+
+	// Disclosure — integrerad, inte buttony
+	--story-card-disclosure-rhythm: 1.75rem;
+
+	// Action button
+	--story-card-action-padding: 0.875rem 1.75rem;
 	--story-card-action-bg: var(--story-card-fg);
 	--story-card-action-fg: var(--story-card-bg);
 	--story-card-action-border-radius: 2px;
 
-	--story-card-bg-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.1));
-	--story-card-bg-padding: clamp(2rem, 6vw, 5rem);
-	--story-card-bg-min-height: clamp(400px, 60vh, 720px);
+	// Layout-specifika
+	--story-card-split-min-height: clamp(360px, 50vw, 560px);
+	--story-card-bg-min-height: clamp(480px, 70vh, 720px);
+	--story-card-bg-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.2));
+	--story-card-bg-padding: clamp(48px, 8vw, 120px);
 
+	// Animation
 	--story-card-disclosure-duration: 0.4s;
 	--story-card-disclosure-easing: ease-out;
 
 	background: var(--story-card-bg);
 	color: var(--story-card-fg);
-	padding: var(--story-card-padding-block) var(--story-card-padding-inline);
 	position: relative;
 
-	// ── Layout-shell ─────────────────────────────────────────────────────────
+	@supports (interpolate-size: allow-keywords) {
+		interpolate-size: allow-keywords;
+	}
+
+	// ── Inner layout-shell ───────────────────────────────────────────────────
 
 	.story-card__inner {
 		display: grid;
-		grid-template-columns: 1fr; // mobile-first
-		gap: var(--story-card-gap);
+		grid-template-columns: 1fr;
 		max-width: var(--story-card-content-max-width);
 		margin-inline: auto;
-		position: relative;
+		padding: var(--story-card-padding-block) var(--story-card-padding-inline);
+		gap: var(--story-card-rhythm-loose);
 	}
 
 	.story-card__text {
 		display: flex;
 		flex-direction: column;
-		gap: var(--story-card-stack-gap);
-		min-width: 0; // tillåt grid-cell att krympa
+		gap: var(--story-card-rhythm-base);
+		min-width: 0;
+		max-width: var(--story-card-text-max-width);
 	}
 
-	// ── Header / text ────────────────────────────────────────────────────────
+	// ── Header (kicker + title + excerpt) ────────────────────────────────────
+	// Tight rhythm inom header, större gap till nästa block
 
 	.story-card__header {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--story-card-rhythm-tight);
 	}
 
 	.story-card__kicker {
 		font-size: var(--story-card-kicker-size);
-		opacity: 0.8;
+		opacity: 0.7;
 		display: block;
+		// Tema kan lägga till letter-spacing/uppercase via override
 	}
 
 	.story-card__title {
 		font-size: var(--story-card-title-size);
 		line-height: var(--story-card-title-line-height);
 		margin: 0;
-		// inget font-family, ingen letter-spacing, ingen font-weight — temat äger
+		max-width: 18ch;
 	}
 
 	.story-card__excerpt {
 		font-size: var(--story-card-excerpt-size);
-		line-height: 1.6;
+		line-height: var(--story-card-excerpt-line-height);
 		margin: 0;
-		max-width: 48rem;
+		max-width: var(--story-card-text-max-width);
+		opacity: 0.85;
 	}
 
-	// ── Labels ───────────────────────────────────────────────────────────────
+	// ── Labels (text-list, inte buttons) ─────────────────────────────────────
 
 	.story-card__labels {
 		list-style: none;
@@ -101,15 +117,15 @@
 		padding: 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: 0.375rem;
 	}
 
 	.story-card__label {
 		font-size: var(--story-card-label-size);
-		padding: 0.25rem 0.75rem;
-		border: 1px solid color-mix(in srgb, currentcolor 30%, transparent);
+		padding: 0.25rem 0.625rem;
+		border: 1px solid var(--story-card-border-color);
 		border-radius: 999px;
-		opacity: 0.85;
+		opacity: 0.7;
 	}
 
 	// ── Action ───────────────────────────────────────────────────────────────
@@ -124,17 +140,23 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 44px; // touch-target
+		min-height: 44px;
 		min-width: 44px;
 		padding: var(--story-card-action-padding);
 		background: var(--story-card-action-bg);
 		color: var(--story-card-action-fg);
 		text-decoration: none;
+		font-size: var(--story-card-summary-size);
 		border-radius: var(--story-card-action-border-radius);
+		transition: opacity 0.2s;
 
 		&:focus-visible {
 			outline: 2px solid currentcolor;
 			outline-offset: 2px;
+		}
+
+		&:hover {
+			opacity: 0.85;
 		}
 	}
 
@@ -150,72 +172,107 @@
 		}
 	}
 
-	// ── Disclosure — editor preview ──────────────────────────────────────────
-	// Editor använder INTE <details> runt InnerBlocks (skulle kunna toggleas bort).
-	// Body är alltid synlig som vanlig <div> i editor; native <details> aktiveras
-	// först i render.php på frontend.
+	// ── Disclosure — editor preview (no <details>) ───────────────────────────
 
 	.story-card__disclosure-editor {
+		margin-top: var(--story-card-disclosure-rhythm);
+		padding-top: var(--story-card-disclosure-rhythm);
+		border-top: 1px solid var(--story-card-border-color);
 
 		.story-card__summary-preview {
 			display: inline-flex;
 			align-items: center;
-			gap: 0.5rem;
+			gap: 0.5em;
 			min-height: 44px;
-			padding: 0.5rem 1rem;
-			background: var(--story-card-summary-bg);
-			border: var(--story-card-summary-border);
-			border-radius: 2px;
+			padding: 0.25rem 0;
 			font-size: var(--story-card-summary-size);
-			margin-bottom: var(--story-card-disclosure-padding);
-			opacity: 0.85;
+			opacity: 0.7;
+			margin-bottom: 0.75rem;
 		}
 
 		.story-card__summary-preview-icon {
 			display: inline-block;
+			font-size: 1.15em;
+			line-height: 1;
 		}
 	}
 
-	// ── Disclosure — frontend (render.php) ───────────────────────────────────
+	// ── Disclosure — frontend (render.php native <details>) ──────────────────
+	// Editorial-känsla: inget bordered button, bara text + chevron med
+	// border-top-separator till body.
 
 	.story-card__disclosure {
+		margin-top: var(--story-card-disclosure-rhythm);
+		padding-top: var(--story-card-disclosure-rhythm);
+		border-top: 1px solid var(--story-card-border-color);
 
-		// Reset native marker (browsers visar default triangel/disc)
 		> .story-card__summary {
 			list-style: none;
 			cursor: pointer;
 			display: inline-flex;
 			align-items: center;
-			gap: 0.5rem;
+			gap: 0.5em;
 			min-height: 44px; // touch-target
-			padding: 0.5rem 1rem;
-			background: var(--story-card-summary-bg);
-			border: var(--story-card-summary-border);
-			border-radius: 2px;
+			padding: 0.25rem 0;
 			font-size: var(--story-card-summary-size);
+			background: none;
+			border: none;
+			opacity: 0.7;
+			transition: opacity 0.2s;
 
 			&::-webkit-details-marker {
 				display: none;
 			}
 
 			&::before {
-				content: "▸";
-				display: inline-block;
-				transition: transform 0.2s ease;
+				content: "+";
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 1em;
+				height: 1em;
+				font-size: 1.15em;
+				line-height: 1;
+				transition: transform 0.25s ease;
+			}
+
+			&:hover,
+			&:focus-visible {
+				opacity: 1;
 			}
 
 			&:focus-visible {
 				outline: 2px solid currentcolor;
-				outline-offset: 2px;
+				outline-offset: 4px;
 			}
 		}
 
 		&[open] > .story-card__summary::before {
-			transform: rotate(90deg);
+			transform: rotate(45deg); // + → ×
 		}
 
 		.story-card__body {
-			padding-top: var(--story-card-disclosure-padding);
+			padding-top: 1.25rem;
+			max-width: var(--story-card-text-max-width);
+			font-size: var(--story-card-body-size);
+			line-height: var(--story-card-body-line-height);
+
+			// Inner blocks ärver ej body-size som default — sätt på vanliga element
+			> p,
+			> ul,
+			> ol,
+			> blockquote {
+				font-size: inherit;
+				line-height: inherit;
+			}
+
+			> *:first-child {
+				margin-top: 0;
+			}
+
+			> *:last-child {
+				margin-bottom: 0;
+			}
 		}
 	}
 
@@ -227,20 +284,19 @@
 			.story-card__body {
 				block-size: 0;
 				overflow: hidden;
+				padding-top: 0;
 				transition:
 					block-size var(--story-card-disclosure-duration) var(--story-card-disclosure-easing),
 					padding-top var(--story-card-disclosure-duration) var(--story-card-disclosure-easing);
-				padding-top: 0;
 			}
 
 			&[open] .story-card__body {
 				block-size: auto;
-				padding-top: var(--story-card-disclosure-padding);
+				padding-top: 1.25rem;
 			}
 		}
 	}
 
-	// prefers-reduced-motion — inga transitions
 	@media (prefers-reduced-motion: reduce) {
 
 		.story-card__disclosure .story-card__body,
@@ -249,22 +305,188 @@
 		}
 	}
 
-	// ── Layout: default ──────────────────────────────────────────────────────
+	// ── Layout: default ─ text vänster, media höger ──────────────────────────
 
 	&.story-card--default {
 
 		.story-card__inner {
 
-			@media (min-width: 960px) {
-				grid-template-columns: 1fr 1fr;
-				align-items: center;
+			@media (min-width: 769px) {
+				grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+				gap: var(--story-card-column-gap);
+				align-items: start;
+			}
+		}
+
+		.story-card__text {
+
+			@media (min-width: 769px) {
+				max-width: none; // grid-cellen styr bredden
 			}
 		}
 	}
 
-	// Layouts reverse / split-* / bg-full implementeras i Etapp 2.
+	// ── Layout: reverse ─ media vänster, text höger ──────────────────────────
 
-	// ── Tema-varianter (Sprint A-konvention) ─────────────────────────────────
+	&.story-card--reverse {
+
+		.story-card__inner {
+
+			@media (min-width: 769px) {
+				grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+				gap: var(--story-card-column-gap);
+				align-items: start;
+			}
+
+			.story-card__text {
+
+				@media (min-width: 769px) {
+					order: 2;
+					max-width: none;
+				}
+			}
+
+			.story-card__media {
+
+				@media (min-width: 769px) {
+					order: 1;
+				}
+			}
+		}
+	}
+
+	// ── Layout: split-left / split-right ─ fullbleed media ───────────────────
+
+	&.story-card--split-left,
+	&.story-card--split-right {
+
+		.story-card__inner {
+
+			@media (min-width: 769px) {
+				grid-template-columns: 1fr 1fr;
+				padding: 0;
+				max-width: none;
+				gap: 0;
+				align-items: stretch;
+			}
+		}
+
+		.story-card__text {
+
+			@media (min-width: 769px) {
+				padding: var(--story-card-padding-block) var(--story-card-padding-inline);
+				justify-content: center;
+				max-width: none;
+			}
+		}
+
+		.story-card__media {
+			position: relative;
+			overflow: hidden;
+
+			@media (min-width: 769px) {
+				min-height: var(--story-card-split-min-height);
+			}
+
+			.story-card__media-element {
+
+				@media (min-width: 769px) {
+					position: absolute;
+					inset: 0;
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+		}
+	}
+
+	&.story-card--split-left {
+
+		.story-card__media {
+
+			@media (min-width: 769px) {
+				order: 1;
+			}
+		}
+
+		.story-card__text {
+
+			@media (min-width: 769px) {
+				order: 2;
+			}
+		}
+	}
+
+	// ── Layout: bg-full ─ text + visual ovanpå fullbleed bakgrund ────────────
+
+	&.story-card--bg-full {
+		min-height: var(--story-card-bg-min-height);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		.story-card__bg {
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+		}
+
+		.story-card__bg-media {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+
+		// Overlay för läsbarhet
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			background: var(--story-card-bg-overlay);
+			pointer-events: none;
+		}
+
+		.story-card__inner {
+			position: relative;
+			z-index: 1;
+			padding: var(--story-card-bg-padding) var(--story-card-padding-inline);
+		}
+
+		.story-card__media {
+			display: none; // bg-full har inte sidoplacerad media
+		}
+
+		// Text + alla relaterade element är ljusa över bakgrundsmedia
+		.story-card__title,
+		.story-card__excerpt,
+		.story-card__kicker,
+		.story-card__summary,
+		.story-card__summary-label,
+		.story-card__body,
+		.story-card__label,
+		.story-card__action {
+			color: #fff;
+		}
+
+		.story-card__action {
+			background: rgba(255, 255, 255, 0.95);
+			color: #000;
+		}
+
+		.story-card__label {
+			border-color: rgba(255, 255, 255, 0.35);
+		}
+
+		.story-card__disclosure {
+			border-top-color: rgba(255, 255, 255, 0.2);
+		}
+	}
+
+	// ── Tema-varianter (oavsett layout, undantag bg-full) ────────────────────
 
 	&.story-card--light {
 		--story-card-bg: var(--wp--preset--color--base, #f5f5f5);

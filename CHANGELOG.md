@@ -10,7 +10,30 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
-## [1.13.0-rc.1] — 2026-05-01
+## [1.13.0-rc.2] — 2026-05-01
+
+### Etapp 2: alla 5 layouts + visual fidelity-pass (default)
+
+> Andra RC. Default-layout omkalibrerad för editorial-känsla; reverse, split-left, split-right, bg-full implementerade.
+> Smoke-test på fse.agoodsite.se/asr-test innan v1.13.0 final.
+
+### Changed
+- **Default-layout: full-width by default** (`supports.default.align: "full"`). Block ska kännas som editorial-modul, inte centrerat kort i content-area.
+- **Tighter container proportions** matchar DENSIQ:s `--module-pad`/`--pad-x`-skala (`clamp(56px, 6vw, 96px)` block, `clamp(24px, 5vw, 80px)` inline).
+- **Title line-height 1.0** (super tight, premium-känsla) — tidigare 1.05.
+- **Kolumn-proportions:** default 7fr/5fr (text större), reverse 5fr/7fr — matchar DENSIQ-stories.
+- **Disclosure-styling integrerad** — ingen bordered button-look. Bara text + chevron med `border-top` mot body. Plus-ikon roterar 45° till × när öppen.
+- **Vertical rhythm omkalibrerad:** tight (0.75rem) inom header, base (1.5rem) mellan major sections, loose (2.5rem) till disclosure.
+- **Text-max-width:** 32rem (~640px) för optimal läsbarhet inom större container.
+- **Bg-full:** min-height `clamp(480px, 70vh, 720px)` för teatralisk känsla, inte bara 60vh.
+
+### Added (Etapp 2)
+- `goodblocks/story-card`: layouts `reverse`, `split-left`, `split-right`, `bg-full` är nu implementerade
+- Mobile-collapse-breakpoint: 768px (matchar DENSIQ)
+- Split-layouts: media får `min-height: clamp(360px, 50vw, 560px)` med `object-fit: cover` på desktop
+- Bg-full: `<article>::after`-overlay för text-läsbarhet, alla text-element forced-white oberoende av theme
+
+
 
 > **Pre-release for smoke-testing on fse.agoodsite.se before v1.13.0 final.**
 >

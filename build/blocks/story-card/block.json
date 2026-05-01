@@ -19,6 +19,9 @@
       "wide",
       "full"
     ],
+    "default": {
+      "align": "full"
+    },
     "spacing": {
       "padding": true,
       "margin": true

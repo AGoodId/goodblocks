@@ -11,6 +11,9 @@
 		"anchor": true,
 		"html": false,
 		"align": [ "wide", "full" ],
+		"default": {
+			"align": "full"
+		},
 		"spacing": {
 			"padding": true,
 			"margin": true
