@@ -38,14 +38,18 @@ if ( ! in_array( $action_target, [ '_self', '_blank' ], true ) ) {
 
 // ─── Text-attribut ──────────────────────────────────────────────────────────
 
-$kicker  = isset( $attributes['kicker'] )  ? (string) $attributes['kicker']  : '';
-$title   = isset( $attributes['title'] )   ? (string) $attributes['title']   : '';
-$excerpt = isset( $attributes['excerpt'] ) ? (string) $attributes['excerpt'] : '';
+$decode_text = static function ( $value ) {
+	return html_entity_decode( (string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+};
+
+$kicker  = isset( $attributes['kicker'] )  ? $decode_text( $attributes['kicker'] )  : '';
+$title   = isset( $attributes['title'] )   ? $decode_text( $attributes['title'] )   : '';
+$excerpt = isset( $attributes['excerpt'] ) ? $decode_text( $attributes['excerpt'] ) : '';
 
 // ─── Media ──────────────────────────────────────────────────────────────────
 
 $media_url = isset( $attributes['mediaUrl'] ) ? (string) $attributes['mediaUrl'] : '';
-$media_alt = isset( $attributes['mediaAlt'] ) ? (string) $attributes['mediaAlt'] : '';
+$media_alt = isset( $attributes['mediaAlt'] ) ? $decode_text( $attributes['mediaAlt'] ) : '';
 $has_media = $media_url !== '';
 
 $visual_html = isset( $attributes['visualHtml'] ) ? (string) $attributes['visualHtml'] : '';
@@ -54,7 +58,7 @@ $has_visual  = trim( $visual_html ) !== '';
 // ─── Action ─────────────────────────────────────────────────────────────────
 
 $action_url   = isset( $attributes['actionUrl'] )   ? (string) $attributes['actionUrl']   : '';
-$action_label = isset( $attributes['actionLabel'] ) ? (string) $attributes['actionLabel'] : '';
+$action_label = isset( $attributes['actionLabel'] ) ? $decode_text( $attributes['actionLabel'] ) : '';
 $has_action   = $action_url !== '' && $action_label !== '';
 
 // ─── Labels ─────────────────────────────────────────────────────────────────
@@ -62,7 +66,7 @@ $has_action   = $action_url !== '' && $action_label !== '';
 $labels = isset( $attributes['labels'] ) ? (array) $attributes['labels'] : [];
 $labels = array_values( array_filter(
 	array_map(
-		static fn( $l ) => trim( (string) $l ),
+		static fn( $l ) => trim( $decode_text( $l ) ),
 		$labels
 	),
 	static fn( $l ) => $l !== ''
@@ -70,7 +74,7 @@ $labels = array_values( array_filter(
 
 // ─── Disclosure ─────────────────────────────────────────────────────────────
 
-$summary_label_attr = isset( $attributes['summaryLabel'] ) ? trim( (string) $attributes['summaryLabel'] ) : '';
+$summary_label_attr = isset( $attributes['summaryLabel'] ) ? trim( $decode_text( $attributes['summaryLabel'] ) ) : '';
 $summary_label      = $summary_label_attr !== '' ? $summary_label_attr : __( 'Read more', 'goodblocks' );
 $open_by_default    = ! empty( $attributes['openByDefault'] );
 

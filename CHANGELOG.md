@@ -10,6 +10,16 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.7] — 2026-05-02
+
+### Migrated entity decoding for story-card
+
+> Sjunde RC. Liten men viktig render-fix för story-cards som kommer från migrerat ASR-innehåll där vissa textattribut redan hunnit HTML-encodas innan blockifiering.
+
+### Fixed
+- `goodblocks/story-card` dekodar nu HTML-entiteter i textattribut före render, så rubriker som `Governance & Leadership` och `Materiality Assessment & Stakeholder Engagement` inte längre visas som dubbel-escapade på frontend.
+- Samma normalisering gäller även `mediaAlt`, `actionLabel`, `labels` och `summaryLabel`, så migrerade block renderar renare utan manuella innehållspatchar.
+
 ## [1.13.0-rc.6] — 2026-05-01
 
 ### Special visual slot for story-card
