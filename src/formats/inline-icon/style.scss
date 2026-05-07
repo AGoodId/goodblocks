@@ -14,10 +14,15 @@
 	display: block;
 	width: 1em;
 	height: 1em;
-	fill: none;
+	fill: none !important;
 	stroke: currentcolor;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+}
+
+.goodblocks-inline-icon svg * {
+	fill: none !important;
+	stroke: currentcolor;
 }
 
 .goodblocks-inline-icon-picker {
@@ -57,10 +62,15 @@
 }
 
 .goodblocks-inline-icon-picker__option svg {
-	fill: none;
+	fill: none !important;
 	stroke: currentcolor;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+}
+
+.goodblocks-inline-icon-picker__option svg * {
+	fill: none !important;
+	stroke: currentcolor;
 }
 
 .goodblocks-inline-icon-picker__option span {

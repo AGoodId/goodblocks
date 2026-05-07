@@ -41,10 +41,16 @@
 
 .goodblocks-icon-picker__option svg,
 .goodblocks-icon-current svg {
-	fill: none;
+	fill: none !important;
 	stroke: currentcolor;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+}
+
+.goodblocks-icon-picker__option svg *,
+.goodblocks-icon-current svg * {
+	fill: none !important;
+	stroke: currentcolor;
 }
 
 .goodblocks-icon-picker__option span {

@@ -5,7 +5,7 @@
 	--goodblocks-icon-text-size: 0.95rem;
 	--goodblocks-icon-color: currentcolor;
 
-	display: inline-flex;
+	display: flex;
 	gap: var(--goodblocks-icon-gap);
 	align-items: flex-start;
 	color: var(--goodblocks-icon-color);
@@ -26,11 +26,16 @@
 		display: block;
 		width: var(--goodblocks-icon-size);
 		height: var(--goodblocks-icon-size);
-		fill: none;
+		fill: none !important;
 		stroke: currentcolor;
 		stroke-linecap: round;
 		stroke-linejoin: round;
 		stroke-width: 2;
+	}
+
+	.goodblocks-icon__glyph svg * {
+		fill: none !important;
+		stroke: currentcolor;
 	}
 
 	.goodblocks-icon__content {

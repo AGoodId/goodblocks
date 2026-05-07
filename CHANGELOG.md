@@ -10,6 +10,12 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.10] — 2026-05-07
+
+### Fixed
+- `goodblocks/icon` renderas nu som block-level flex i stället för `inline-flex`, så flera ikonblock hamnar under varandra.
+- Lucide-outline tvingas även på SVG-barn (`path`, `circle`, `rect` osv.) i editorpickers och inline-ikoner, så admin-CSS inte kan fylla ikonformerna.
+
 ## [1.13.0-rc.9] — 2026-05-07
 
 ### Fixed
