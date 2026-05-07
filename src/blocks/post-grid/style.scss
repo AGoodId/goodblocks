@@ -13,6 +13,7 @@
 //   .post-excerpt            — truncated excerpt
 //   .post-meta               — metadata wrapper
 //   .post-venue              — event venue (Events Calendar)
+//   .post-event-meta         — GoodBlocks event class/type/venue chips
 //   .post-grid-more-link     — "load more" / archive link
 // =============================================================================
 
@@ -21,6 +22,37 @@
 	// =========================================================================
 	// GRID & PEOPLE LAYOUTS
 	// =========================================================================
+
+	.post-event-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		margin-top: 0.4rem;
+
+		span {
+			border: 1px solid color-mix(in srgb, currentcolor 16%, transparent);
+			border-radius: 999px;
+			font-size: 0.78rem;
+			line-height: 1;
+			padding: 0.35rem 0.5rem;
+		}
+	}
+
+	.event-status-alert {
+		display: inline-block;
+		margin-bottom: 0.5rem;
+
+		&.is-changed,
+		&.is-live {
+			background: #fff4d8;
+			color: #6f4b00;
+		}
+
+		&.is-cancelled {
+			background: #ffe3e3;
+			color: #8a1f1f;
+		}
+	}
 
 	&.grid,
 	&.people {

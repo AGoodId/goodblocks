@@ -1,0 +1,111 @@
+.wp-block-goodblocks-event-class-schedule {
+	--class-schedule-border: color-mix(in srgb, currentcolor 14%, transparent);
+	--class-schedule-muted: color-mix(in srgb, currentcolor 62%, transparent);
+	--class-schedule-soft: color-mix(in srgb, currentcolor 5%, transparent);
+}
+
+.goodblocks-event-class-schedule__heading {
+	margin: 0 0 0.8rem;
+	font-size: clamp(1.35rem, 2.4vw, 2rem);
+}
+
+.goodblocks-event-class-schedule__search {
+	margin-bottom: 0.75rem;
+
+	input {
+		width: 100%;
+		border: 1px solid var(--class-schedule-border);
+		border-radius: 8px;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		font-size: 1.05rem;
+		padding: 0.8rem 0.9rem;
+	}
+}
+
+.goodblocks-event-class-schedule__results {
+	display: grid;
+	gap: 0.5rem;
+}
+
+.goodblocks-event-class-schedule__message {
+	margin: 0;
+	color: var(--class-schedule-muted);
+}
+
+.goodblocks-event-class-schedule__item {
+	display: grid;
+	grid-template-columns: minmax(7rem, 10rem) minmax(0, 1fr) auto;
+	gap: 1rem;
+	align-items: center;
+	border: 1px solid var(--class-schedule-border);
+	border-radius: 8px;
+	padding: 0.85rem;
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+.goodblocks-event-class-schedule__type {
+	justify-self: start;
+	border-radius: 999px;
+	background: var(--class-schedule-soft);
+	color: var(--class-schedule-muted);
+	font-size: 0.82rem;
+	font-weight: 700;
+	line-height: 1;
+	padding: 0.45rem 0.6rem;
+}
+
+.goodblocks-event-class-schedule__main {
+
+	h3 {
+		margin: 0;
+		font-size: 1rem;
+		line-height: 1.25;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	p {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem 0.65rem;
+		margin: 0.3rem 0 0;
+		color: var(--class-schedule-muted);
+		font-size: 0.9rem;
+	}
+}
+
+.goodblocks-event-class-schedule__links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	justify-content: flex-end;
+
+	a {
+		border: 1px solid var(--class-schedule-border);
+		border-radius: 999px;
+		color: inherit;
+		font-size: 0.85rem;
+		line-height: 1;
+		padding: 0.45rem 0.65rem;
+		text-decoration: none;
+	}
+}
+
+@media (max-width: 680px) {
+
+	.goodblocks-event-class-schedule__item {
+		grid-template-columns: 1fr;
+	}
+
+	.goodblocks-event-class-schedule__links {
+		justify-content: flex-start;
+	}
+}

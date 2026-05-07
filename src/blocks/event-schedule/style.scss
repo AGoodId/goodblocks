@@ -1,0 +1,178 @@
+.wp-block-goodblocks-event-schedule {
+	--schedule-border: color-mix(in srgb, currentcolor 14%, transparent);
+	--schedule-muted: color-mix(in srgb, currentcolor 62%, transparent);
+	--schedule-soft: color-mix(in srgb, currentcolor 5%, transparent);
+
+	container-type: inline-size;
+}
+
+.goodblocks-event-schedule__toolbar {
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height, 0);
+	z-index: 2;
+	display: grid;
+	gap: 0.75rem;
+	padding: 0.75rem 0;
+	background: Canvas;
+}
+
+.goodblocks-event-schedule__days {
+	display: flex;
+	gap: 0.4rem;
+	overflow-x: auto;
+	padding-bottom: 0.1rem;
+
+	button {
+		flex: 0 0 auto;
+		border: 1px solid var(--schedule-border);
+		border-radius: 999px;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+		font: inherit;
+		font-size: 0.9rem;
+		line-height: 1;
+		padding: 0.55rem 0.8rem;
+
+		&.is-active {
+			background: currentcolor;
+			color: Canvas;
+		}
+	}
+}
+
+.goodblocks-event-schedule__filters {
+	display: grid;
+	grid-template-columns: minmax(14rem, 1fr) minmax(10rem, 14rem);
+	gap: 0.75rem;
+
+	label {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	span {
+		color: var(--schedule-muted);
+		font-size: 0.8rem;
+	}
+
+	input,
+	select {
+		width: 100%;
+		border: 1px solid var(--schedule-border);
+		border-radius: 6px;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		padding: 0.7rem 0.75rem;
+	}
+}
+
+.goodblocks-event-schedule__list {
+	display: grid;
+	gap: 0.5rem;
+
+	&.is-empty::after {
+		content: attr(data-empty-text);
+		display: block;
+		padding: 1rem;
+		color: var(--schedule-muted);
+	}
+}
+
+.goodblocks-event-schedule__item {
+	display: grid;
+	grid-template-columns: minmax(7rem, 9rem) minmax(0, 1fr) auto;
+	gap: 1rem;
+	align-items: center;
+	border: 1px solid var(--schedule-border);
+	border-radius: 8px;
+	padding: 0.85rem;
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+.goodblocks-event-schedule__time {
+	display: grid;
+	gap: 0.15rem;
+
+	span {
+		font-size: 1.05rem;
+		font-weight: 700;
+	}
+
+	small {
+		color: var(--schedule-muted);
+	}
+}
+
+.goodblocks-event-schedule__meta,
+.goodblocks-event-schedule__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+}
+
+.goodblocks-event-schedule__meta span,
+.goodblocks-event-schedule__status {
+	border-radius: 999px;
+	background: var(--schedule-soft);
+	color: var(--schedule-muted);
+	font-size: 0.78rem;
+	line-height: 1;
+	padding: 0.35rem 0.5rem;
+}
+
+.goodblocks-event-schedule__status.is-changed,
+.goodblocks-event-schedule__status.is-live {
+	background: #fff4d8;
+	color: #6f4b00;
+}
+
+.goodblocks-event-schedule__status.is-cancelled {
+	background: #ffe3e3;
+	color: #8a1f1f;
+}
+
+.goodblocks-event-schedule__actions {
+	justify-content: flex-end;
+
+	a {
+		border: 1px solid var(--schedule-border);
+		border-radius: 999px;
+		color: inherit;
+		font-size: 0.85rem;
+		line-height: 1;
+		padding: 0.45rem 0.65rem;
+		text-decoration: none;
+	}
+}
+
+.goodblocks-event-schedule__body h3 {
+	margin: 0.2rem 0 0;
+	font-size: 1rem;
+	line-height: 1.25;
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+
+.goodblocks-event-schedule__empty {
+	color: var(--schedule-muted);
+}
+
+@container (max-width: 680px) {
+
+	.goodblocks-event-schedule__filters,
+	.goodblocks-event-schedule__item {
+		grid-template-columns: 1fr;
+	}
+
+	.goodblocks-event-schedule__actions {
+		justify-content: flex-start;
+	}
+}

@@ -121,6 +121,26 @@ module.exports = {
 			__dirname,
 			'src/blocks/event-list/index.js'
 		),
+		'blocks/event-schedule/index': path.resolve(
+			__dirname,
+			'src/blocks/event-schedule/index.js'
+		),
+		'blocks/event-schedule/view': path.resolve(
+			__dirname,
+			'src/blocks/event-schedule/view.js'
+		),
+		'blocks/event-now-next/index': path.resolve(
+			__dirname,
+			'src/blocks/event-now-next/index.js'
+		),
+		'blocks/event-class-schedule/index': path.resolve(
+			__dirname,
+			'src/blocks/event-class-schedule/index.js'
+		),
+		'blocks/event-class-schedule/view': path.resolve(
+			__dirname,
+			'src/blocks/event-class-schedule/view.js'
+		),
 		// Testimonials
 		'blocks/testimonials/index': path.resolve(
 			__dirname,

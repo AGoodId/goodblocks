@@ -1,0 +1,48 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/event-schedule",
+	"title": "Event Schedule",
+	"category": "goodblocks",
+	"icon": "schedule",
+	"description": "Interactive event schedule with day filters, class search, and competition-friendly rows.",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"default": {
+			"align": "wide"
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"attributes": {
+		"eventsToShow": {
+			"type": "number",
+			"default": 200
+		},
+		"showPast": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSearch": {
+			"type": "boolean",
+			"default": true
+		},
+		"showTypeFilter": {
+			"type": "boolean",
+			"default": true
+		},
+		"emptyText": {
+			"type": "string",
+			"default": "Inga schemapunkter hittades."
+		}
+	},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
+}
