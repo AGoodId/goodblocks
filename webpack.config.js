@@ -135,6 +135,11 @@ module.exports = {
 			__dirname,
 			'src/blocks/section-header/index.js'
 		),
+		// Lucide icon picker
+		'blocks/icon/index': path.resolve(
+			__dirname,
+			'src/blocks/icon/index.js'
+		),
 		// KPI grid (foundation block, Sprint A)
 		'blocks/kpi-grid/index': path.resolve(
 			__dirname,
@@ -154,6 +159,11 @@ module.exports = {
 		'blocks/agoodapp-media-picker/index': path.resolve(
 			__dirname,
 			'src/blocks/agoodapp-media-picker/index.js'
+		),
+		// Editor formats
+		'formats/inline-icon/index': path.resolve(
+			__dirname,
+			'src/formats/inline-icon/index.js'
 		),
 	},
 	output: {

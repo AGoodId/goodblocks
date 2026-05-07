@@ -1,0 +1,65 @@
+.goodblocks-icon-picker {
+	width: min(420px, calc(100vw - 32px));
+	padding: 12px;
+}
+
+.goodblocks-icon-picker__grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 6px;
+	max-height: 320px;
+	margin-top: 12px;
+	overflow-y: auto;
+}
+
+.goodblocks-icon-picker__option.components-button {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	align-items: center;
+	justify-content: center;
+	height: 78px;
+	padding: 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	color: #1e1e1e;
+	text-align: center;
+	box-shadow: none;
+}
+
+.goodblocks-icon-picker__option.components-button:hover,
+.goodblocks-icon-picker__option.components-button:focus {
+	border-color: var(--wp-admin-theme-color, #3858e9);
+	color: var(--wp-admin-theme-color, #3858e9);
+}
+
+.goodblocks-icon-picker__option.components-button.is-pressed {
+	border-color: var(--wp-admin-theme-color, #3858e9);
+	background: color-mix(in srgb, var(--wp-admin-theme-color, #3858e9) 9%, #fff);
+	color: var(--wp-admin-theme-color, #3858e9);
+}
+
+.goodblocks-icon-picker__option span {
+	max-width: 100%;
+	overflow: hidden;
+	font-size: 11px;
+	line-height: 1.2;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.goodblocks-icon-picker__empty {
+	margin: 16px 0 4px;
+	color: #757575;
+	font-size: 12px;
+	text-align: center;
+}
+
+.goodblocks-icon-current.components-button {
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	width: 100%;
+	justify-content: flex-start;
+	margin-bottom: 16px;
+}

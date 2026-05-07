@@ -60,6 +60,12 @@ Sidebar-style page menu that lists child pages of a selected parent. Optionally 
 
 Simple email signup form that posts directly to a Mailchimp list. Configurable title, description text, and list link.
 
+### Icon
+
+Curated Lucide icon block for event pages and style-guide examples. Includes a searchable editor picker, small/medium/large sizes, inherit/brand blue/gold/white colors, and layouts for icon-only, icon with title, or icon with supporting text.
+
+The editor also includes an inline Lucide icon format for RichText fields, so editors can insert curated icons directly inside headings, paragraphs, lists, and other text-based blocks.
+
 ---
 
 ## Features beyond blocks

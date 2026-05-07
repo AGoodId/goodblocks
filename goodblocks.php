@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Post Grid, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.13.0-rc.7
+ * Version: 1.13.0-rc.8
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.13.0-rc.7' );
+define( 'GOODBLOCKS_VERSION', '1.13.0-rc.8' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
@@ -67,6 +67,7 @@ function goodblocks_register_blocks() {
 		'event-list',
 		'testimonials',
 		'section-header',
+		'icon',
 		'kpi-grid',
 		'story-card',
 		'hero',
@@ -148,6 +149,59 @@ function goodblocks_block_category( $categories ) {
 	);
 }
 add_filter( 'block_categories_all', 'goodblocks_block_category' );
+
+/**
+ * Register inline RichText formats for the block editor.
+ */
+function goodblocks_enqueue_block_editor_formats() {
+	$asset_path = GOODBLOCKS_DIR . 'build/formats/inline-icon/index.asset.php';
+	$script_url = GOODBLOCKS_URI . 'build/formats/inline-icon/index.js';
+	$style_path = GOODBLOCKS_DIR . 'build/formats/inline-icon/style-index.css';
+	$style_url  = GOODBLOCKS_URI . 'build/formats/inline-icon/style-index.css';
+
+	if ( ! file_exists( $asset_path ) ) {
+		return;
+	}
+
+	$asset = require $asset_path;
+
+	wp_enqueue_script(
+		'goodblocks-inline-icon-format',
+		$script_url,
+		$asset['dependencies'] ?? [],
+		$asset['version'] ?? GOODBLOCKS_VERSION,
+		true
+	);
+
+	if ( file_exists( $style_path ) ) {
+		wp_enqueue_style(
+			'goodblocks-inline-icon-format',
+			$style_url,
+			[],
+			filemtime( $style_path )
+		);
+	}
+}
+add_action( 'enqueue_block_editor_assets', 'goodblocks_enqueue_block_editor_formats' );
+
+/**
+ * Load inline icon formatting on the frontend for content using RichText icons.
+ */
+function goodblocks_enqueue_inline_icon_style() {
+	$style_path = GOODBLOCKS_DIR . 'build/formats/inline-icon/style-index.css';
+
+	if ( ! file_exists( $style_path ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'goodblocks-inline-icon-format',
+		GOODBLOCKS_URI . 'build/formats/inline-icon/style-index.css',
+		[],
+		filemtime( $style_path )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'goodblocks_enqueue_inline_icon_style' );
 
 /**
  * Pass translatable strings to block view scripts.

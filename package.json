@@ -14,12 +14,15 @@
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
+    "@types/react-dom": "^19.2.3",
     "@wordpress/scripts": "^30.0.0",
     "husky": "^9.1.7"
   },
   "dependencies": {
     "@wordpress/icons": "^11.6.0",
+    "@wordpress/rich-text": "^7.45.0",
     "gsap": "^3.12.0",
+    "lucide-react": "^1.14.0",
     "swiper": "^12.1.3"
   }
 }

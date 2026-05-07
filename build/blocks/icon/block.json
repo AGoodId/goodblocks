@@ -1,0 +1,95 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/icon",
+  "title": "Ikon",
+  "category": "goodblocks",
+  "icon": "star-filled",
+  "description": "Visa en kurerad Lucide-ikon med valfri rubrik eller text.",
+  "keywords": [
+    "ikon",
+    "icon",
+    "lucide",
+    "symbol",
+    "event",
+    "datum",
+    "plats",
+    "biljett"
+  ],
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "iconName": {
+      "type": "string",
+      "default": "calendar"
+    },
+    "layout": {
+      "type": "string",
+      "default": "icon-title",
+      "enum": [
+        "icon-only",
+        "icon-title",
+        "icon-text"
+      ]
+    },
+    "size": {
+      "type": "string",
+      "default": "medium",
+      "enum": [
+        "small",
+        "medium",
+        "large"
+      ]
+    },
+    "color": {
+      "type": "string",
+      "default": "inherit",
+      "enum": [
+        "inherit",
+        "brand-blue",
+        "gold",
+        "white"
+      ]
+    },
+    "alignment": {
+      "type": "string",
+      "default": "left",
+      "enum": [
+        "left",
+        "center"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "default": ""
+    },
+    "text": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "example": {
+    "attributes": {
+      "iconName": "map-pin",
+      "layout": "icon-text",
+      "size": "medium",
+      "color": "brand-blue",
+      "title": "Venue",
+      "text": "Find your way to the event."
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}

@@ -10,6 +10,19 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.8] — 2026-05-07
+
+### Lucide icon picker
+
+> Åttonde RC. Lägger till ett kurerat ikonflöde för redaktörer: både som eget block och som inline-format i text.
+
+### Added
+- `goodblocks/icon` — nytt dynamiskt block med sökbar Lucide-picker, kurerad event-ikonlista, storlekar, färger och layoutlägen för ikon ensam, ikon + rubrik eller ikon + rubrik/text.
+- Inline Lucide-format i RichText-toolbaren, så redaktörer kan infoga ikoner direkt i rubriker, stycken, listor och andra textbaserade block.
+
+### Changed
+- Blocket heter nu **Ikon** i insertern och går att hitta på svenska sökord som `ikon`, `symbol`, `datum`, `plats` och `biljett`.
+
 ## [1.13.0-rc.7] — 2026-05-02
 
 ### Migrated entity decoding for story-card
