@@ -26,6 +26,10 @@
 		display: block;
 		width: var(--goodblocks-icon-size);
 		height: var(--goodblocks-icon-size);
+		fill: none;
+		stroke: currentcolor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
 		stroke-width: 2;
 	}
 

@@ -10,6 +10,11 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.13.0-rc.9] — 2026-05-07
+
+### Fixed
+- Lucide-ikoner i blockets picker och inline-pickern tvingas nu till outline-rendering med `fill: none`, så WordPress editor-CSS inte kan få dem att se ut som fyllda solid-ikoner.
+
 ## [1.13.0-rc.8] — 2026-05-07
 
 ### Lucide icon picker

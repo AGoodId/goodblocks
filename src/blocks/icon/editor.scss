@@ -39,6 +39,14 @@
 	color: var(--wp-admin-theme-color, #3858e9);
 }
 
+.goodblocks-icon-picker__option svg,
+.goodblocks-icon-current svg {
+	fill: none;
+	stroke: currentcolor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
 .goodblocks-icon-picker__option span {
 	max-width: 100%;
 	overflow: hidden;
