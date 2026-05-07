@@ -20,6 +20,9 @@ if ( is_array( $post_type_raw ) ) {
 } else {
 	$post_types = [ $post_type_raw ];
 }
+$has_goodblocks_events = in_array( 'goodblocks_event', $post_types, true );
+$has_tribe_events      = in_array( 'tribe_events', $post_types, true );
+$event_start_meta_key  = $has_goodblocks_events ? '_event_start' : '_EventStartDate';
 
 // WP_Query accepts array for post_type.
 $query_args = [
@@ -45,11 +48,11 @@ if ( $attributes['sortOrder'] === 'asc' || $attributes['sortOrder'] === 'desc' )
 } elseif ( $attributes['sortOrder'] === 'date_upcoming' ) {
 	$query_args['order']      = 'ASC';
 	$query_args['orderby']    = 'meta_value';
-	$query_args['meta_key']   = '_EventStartDate';
+	$query_args['meta_key']   = $event_start_meta_key;
 	$query_args['meta_type']  = 'DATETIME';
 	$query_args['meta_query'] = [
 		[
-			'key'     => '_EventStartDate',
+			'key'     => $event_start_meta_key,
 			'value'   => $current_date,
 			'compare' => '>=',
 			'type'    => 'DATETIME',
@@ -58,11 +61,11 @@ if ( $attributes['sortOrder'] === 'asc' || $attributes['sortOrder'] === 'desc' )
 } elseif ( $attributes['sortOrder'] === 'date_past' ) {
 	$query_args['order']      = 'DESC';
 	$query_args['orderby']    = 'meta_value';
-	$query_args['meta_key']   = '_EventStartDate';
+	$query_args['meta_key']   = $event_start_meta_key;
 	$query_args['meta_type']  = 'DATETIME';
 	$query_args['meta_query'] = [
 		[
-			'key'     => '_EventStartDate',
+			'key'     => $event_start_meta_key,
 			'value'   => $current_date,
 			'compare' => '<',
 			'type'    => 'DATETIME',
@@ -105,14 +108,14 @@ $query = new WP_Query( $query_args );
 
 // Fallback for upcoming events: show past events if none upcoming.
 if (
-	in_array( 'tribe_events', $post_types, true ) &&
+	( $has_tribe_events || $has_goodblocks_events ) &&
 	$attributes['sortOrder'] === 'date_upcoming' &&
 	! $query->have_posts()
 ) {
 	$query_args['order']      = 'DESC';
 	$query_args['meta_query'] = [
 		[
-			'key'     => '_EventStartDate',
+			'key'     => $event_start_meta_key,
 			'value'   => $current_date,
 			'compare' => '<',
 			'type'    => 'DATETIME',
@@ -156,7 +159,7 @@ if ( $query->have_posts() ) : ?>
 	</div>
 
 <?php else : ?>
-	<?php if ( in_array( 'tribe_events', $post_types, true ) ) : ?>
+	<?php if ( $has_tribe_events || $has_goodblocks_events ) : ?>
 		<p class="my-6"><?php esc_html_e( 'Inga kommande händelser.', 'goodblocks' ); ?></p>
 	<?php else : ?>
 		<p class="my-6"><?php echo esc_html( $attributes['noPostsText'] ); ?></p>

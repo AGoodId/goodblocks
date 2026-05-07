@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/event-now-next",
+	"title": "Event Now / Next",
+	"category": "goodblocks",
+	"icon": "controls-forward",
+	"description": "Show the current and next event schedule items.",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"attributes": {
+		"itemsToShow": {
+			"type": "number",
+			"default": 3
+		},
+		"heading": {
+			"type": "string",
+			"default": "Nu och nästa"
+		},
+		"emptyText": {
+			"type": "string",
+			"default": "Inga kommande schemapunkter."
+		}
+	},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

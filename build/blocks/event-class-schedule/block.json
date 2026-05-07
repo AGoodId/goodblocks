@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/event-class-schedule",
+  "title": "My Class Schedule",
+  "category": "goodblocks",
+  "icon": "search",
+  "description": "Help visitors find qualification, final, venue, stream, and results for their class.",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "default": {
+      "align": "wide"
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "eventsToShow": {
+      "type": "number",
+      "default": 300
+    },
+    "heading": {
+      "type": "string",
+      "default": "Hitta din klass"
+    },
+    "placeholder": {
+      "type": "string",
+      "default": "Sök efter klass"
+    },
+    "emptyText": {
+      "type": "string",
+      "default": "Sök på din klass för att se tider."
+    },
+    "noResultsText": {
+      "type": "string",
+      "default": "Ingen klass matchade sökningen."
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}

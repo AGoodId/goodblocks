@@ -7,6 +7,9 @@
  * @var array $attributes Block attributes.
  * @package GoodBlocks
  */
+$post_type           = get_post_type();
+$is_goodblocks_event = 'goodblocks_event' === $post_type && function_exists( 'goodblocks_get_event_data' );
+$event               = $is_goodblocks_event ? goodblocks_get_event_data( get_the_ID() ) : null;
 ?>
 <div class="list-item">
 
@@ -26,7 +29,22 @@
 		<?php endif; ?>
 
 		<?php if ( $attributes['showDate'] ) : ?>
-			<?php if ( $attributes['postType'] === 'tribe_events' && function_exists( 'tribe_get_start_date' ) ) : ?>
+			<?php if ( $is_goodblocks_event && $event ) : ?>
+				<div class="post-date event-post-date"><?php echo esc_html( $event['range_label'] ); ?></div>
+				<?php if ( $event['class'] || $event['type'] || $event['venue'] ) : ?>
+					<div class="post-event-meta">
+						<?php if ( $event['type'] ) : ?>
+							<span><?php echo esc_html( $event['type_label'] ); ?></span>
+						<?php endif; ?>
+						<?php if ( $event['class'] ) : ?>
+							<span><?php echo esc_html( $event['class'] ); ?></span>
+						<?php endif; ?>
+						<?php if ( $event['venue'] ) : ?>
+							<span><?php echo esc_html( $event['venue'] ); ?></span>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+			<?php elseif ( $attributes['postType'] === 'tribe_events' && function_exists( 'tribe_get_start_date' ) ) : ?>
 				<div class="post-date event-post-date"><?php do_action( 'goodblocks_event_date_range', get_the_ID() ); ?></div>
 			<?php else : ?>
 				<div class="post-date"><?php echo get_the_date(); ?></div>
@@ -39,6 +57,9 @@
 
 		<?php if ( $attributes['showExcerpt'] ) : ?>
 			<div class="post-excerpt">
+				<?php if ( $is_goodblocks_event && $event && in_array( $event['status'], [ 'changed', 'cancelled', 'live' ], true ) ) : ?>
+					<span class="past-event-alert event-status-alert is-<?php echo esc_attr( $event['status'] ); ?>"><?php echo esc_html( $event['status_label'] ); ?></span>
+				<?php endif; ?>
 				<?php
 				if ( has_excerpt() ) {
 					echo esc_html( get_the_excerpt() );

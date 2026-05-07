@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Post Grid, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.13.0-rc.10
+ * Version: 1.14.0-rc.1
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.13.0-rc.10' );
+define( 'GOODBLOCKS_VERSION', '1.14.0-rc.1' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
@@ -65,6 +65,9 @@ function goodblocks_register_blocks() {
 		'mailchimp-signup',
 		'post-grid',
 		'event-list',
+		'event-schedule',
+		'event-now-next',
+		'event-class-schedule',
 		'testimonials',
 		'section-header',
 		'icon',
