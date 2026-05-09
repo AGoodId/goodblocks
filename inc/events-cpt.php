@@ -139,11 +139,12 @@ function goodblocks_event_detail_fields(): array {
 			'label'   => __( 'Status', 'goodblocks' ),
 			'type'    => 'select',
 			'options' => [
-				'scheduled' => __( 'Scheduled', 'goodblocks' ),
-				'changed'   => __( 'Changed', 'goodblocks' ),
-				'cancelled' => __( 'Cancelled', 'goodblocks' ),
-				'live'      => __( 'Live now', 'goodblocks' ),
-				'done'      => __( 'Done', 'goodblocks' ),
+				'scheduled'   => __( 'Scheduled', 'goodblocks' ),
+				'placeholder' => __( 'Preliminary / placeholder', 'goodblocks' ),
+				'changed'     => __( 'Changed', 'goodblocks' ),
+				'cancelled'   => __( 'Cancelled', 'goodblocks' ),
+				'live'        => __( 'Live now', 'goodblocks' ),
+				'done'        => __( 'Done', 'goodblocks' ),
 			],
 		],
 	];
