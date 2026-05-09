@@ -104,6 +104,9 @@ $class_list_id = wp_unique_id( 'goodblocks-event-classes-' );
 					</div>
 				</article>
 			<?php endforeach; ?>
+			<p class="goodblocks-event-schedule__empty" data-schedule-empty hidden>
+				<?php echo esc_html( $attributes['emptyText'] ?? __( 'No schedule items found.', 'goodblocks' ) ); ?>
+			</p>
 		</div>
 	<?php else : ?>
 		<p class="goodblocks-event-schedule__empty"><?php echo esc_html( $attributes['emptyText'] ?? __( 'No schedule items found.', 'goodblocks' ) ); ?></p>

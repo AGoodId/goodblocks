@@ -104,6 +104,8 @@ function goodblocks_event_detail_fields(): array {
 			'label'       => __( 'Class / Division', 'goodblocks' ),
 			'placeholder' => __( 'Senior All Girl Premier', 'goodblocks' ),
 			'type'        => 'text',
+			'datalist'    => true,
+			'description' => __( 'Use a consistent class or division name. Schedule filters use this value.', 'goodblocks' ),
 		],
 		'_event_type'    => [
 			'label'   => __( 'Schedule type', 'goodblocks' ),
@@ -145,6 +147,47 @@ function goodblocks_event_detail_fields(): array {
 			],
 		],
 	];
+}
+
+function goodblocks_get_event_class_options(): array {
+	$event_ids = get_posts( [
+		'post_type'              => 'goodblocks_event',
+		'post_status'            => 'any',
+		'posts_per_page'         => -1,
+		'fields'                 => 'ids',
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => true,
+	] );
+
+	$options = [];
+
+	foreach ( $event_ids as $event_id ) {
+		if ( 'trash' === get_post_status( $event_id ) ) {
+			continue;
+		}
+
+		$class = sanitize_text_field( (string) get_post_meta( $event_id, '_event_class', true ) );
+
+		if ( '' !== $class ) {
+			$options[ strtolower( $class ) ] = $class;
+		}
+	}
+
+	/**
+	 * Filters class/division suggestions shown in the event editor.
+	 *
+	 * Use this to provide an event-specific controlled list while keeping the
+	 * field editable for one-off classes.
+	 *
+	 * @param string[] $options Suggested class/division names.
+	 */
+	$options = apply_filters( 'goodblocks_event_class_options', array_values( $options ) );
+	$options = array_filter( array_map( 'sanitize_text_field', (array) $options ) );
+	$options = array_values( array_unique( $options ) );
+
+	natcasesort( $options );
+
+	return array_values( $options );
 }
 
 function goodblocks_event_add_meta_box(): void {
@@ -229,6 +272,9 @@ function goodblocks_event_dates_render( WP_Post $post ): void {
 
 function goodblocks_event_details_render( WP_Post $post ): void {
 	wp_nonce_field( 'goodblocks_event_details', 'goodblocks_event_details_nonce' );
+
+	$class_options  = goodblocks_get_event_class_options();
+	$class_list_id  = wp_unique_id( 'goodblocks-event-class-options-' );
 	?>
 	<div class="goodblocks-event-details" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;">
 		<?php foreach ( goodblocks_event_detail_fields() as $meta_key => $field ) : ?>
@@ -254,7 +300,22 @@ function goodblocks_event_details_render( WP_Post $post ): void {
 						style="width:100%;"
 						value="<?php echo esc_attr( $value ); ?>"
 						placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
+						<?php if ( ! empty( $field['datalist'] ) && $class_options ) : ?>
+							list="<?php echo esc_attr( $class_list_id ); ?>"
+						<?php endif; ?>
 					>
+					<?php if ( '_event_class' === $meta_key && $class_options ) : ?>
+						<datalist id="<?php echo esc_attr( $class_list_id ); ?>">
+							<?php foreach ( $class_options as $option ) : ?>
+								<option value="<?php echo esc_attr( $option ); ?>"></option>
+							<?php endforeach; ?>
+						</datalist>
+					<?php endif; ?>
+				<?php endif; ?>
+				<?php if ( ! empty( $field['description'] ) ) : ?>
+					<span style="display:block;margin-top:4px;color:#757575;font-size:12px;">
+						<?php echo esc_html( $field['description'] ); ?>
+					</span>
 				<?php endif; ?>
 			</p>
 		<?php endforeach; ?>
