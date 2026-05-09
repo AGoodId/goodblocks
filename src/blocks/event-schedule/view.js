@@ -9,6 +9,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const list = root.querySelector(
 				'.goodblocks-event-schedule__list'
 			);
+			const empty = root.querySelector( '[data-schedule-empty]' );
 			let activeDay = '';
 
 			const applyFilters = () => {
@@ -36,6 +37,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 				if ( list ) {
 					list.classList.toggle( 'is-empty', visible === 0 );
+				}
+
+				if ( empty ) {
+					empty.hidden = visible !== 0;
 				}
 			};
 
