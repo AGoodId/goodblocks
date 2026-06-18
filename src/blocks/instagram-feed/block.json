@@ -1,0 +1,60 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/instagram-feed",
+	"title": "Instagram Feed",
+	"category": "goodblocks",
+	"icon": "camera",
+	"description": "Display cached media from a connected Instagram account.",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"default": {
+			"align": "wide"
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"attributes": {
+		"postsToShow": {
+			"type": "number",
+			"default": 8
+		},
+		"columns": {
+			"type": "number",
+			"default": 4
+		},
+		"gap": {
+			"type": "number",
+			"default": 16
+		},
+		"aspectRatio": {
+			"type": "string",
+			"default": "1/1"
+		},
+		"showCaption": {
+			"type": "boolean",
+			"default": false
+		},
+		"showProfileLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"profileLinkText": {
+			"type": "string",
+			"default": "Följ oss på Instagram"
+		},
+		"fallbackText": {
+			"type": "string",
+			"default": "Instagramflödet är inte tillgängligt just nu."
+		}
+	},
+	"example": {},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

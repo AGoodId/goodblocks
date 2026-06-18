@@ -116,6 +116,10 @@ module.exports = {
 			__dirname,
 			'src/blocks/product-carousel/view.js'
 		),
+		'blocks/instagram-feed/index': path.resolve(
+			__dirname,
+			'src/blocks/instagram-feed/index.js'
+		),
 		// Events
 		'blocks/event-list/index': path.resolve(
 			__dirname,
