@@ -14,7 +14,7 @@ if ( ! function_exists( 'goodblocks_instagram_get_cache' ) ) {
 $posts_to_show     = isset( $attributes['postsToShow'] ) ? max( 1, min( 24, absint( $attributes['postsToShow'] ) ) ) : 8;
 $columns           = isset( $attributes['columns'] ) ? max( 1, min( 6, absint( $attributes['columns'] ) ) ) : 4;
 $gap               = isset( $attributes['gap'] ) ? max( 0, min( 48, absint( $attributes['gap'] ) ) ) : 16;
-$aspect_ratio      = isset( $attributes['aspectRatio'] ) ? sanitize_text_field( $attributes['aspectRatio'] ) : '1/1';
+$aspect_ratio      = isset( $attributes['aspectRatio'] ) ? sanitize_text_field( $attributes['aspectRatio'] ) : 'auto';
 $allowed_ratios    = [ '1/1', '4/5', '4/3', 'auto' ];
 $show_caption      = ! empty( $attributes['showCaption'] );
 $show_profile_link = ! empty( $attributes['showProfileLink'] );
@@ -23,7 +23,7 @@ $fallback_text     = isset( $attributes['fallbackText'] ) ? $attributes['fallbac
 $profile_url       = get_option( 'goodblocks_instagram_profile_url', '' );
 
 if ( ! in_array( $aspect_ratio, $allowed_ratios, true ) ) {
-	$aspect_ratio = '1/1';
+	$aspect_ratio = 'auto';
 }
 
 $cache = goodblocks_instagram_get_cache();
