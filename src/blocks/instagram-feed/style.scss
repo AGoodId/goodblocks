@@ -1,0 +1,104 @@
+.wp-block-goodblocks-instagram-feed {
+	--instagram-feed-columns: 4;
+	--instagram-feed-tablet-columns: 3;
+	--instagram-feed-mobile-columns: 2;
+	--instagram-feed-gap: 16px;
+	--instagram-feed-aspect-ratio: 1 / 1;
+
+	.goodblocks-instagram-feed__grid {
+		display: grid;
+		gap: var(--instagram-feed-gap);
+		grid-template-columns: repeat(var(--instagram-feed-columns), minmax(0, 1fr));
+	}
+
+	.goodblocks-instagram-feed__item {
+		position: relative;
+		display: block;
+		overflow: hidden;
+		color: inherit;
+		background: #f3f3f3;
+		text-decoration: none;
+
+		&:focus-visible {
+			outline: 2px solid currentcolor;
+			outline-offset: 3px;
+		}
+	}
+
+	.goodblocks-instagram-feed__media {
+		display: block;
+		width: 100%;
+		aspect-ratio: var(--instagram-feed-aspect-ratio);
+		object-fit: cover;
+		transition: transform 0.25s ease;
+	}
+
+	&.is-aspect-auto {
+
+		.goodblocks-instagram-feed__media {
+			aspect-ratio: auto;
+			height: auto;
+		}
+	}
+
+	.goodblocks-instagram-feed__item:hover .goodblocks-instagram-feed__media {
+		transform: scale(1.03);
+	}
+
+	.goodblocks-instagram-feed__badge {
+		position: absolute;
+		top: 0.625rem;
+		right: 0.625rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2rem;
+		min-height: 2rem;
+		border-radius: 999px;
+		background: rgba(0, 0, 0, 0.68);
+		color: #fff;
+		font-size: 0.75rem;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.goodblocks-instagram-feed__caption {
+		position: absolute;
+		inset: auto 0 0;
+		margin: 0;
+		padding: 2.5rem 0.875rem 0.875rem;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent);
+		color: #fff;
+		font-size: 0.875rem;
+		line-height: 1.35;
+	}
+
+	.goodblocks-instagram-feed__footer {
+		margin-top: 1rem;
+	}
+
+	.goodblocks-instagram-feed__profile-link {
+		color: currentcolor;
+		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 0.18em;
+	}
+
+	.goodblocks-instagram-feed__fallback {
+		margin: 0;
+	}
+
+	@media (max-width: 900px) {
+
+		.goodblocks-instagram-feed__grid {
+			grid-template-columns: repeat(var(--instagram-feed-tablet-columns), minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+
+		.goodblocks-instagram-feed__grid {
+			grid-template-columns: repeat(var(--instagram-feed-mobile-columns), minmax(0, 1fr));
+		}
+	}
+}
