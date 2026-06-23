@@ -51,6 +51,10 @@ class MasonryQueryBlock {
 		this.currentGallery = []; // Current project's gallery array
 		this.visibleItems = this.items;
 		this.originalUrl = null;
+		this.boundItemClick = ( item ) => ( e ) => {
+			e.preventDefault();
+			this.openModal( this.items.indexOf( item ) );
+		};
 
 		this.init();
 	}
@@ -99,36 +103,11 @@ class MasonryQueryBlock {
 			this.layoutMasonryGrid();
 		};
 
-		const images = this.grid.querySelectorAll( 'img' );
-		let loadedCount = 0;
-		const totalImages = images.length;
-
-		const onImageLoad = () => {
-			loadedCount++;
-			if ( loadedCount >= totalImages ) {
-				this.allImagesLoaded = true;
-				this.container.classList.add( 'masonry-query--loaded' );
-			}
-			layout();
-		};
-
-		// For lazy-loaded images that are off-screen, img.complete may be true
-		// but naturalHeight is 0 (no data yet). Only count as loaded if the
-		// image actually has dimensions.
-		images.forEach( ( img ) => {
-			if ( img.complete && img.naturalHeight > 0 ) {
-				onImageLoad();
-			} else {
-				img.addEventListener( 'load', onImageLoad );
-				img.addEventListener( 'error', onImageLoad );
-			}
-		} );
-
-		if ( totalImages === 0 ) {
+		this.waitForImages( this.items, () => {
 			this.allImagesLoaded = true;
 			this.container.classList.add( 'masonry-query--loaded' );
 			layout();
-		}
+		} );
 
 		// Recalculate on resize (debounced, skip during scroll)
 		let resizeTimer;
@@ -140,6 +119,48 @@ class MasonryQueryBlock {
 			},
 			{ passive: true }
 		);
+	}
+
+	waitForImages( items, done ) {
+		const images = items.flatMap( ( item ) =>
+			Array.from( item.querySelectorAll( 'img' ) )
+		);
+
+		if ( images.length === 0 ) {
+			done();
+			return;
+		}
+
+		let remaining = images.length;
+		const imageDone = () => {
+			remaining--;
+			this.scheduleLayout();
+			if ( remaining <= 0 ) {
+				done();
+			}
+		};
+
+		images.forEach( ( img ) => {
+			if ( img.complete && img.naturalHeight > 0 ) {
+				imageDone();
+			} else {
+				img.addEventListener( 'load', imageDone, { once: true } );
+				img.addEventListener( 'error', imageDone, { once: true } );
+			}
+		} );
+	}
+
+	scheduleLayout() {
+		if ( ! this.grid ) {
+			return;
+		}
+
+		if ( this.isScrolling ) {
+			this.layoutPending = true;
+			return;
+		}
+
+		window.requestAnimationFrame( () => this.layoutMasonryGrid() );
 	}
 
 	layoutMasonryGrid() {
@@ -229,11 +250,8 @@ class MasonryQueryBlock {
 
 		this.createModal();
 
-		this.items.forEach( ( item, index ) => {
-			item.addEventListener( 'click', ( e ) => {
-				e.preventDefault();
-				this.openModal( index );
-			} );
+		this.items.forEach( ( item ) => {
+			item.addEventListener( 'click', this.boundItemClick( item ) );
 		} );
 
 		document.addEventListener( 'keydown', ( e ) => {
@@ -786,10 +804,12 @@ class MasonryQueryBlock {
 					this.items.push( item );
 					this.visibleItems.push( item );
 
-					item.addEventListener( 'click', ( e ) => {
-						e.preventDefault();
-						this.openModal( this.items.indexOf( item ) );
-					} );
+					if ( this.settings.clickAction === 'lightbox' ) {
+						item.addEventListener(
+							'click',
+							this.boundItemClick( item )
+						);
+					}
 				} );
 
 				gsap.to( newItems, {
@@ -801,6 +821,18 @@ class MasonryQueryBlock {
 				} );
 
 				this.currentPage++;
+				if (
+					this.container.classList.contains(
+						'masonry-query--masonry'
+					)
+				) {
+					this.allImagesLoaded = false;
+					this.scheduleLayout();
+					this.waitForImages( newItems, () => {
+						this.allImagesLoaded = true;
+						this.scheduleLayout();
+					} );
+				}
 			}
 
 			if ( ! data.hasMore || this.currentPage >= this.maxPages ) {

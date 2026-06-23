@@ -33,6 +33,98 @@ function goodblocks_get_thumbnail( $size = 'large', $attr = array() ) {
 }
 
 /**
+ * Resolve an attachment ID from an image URL, including generated image sizes.
+ *
+ * @param string $url Image URL.
+ * @return int Attachment ID, or 0 when not found.
+ */
+function goodblocks_attachment_id_from_url( string $url ): int {
+	$url = esc_url_raw( $url );
+
+	if ( ! $url ) {
+		return 0;
+	}
+
+	$attachment_id = attachment_url_to_postid( $url );
+	if ( $attachment_id ) {
+		return absint( $attachment_id );
+	}
+
+	$uploads = wp_get_upload_dir();
+	if ( empty( $uploads['baseurl'] ) ) {
+		return 0;
+	}
+
+	$url_path     = (string) wp_parse_url( $url, PHP_URL_PATH );
+	$baseurl_path = (string) wp_parse_url( $uploads['baseurl'], PHP_URL_PATH );
+
+	if ( ! $url_path || ! $baseurl_path || 0 !== strpos( $url_path, $baseurl_path ) ) {
+		return 0;
+	}
+
+	$relative_path = ltrim( substr( $url_path, strlen( $baseurl_path ) ), '/' );
+	$relative_path = preg_replace( '/-\d+x\d+(?=\.[a-zA-Z0-9]+$)/', '', $relative_path );
+	$original_url  = trailingslashit( $uploads['baseurl'] ) . $relative_path;
+
+	return absint( attachment_url_to_postid( $original_url ) );
+}
+
+/**
+ * Get the first image attachment used in post content.
+ *
+ * @param int $post_id Post ID.
+ * @return int Attachment ID, or 0 when not found.
+ */
+function goodblocks_get_first_content_image_id( int $post_id ): int {
+	$content = get_post_field( 'post_content', $post_id );
+
+	if ( ! $content ) {
+		return 0;
+	}
+
+	if ( has_blocks( $content ) ) {
+		$find_image_id = static function ( array $blocks ) use ( &$find_image_id ): int {
+			foreach ( $blocks as $content_block ) {
+				$block_name = $content_block['blockName'] ?? '';
+				$attrs      = $content_block['attrs'] ?? [];
+
+				if ( 'core/image' === $block_name && ! empty( $attrs['id'] ) ) {
+					return absint( $attrs['id'] );
+				}
+
+				if ( 'core/gallery' === $block_name && ! empty( $attrs['ids'] ) && is_array( $attrs['ids'] ) ) {
+					return absint( reset( $attrs['ids'] ) );
+				}
+
+				if ( ! empty( $content_block['innerBlocks'] ) ) {
+					$image_id = $find_image_id( $content_block['innerBlocks'] );
+					if ( $image_id ) {
+						return $image_id;
+					}
+				}
+			}
+
+			return 0;
+		};
+
+		$image_id = $find_image_id( parse_blocks( $content ) );
+		if ( $image_id ) {
+			return $image_id;
+		}
+	}
+
+	preg_match_all( '/<img[^>]+src=["\']([^"\']+)["\']/', $content, $matches );
+	foreach ( $matches[1] ?? [] as $image_url ) {
+		$image_id = goodblocks_attachment_id_from_url( $image_url );
+		if ( $image_id ) {
+			return $image_id;
+		}
+	}
+
+	return 0;
+}
+
+/**
  * Load a block template with theme override support.
  *
  * Lookup order:
