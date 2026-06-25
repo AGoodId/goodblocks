@@ -81,6 +81,7 @@ function goodblocks_register_blocks() {
 		'slide',
 		'product-carousel',
 		'instagram-feed',
+		'table-of-contents',
 	];
 
 	foreach ( $blocks as $block ) {

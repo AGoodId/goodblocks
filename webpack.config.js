@@ -120,6 +120,14 @@ module.exports = {
 			__dirname,
 			'src/blocks/instagram-feed/index.js'
 		),
+		'blocks/table-of-contents/index': path.resolve(
+			__dirname,
+			'src/blocks/table-of-contents/index.js'
+		),
+		'blocks/table-of-contents/view': path.resolve(
+			__dirname,
+			'src/blocks/table-of-contents/view.js'
+		),
 		// Events
 		'blocks/event-list/index': path.resolve(
 			__dirname,

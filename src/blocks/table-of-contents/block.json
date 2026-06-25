@@ -1,0 +1,109 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/table-of-contents",
+	"title": "Table of Contents",
+	"category": "goodblocks",
+	"icon": "list-view",
+	"description": "Generate a clean table of contents from page headings.",
+	"keywords": [ "toc", "contents", "anchors", "headings", "navigation" ],
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"padding": true,
+			"margin": true
+		}
+	},
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Innehåll"
+		},
+		"includeLevels": {
+			"type": "array",
+			"default": [2, 3]
+		},
+		"includeH2": {
+			"type": "boolean",
+			"default": true
+		},
+		"includeH3": {
+			"type": "boolean",
+			"default": true
+		},
+		"includeH4": {
+			"type": "boolean",
+			"default": false
+		},
+		"includeH5": {
+			"type": "boolean",
+			"default": false
+		},
+		"includeH6": {
+			"type": "boolean",
+			"default": false
+		},
+		"layout": {
+			"type": "string",
+			"default": "card",
+			"enum": [ "card", "minimal", "floating" ]
+		},
+		"sticky": {
+			"type": "boolean",
+			"default": false
+		},
+		"floatingPosition": {
+			"type": "string",
+			"default": "right",
+			"enum": [ "left", "right" ]
+		},
+		"showNumbers": {
+			"type": "boolean",
+			"default": false
+		},
+		"showActive": {
+			"type": "boolean",
+			"default": true
+		},
+		"collapsible": {
+			"type": "boolean",
+			"default": true
+		},
+		"startCollapsed": {
+			"type": "boolean",
+			"default": false
+		},
+		"smoothScroll": {
+			"type": "boolean",
+			"default": true
+		},
+		"minHeadings": {
+			"type": "number",
+			"default": 2
+		},
+		"scrollOffset": {
+			"type": "number",
+			"default": 96
+		},
+		"scopeSelector": {
+			"type": "string",
+			"default": ""
+		},
+		"headingSelector": {
+			"type": "string",
+			"default": ""
+		},
+		"excludeSelector": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"example": {},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
