@@ -286,6 +286,63 @@ Likely future additions:
 
 Keep new event features compatible with the existing `goodblocks_event` CPT and meta fields unless there is a strong reason to migrate.
 
+## Riskytor och verifieringspolicy (dev-orchestrator)
+
+Denna sektion läses av den användarglobala dev-orchestrator-skillen för projektspecifika parametrar. Den har företräde framför skillens generiska defaults.
+
+### Riskytor
+
+GoodBlocks distribueras som en delad plugin till flera WordPress-sajter (via `GoodBlocks_GitHub_Updater`, se `inc/github-updater.php`) och auto-uppdateras på alla sajter som kör den när en `v*`-tag pushas. En trasig release har bred blast radius — den träffar alla konsument-sajter samtidigt, inte bara ett repo. Ändringar i följande kräver oberoende motbevisare (en separat subagent/modellkörning som aktivt försöker hitta fel, inte bara bekräftar) och den starkaste tillgängliga checker-modellen (Fable → Opus vid konflikt om budget):
+
+- `inc/github-updater.php` — auto-update-mekanismen. Fel här kan bryta uppdateringar eller leverera trasig kod till alla sajter.
+- `.github/workflows/ci.yml` och `.github/workflows/release.yml` — release-kedjan som paketerar och distribuerar `goodblocks.zip`.
+- REST-endpoints i `inc/search-rest-api.php`, `inc/masonry-rest-api.php` (permission_callback `__return_true`, dvs publikt nåbara utan auth) och `inc/agoodapp-sideload.php`, `inc/agoodapp-proxy.php` (kräver `edit_posts`/`upload_files` — verifiera att caps-checken faktiskt körs och inte kan kringgås).
+- Datamuterande vägar: CSV-import (`goodblocks_import_events_csv()` i `inc/events-cpt.php`) och WP-CLI-migreringen `wp goodblocks migrate-events` (`inc/events-migrate.php`), som skriver om `post_type` och meta i bulk. Kräv `--dry-run`-verifiering och validera att `goodblocks_get_events()`/virtuell recurrence-expansion (`_event_recurrence_*`-meta) inte kan producera oändliga eller felaktiga occurrence-listor.
+- `goodblocks.php` — huvudregistrering, versionskonstant (`GOODBLOCKS_VERSION`) och namespace-migreringslogik (`agoodsite-fse` → `agoodblocks` → `goodblocks`) som körs automatiskt vid aktivering/version-update.
+
+### Mänskliga gater
+
+- Ingen push till `main` utan PR-granskning (gäller även agenter — se "Branch-strategi"/"Releases" ovan).
+- Tagging (`git tag vX.Y.Z && git push --tags`) som triggar en publik release kräver explicit mänskligt godkännande — det är en distributionshändelse till produktionssajter, inte en vanlig commit.
+- Ändringar i `.github/workflows/` kräver mänsklig granskning innan merge (redan noterat under "Vad du inte ska göra").
+- Bulk-datamigrering (`wp goodblocks migrate-events` utan `--dry-run`) mot en produktionsdatabas kräver explicit mänskligt godkännande.
+
+### Modellpolicy
+
+- Implementation: standardmodell (Sonnet) för de flesta ändringar i block, PHP-helpers och templates.
+- Oberoende verifiering/motbevisare av riskytorna ovan: starkaste tillgängliga checker-modell (Fable, eller Opus om Fable inte är tillgänglig). Motbevisaren ska vara en separat körning/subagent från den som skrev ändringen, inte samma kontext.
+- Rutinmässig lint/formattering och dokumentationsuppdateringar: valfri modell, ingen oberoende granskning krävs.
+
+### Verifieringskommando
+
+```bash
+# PHP-syntax på ändrade filer
+php -l goodblocks.php
+php -l inc/events-cpt.php
+php -l inc/events-migrate.php
+php -l inc/github-updater.php
+
+# Lint (hela repot)
+npm run lint
+
+# Riktad lint för kända legacy-problemområden
+npx wp-scripts lint-js src/blocks/event-schedule src/blocks/event-now-next src/blocks/event-class-schedule
+npx wp-scripts lint-style 'src/blocks/event-schedule/**/*.scss' 'src/blocks/event-now-next/**/*.scss' 'src/blocks/event-class-schedule/**/*.scss'
+
+# Events-specifik smoke-test
+npm run test:events
+
+# Build och verifiera att build/ faktiskt ändrades för berörda block
+npm run build
+git status build/blocks/
+
+# Block-validering (samma check som CI kör)
+python3 -m json.tool src/blocks/<block>/block.json
+
+# Migrering: alltid dry-run först
+wp goodblocks migrate-events --dry-run
+```
+
 ## Pre-PR Checklist
 
 - Read `git status` before editing and before finishing.
