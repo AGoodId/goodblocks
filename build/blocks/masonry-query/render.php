@@ -422,14 +422,9 @@ foreach ( $data_attrs as $key => $value ) {
 					$image_id = get_post_thumbnail_id( $post_id );
 					break;
 				case 'first':
-					// Get first image from content
-					$content = get_the_content();
-					preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/', $content, $matches );
-					if ( ! empty( $matches[1] ) ) {
-						$image_id = attachment_url_to_postid( $matches[1] );
-					}
-					if ( ! $image_id ) {
-						$image_id = get_post_thumbnail_id( $post_id );
+					$image_id = get_post_thumbnail_id( $post_id );
+					if ( ! $image_id && function_exists( 'goodblocks_get_first_content_image_id' ) ) {
+						$image_id = goodblocks_get_first_content_image_id( $post_id );
 					}
 					break;
 				case 'acf':
@@ -601,7 +596,8 @@ foreach ( $data_attrs as $key => $value ) {
 					data-excerpt="<?php echo esc_attr( $excerpt ); ?>"
 				<?php endif; ?>
 			>
-				<div class="masonry-query__image-wrapper" style="<?php echo $image_fit === 'contain' ? '--image-fit: contain;' : ''; ?><?php echo ! $has_image ? 'aspect-ratio:4/3;' : ''; ?>">
+				<?php if ( $has_image ) : ?>
+				<div class="masonry-query__image-wrapper" style="<?php echo $image_fit === 'contain' ? '--image-fit: contain;' : ''; ?>">
 					<?php if ( ! empty( $hero_video_url ) ) : ?>
 						<video autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true" src="<?php echo esc_url( $hero_video_url ); ?>"></video>
 					<?php elseif ( $image_full ) : ?>
@@ -622,6 +618,7 @@ foreach ( $data_attrs as $key => $value ) {
 						/>
 					<?php endif; ?>
 				</div>
+				<?php endif; ?>
 
 				<!-- Overlay with visible content -->
 				<?php if ( $overlay_style !== 'none' && ( $show_title || $show_category || $show_excerpt || $show_date ) ) : ?>

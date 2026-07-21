@@ -150,13 +150,9 @@ function goodblocks_masonry_load_more( $request ) {
 				$image_id = get_post_thumbnail_id( $post_id );
 				break;
 			case 'first':
-				$content = get_the_content();
-				preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/', $content, $matches );
-				if ( ! empty( $matches[1] ) ) {
-					$image_id = attachment_url_to_postid( $matches[1] );
-				}
-				if ( ! $image_id ) {
-					$image_id = get_post_thumbnail_id( $post_id );
+				$image_id = get_post_thumbnail_id( $post_id );
+				if ( ! $image_id && function_exists( 'goodblocks_get_first_content_image_id' ) ) {
+					$image_id = goodblocks_get_first_content_image_id( $post_id );
 				}
 				break;
 			case 'acf':
@@ -183,6 +179,7 @@ function goodblocks_masonry_load_more( $request ) {
 		$image_alt   = $image_id ? ( get_post_meta( $image_id, '_wp_attachment_image_alt', true ) ?: get_the_title( $post_id ) ) : get_the_title( $post_id );
 
 		$hero_video_url = get_post_meta( $post_id, 'portfolio_hero_video', true );
+		$has_image      = $image_large || $hero_video_url;
 
 		// Category for overlay.
 		$overlay_terms = get_the_terms( $post_id, $cat_taxonomy );
@@ -199,12 +196,14 @@ function goodblocks_masonry_load_more( $request ) {
 		// Tags.
 		$post_tags = get_the_terms( $post_id, 'post_tag' );
 		$tag_data  = [];
+		$tag_links = [];
 		if ( $post_tags && ! is_wp_error( $post_tags ) ) {
 			foreach ( $post_tags as $pt ) {
 				$tag_data[] = [
 					'name' => $pt->name,
 					'url'  => get_term_link( $pt ),
 				];
+				$tag_links[ $pt->name ] = get_term_link( $pt );
 			}
 		}
 
@@ -248,14 +247,20 @@ function goodblocks_masonry_load_more( $request ) {
 			data-title="<?php echo esc_attr( get_the_title() ); ?>"
 			data-excerpt="<?php echo esc_attr( wp_trim_words( get_the_excerpt(), 30 ) ); ?>"
 			data-permalink="<?php echo esc_url( get_permalink( $post_id ) ); ?>"
-			data-categories="<?php echo esc_attr( implode( ',', $cat_slugs ) ); ?>"
+			data-category="<?php echo esc_attr( implode( ',', $cat_slugs ) ); ?>"
 			<?php if ( ! empty( $tag_data ) ) : ?>
-				data-tags="<?php echo esc_attr( wp_json_encode( $tag_data ) ); ?>"
+				data-tags="<?php echo esc_attr( implode( ',', array_column( $tag_data, 'name' ) ) ); ?>"
+				data-tag-links="<?php echo esc_attr( wp_json_encode( $tag_links ) ); ?>"
 			<?php endif; ?>
 			<?php if ( $image_full ) : ?>
 				data-full-src="<?php echo esc_url( $image_full[0] ); ?>"
 				data-full-width="<?php echo esc_attr( $image_full[1] ); ?>"
 				data-full-height="<?php echo esc_attr( $image_full[2] ); ?>"
+				<?php if ( $click_action === 'lightbox' ) : ?>
+					data-pswp-src="<?php echo esc_url( $image_full[0] ); ?>"
+					data-pswp-width="<?php echo esc_attr( $image_full[1] ); ?>"
+					data-pswp-height="<?php echo esc_attr( $image_full[2] ); ?>"
+				<?php endif; ?>
 			<?php endif; ?>
 			<?php if ( $hero_video_url ) : ?>
 				data-video="<?php echo esc_url( $hero_video_url ); ?>"
@@ -264,11 +269,12 @@ function goodblocks_masonry_load_more( $request ) {
 			data-alt="<?php echo esc_attr( $image_alt ); ?>"
 			<?php echo $exif_html; ?>
 		>
-			<?php if ( $image_large ) : ?>
+			<?php if ( $has_image ) : ?>
 				<div class="masonry-query__image-wrapper">
 					<?php if ( $hero_video_url ) : ?>
 						<video class="masonry-query__video" src="<?php echo esc_url( $hero_video_url ); ?>" muted loop playsinline preload="metadata"></video>
 					<?php endif; ?>
+					<?php if ( $image_large ) : ?>
 					<img
 						class="masonry-query__image"
 						src="<?php echo esc_url( $image_large[0] ); ?>"
@@ -276,19 +282,40 @@ function goodblocks_masonry_load_more( $request ) {
 						width="<?php echo esc_attr( $image_large[1] ); ?>"
 						height="<?php echo esc_attr( $image_large[2] ); ?>"
 						loading="lazy"
+						decoding="async"
+						<?php if ( $image_large[1] && $image_large[2] && $image_ratio === 'original' ) : ?>
+							style="aspect-ratio: <?php echo esc_attr( $image_large[1] ); ?> / <?php echo esc_attr( $image_large[2] ); ?>"
+						<?php endif; ?>
 					/>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 
-			<div class="masonry-query__overlay">
+			<?php if ( $overlay_style !== 'none' && ( $show_title || $show_category || $show_excerpt || $show_date ) ) : ?>
+				<div class="masonry-query__overlay">
+					<div class="masonry-query__content">
+						<?php if ( $show_category && $primary_cat ) : ?>
+							<span class="masonry-query__category"><?php echo esc_html( $primary_cat->name ); ?></span>
+						<?php endif; ?>
+						<?php if ( $show_title && get_the_title() ) : ?>
+							<h3 class="masonry-query__title"><?php the_title(); ?></h3>
+						<?php endif; ?>
+						<?php if ( $show_excerpt && get_the_excerpt() ) : ?>
+							<p class="masonry-query__excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 15 ) ); ?></p>
+						<?php endif; ?>
+						<?php if ( $show_date ) : ?>
+							<time class="masonry-query__date" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+						<?php endif; ?>
+					</div>
+				</div>
+			<?php endif; ?>
+
+			<div class="masonry-query__lightbox-data" hidden>
 				<?php if ( ! $show_title && get_the_title() ) : ?>
 					<h3 class="masonry-query__title"><?php the_title(); ?></h3>
 				<?php endif; ?>
-				<?php if ( ! $show_date ) : ?>
-					<time class="masonry-query__date" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
-				<?php endif; ?>
 				<?php if ( ! $show_excerpt && get_the_excerpt() ) : ?>
-					<p class="masonry-query__excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 20 ) ); ?></p>
+					<p class="masonry-query__excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 30 ) ); ?></p>
 				<?php endif; ?>
 				<?php if ( ! $show_category && $primary_cat ) : ?>
 					<span class="masonry-query__category"><?php echo esc_html( $primary_cat->name ); ?></span>
