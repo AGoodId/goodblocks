@@ -16,6 +16,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		gap,
 		aspectRatio,
 		showCaption,
+		showMetadata,
 		showProfileLink,
 		profileLinkText,
 		fallbackText,
@@ -83,6 +84,13 @@ export default function Edit( { attributes, setAttributes } ) {
 						checked={ showCaption }
 						onChange={ ( value ) =>
 							setAttributes( { showCaption: value } )
+						}
+					/>
+					<ToggleControl
+						label={ __( 'Show account and date', 'goodblocks' ) }
+						checked={ showMetadata }
+						onChange={ ( value ) =>
+							setAttributes( { showMetadata: value } )
 						}
 					/>
 				</PanelBody>

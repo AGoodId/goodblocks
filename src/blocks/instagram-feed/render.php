@@ -17,6 +17,7 @@ $gap               = isset( $attributes['gap'] ) ? max( 0, min( 48, absint( $att
 $aspect_ratio      = isset( $attributes['aspectRatio'] ) ? sanitize_text_field( $attributes['aspectRatio'] ) : 'auto';
 $allowed_ratios    = [ '1/1', '4/5', '4/3', 'auto' ];
 $show_caption      = ! empty( $attributes['showCaption'] );
+$show_metadata     = ! empty( $attributes['showMetadata'] );
 $show_profile_link = ! empty( $attributes['showProfileLink'] );
 $profile_link_text = isset( $attributes['profileLinkText'] ) ? $attributes['profileLinkText'] : __( 'Följ oss på Instagram', 'goodblocks' );
 $fallback_text     = isset( $attributes['fallbackText'] ) ? $attributes['fallbackText'] : __( 'Instagramflödet är inte tillgängligt just nu.', 'goodblocks' );
@@ -36,7 +37,7 @@ $style = sprintf(
 	$gap,
 	'auto' === $aspect_ratio ? 'auto' : str_replace( '/', ' / ', $aspect_ratio )
 );
-$class = 'goodblocks-instagram-feed' . ( 'auto' === $aspect_ratio ? ' is-aspect-auto' : '' );
+$class = 'goodblocks-instagram-feed' . ( 'auto' === $aspect_ratio ? ' is-aspect-auto' : '' ) . ( $show_caption || $show_metadata ? ' has-card-content' : '' );
 ?>
 
 <div <?php echo get_block_wrapper_attributes( [
@@ -49,6 +50,8 @@ $class = 'goodblocks-instagram-feed' . ( 'auto' === $aspect_ratio ? ' is-aspect-
 				<?php
 				$caption = isset( $item['caption'] ) ? $item['caption'] : '';
 				$alt     = $caption ? wp_trim_words( $caption, 18, '...' ) : __( 'Instagram post', 'goodblocks' );
+				$username = isset( $item['username'] ) ? $item['username'] : '';
+				$posted_at = isset( $item['timestamp'] ) ? strtotime( $item['timestamp'] ) : false;
 				?>
 				<a class="goodblocks-instagram-feed__item" href="<?php echo esc_url( $item['permalink'] ); ?>" target="_blank" rel="noopener noreferrer">
 					<img
@@ -64,6 +67,16 @@ $class = 'goodblocks-instagram-feed' . ( 'auto' === $aspect_ratio ? ' is-aspect-
 					<?php endif; ?>
 					<?php if ( $show_caption && $caption ) : ?>
 						<p class="goodblocks-instagram-feed__caption"><?php echo esc_html( wp_trim_words( $caption, 22, '...' ) ); ?></p>
+					<?php endif; ?>
+					<?php if ( $show_metadata && ( $username || $posted_at ) ) : ?>
+						<div class="goodblocks-instagram-feed__meta">
+							<?php if ( $username ) : ?>
+								<span class="goodblocks-instagram-feed__username">@<?php echo esc_html( ltrim( $username, '@' ) ); ?></span>
+							<?php endif; ?>
+							<?php if ( $posted_at ) : ?>
+								<time datetime="<?php echo esc_attr( gmdate( 'c', $posted_at ) ); ?>"><?php echo esc_html( wp_date( 'j M. Y', $posted_at ) ); ?></time>
+							<?php endif; ?>
+						</div>
 					<?php endif; ?>
 				</a>
 			<?php endforeach; ?>
