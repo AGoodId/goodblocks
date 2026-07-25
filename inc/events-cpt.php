@@ -12,6 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'init', 'goodblocks_register_event_cpt' );
 add_action( 'add_meta_boxes', 'goodblocks_event_add_meta_box' );
 add_action( 'save_post_goodblocks_event', 'goodblocks_event_save_meta', 10, 2 );
+add_action( 'save_post_goodblocks_event', 'goodblocks_flush_events_cache', 20 );
+add_action( 'trashed_post', 'goodblocks_flush_events_cache_for_post' );
+add_action( 'untrashed_post', 'goodblocks_flush_events_cache_for_post' );
+add_action( 'before_delete_post', 'goodblocks_flush_events_cache_for_post' );
 add_filter( 'manage_goodblocks_event_posts_columns', 'goodblocks_event_admin_columns' );
 add_action( 'manage_goodblocks_event_posts_custom_column', 'goodblocks_event_admin_column_content', 10, 2 );
 add_filter( 'manage_edit-goodblocks_event_sortable_columns', 'goodblocks_event_sortable_columns' );
@@ -677,7 +681,80 @@ function goodblocks_event_status_label( string $status ): string {
 	return $options[ $status ] ?? $status;
 }
 
+/**
+ * Return event occurrences for the given args, cached.
+ *
+ * Thin caching wrapper around goodblocks_get_events_query(): the expanded,
+ * filtered and sorted result is stored in a short-lived transient keyed on the
+ * raw args plus a version counter. The counter is bumped whenever any event is
+ * created, edited, trashed, restored or deleted (goodblocks_flush_events_cache),
+ * so edits are reflected immediately without enumerating transient keys.
+ *
+ * Note: "upcoming" listings use the current time as their lower bound, so a
+ * cached result can lag reality by up to the TTL. Tune or disable the cache via
+ * the `goodblocks_events_cache_ttl` filter (return <= 0 to bypass it entirely).
+ *
+ * @param array $args Query args, see goodblocks_get_events_query().
+ * @return array
+ */
 function goodblocks_get_events( array $args = [] ): array {
+	// Without the transient API loaded (e.g. the standalone PHP smoke test), skip
+	// caching and run the query directly.
+	if ( ! function_exists( 'get_transient' ) ) {
+		return goodblocks_get_events_query( $args );
+	}
+
+	$ttl = (int) apply_filters( 'goodblocks_events_cache_ttl', 10 * MINUTE_IN_SECONDS, $args );
+
+	if ( $ttl <= 0 ) {
+		return goodblocks_get_events_query( $args );
+	}
+
+	$key    = 'goodblocks_events_' . goodblocks_events_cache_version() . '_' . md5( (string) wp_json_encode( $args ) );
+	$cached = get_transient( $key );
+
+	if ( is_array( $cached ) ) {
+		return $cached;
+	}
+
+	$events = goodblocks_get_events_query( $args );
+	set_transient( $key, $events, $ttl );
+
+	return $events;
+}
+
+/**
+ * Current events-cache version. Bumped on any event mutation to invalidate
+ * every cached query at once without having to track individual transient keys.
+ *
+ * @return int
+ */
+function goodblocks_events_cache_version(): int {
+	return (int) get_option( 'goodblocks_events_cache_version', 1 );
+}
+
+/**
+ * Invalidate all cached event queries by bumping the cache version.
+ */
+function goodblocks_flush_events_cache(): void {
+	update_option( 'goodblocks_events_cache_version', goodblocks_events_cache_version() + 1, false );
+}
+
+/**
+ * Flush the events cache when an event post is trashed, restored or deleted.
+ *
+ * save_post covers create/edit directly; this guards the generic post hooks so
+ * only goodblocks_event mutations trigger a flush.
+ *
+ * @param int $post_id Post ID.
+ */
+function goodblocks_flush_events_cache_for_post( $post_id ): void {
+	if ( 'goodblocks_event' === get_post_type( $post_id ) ) {
+		goodblocks_flush_events_cache();
+	}
+}
+
+function goodblocks_get_events_query( array $args = [] ): array {
 	$defaults = [
 		'posts_per_page' => 200,
 		'show_past'      => false,
