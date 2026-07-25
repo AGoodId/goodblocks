@@ -133,6 +133,14 @@ module.exports = {
 			__dirname,
 			'src/blocks/event-list/index.js'
 		),
+		'blocks/event-calendar/index': path.resolve(
+			__dirname,
+			'src/blocks/event-calendar/index.js'
+		),
+		'blocks/event-calendar/view': path.resolve(
+			__dirname,
+			'src/blocks/event-calendar/view.js'
+		),
 		'blocks/event-schedule/index': path.resolve(
 			__dirname,
 			'src/blocks/event-schedule/index.js'

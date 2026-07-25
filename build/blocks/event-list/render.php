@@ -9,57 +9,35 @@
  * @package GoodBlocks
  */
 
-$current_dt = current_time( 'mysql' );
-
-$query_args = [
-	'post_type'      => 'goodblocks_event',
+$events = goodblocks_get_events( [
 	'posts_per_page' => absint( $attributes['eventsToShow'] ),
-	'post_status'    => 'publish',
-	'orderby'        => 'meta_value',
-	'meta_key'       => '_event_start',
-	'meta_type'      => 'DATETIME',
+	'show_past'      => ! empty( $attributes['showPast'] ),
+	'category_slug'  => $attributes['categorySlug'] ?? '',
 	'order'          => ! empty( $attributes['showPast'] ) ? 'DESC' : 'ASC',
-];
+] );
 
-if ( empty( $attributes['showPast'] ) ) {
-	$query_args['meta_query'] = [
-		[
-			'key'     => '_event_start',
-			'value'   => $current_dt,
-			'compare' => '>=',
-			'type'    => 'DATETIME',
-		],
-	];
-}
-
-if ( ! empty( $attributes['categorySlug'] ) ) {
-	$query_args['tax_query'] = [
-		[
-			'taxonomy' => 'event_category',
-			'field'    => 'slug',
-			'terms'    => sanitize_key( $attributes['categorySlug'] ),
-		],
-	];
-}
-
-$query = new WP_Query( $query_args );
-
-if ( $query->have_posts() ) : ?>
+if ( $events ) : ?>
 	<div <?php echo get_block_wrapper_attributes( [
 		'style' => '--events-per-row: ' . absint( $attributes['eventsPerRow'] ) . ';',
 		'class' => 'goodblocks-event-list ' . esc_attr( $attributes['viewMode'] ),
 	] ); ?>>
-		<?php while ( $query->have_posts() ) :
-			$query->the_post();
+		<?php foreach ( $events as $event ) :
+			$post = get_post( $event['id'] );
+			if ( ! $post ) {
+				continue;
+			}
+			setup_postdata( $post );
+			$GLOBALS['goodblocks_event_data'] = $event;
 			if ( 'list' === $attributes['viewMode'] ) {
 				goodblocks_template( 'event-list', 'list', $attributes );
 			} else {
 				goodblocks_template( 'event-list', 'grid', $attributes );
 			}
-		endwhile; ?>
+		endforeach; ?>
 	</div>
 <?php else : ?>
 	<p class="goodblocks-no-events"><?php echo esc_html( $attributes['noEventsText'] ); ?></p>
 <?php endif;
 
+unset( $GLOBALS['goodblocks_event_data'] );
 wp_reset_postdata();

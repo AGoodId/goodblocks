@@ -8,9 +8,10 @@
  * @package GoodBlocks
  */
 
-$event_start   = get_post_meta( get_the_ID(), '_event_start', true );
-$event_end     = get_post_meta( get_the_ID(), '_event_end', true );
-$event_all_day = (bool) get_post_meta( get_the_ID(), '_event_all_day', true );
+$event_data    = $GLOBALS['goodblocks_event_data'] ?? [];
+$event_start   = $event_data['start'] ?? get_post_meta( get_the_ID(), '_event_start', true );
+$event_end     = $event_data['end'] ?? get_post_meta( get_the_ID(), '_event_end', true );
+$event_all_day = isset( $event_data['all_day'] ) ? (bool) $event_data['all_day'] : (bool) get_post_meta( get_the_ID(), '_event_all_day', true );
 ?>
 <div class="event-grid-item">
 

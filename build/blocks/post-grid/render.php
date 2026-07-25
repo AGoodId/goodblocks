@@ -32,11 +32,28 @@ $query_args = [
 	'tax_query'      => [],
 ];
 
-if ( $attributes['sortOrder'] === 'asc' || $attributes['sortOrder'] === 'desc' ) {
+$include_ids = [];
+if ( ! empty( $attributes['includeIds'] ) && is_array( $attributes['includeIds'] ) ) {
+	$include_ids                  = array_map( 'absint', $attributes['includeIds'] );
+	$query_args['post__in']       = $include_ids;
+	$query_args['orderby']        = 'post__in';
+	$query_args['order']          = 'ASC';
+	$query_args['posts_per_page'] = count( $query_args['post__in'] );
+
+	if ( $has_tribe_events ) {
+		$query_args['suppress_filters']              = true;
+		$query_args['tribe_suppress_query_filters'] = true;
+	}
+}
+
+if ( ! empty( $query_args['post__in'] ) ) {
+	// Keep explicit CVP-style selections in the same order they were serialized.
+} elseif ( $attributes['sortOrder'] === 'asc' || $attributes['sortOrder'] === 'desc' ) {
 	$query_args['order']   = $attributes['sortOrder'];
 	$query_args['orderby'] = 'post_date';
 } elseif ( $attributes['sortOrder'] === 'menu' ) {
 	$query_args['orderby'] = 'menu_order';
+	$query_args['order']   = 'ASC';
 } elseif ( $attributes['sortOrder'] === 'meta_desc' || $attributes['sortOrder'] === 'meta_asc' ) {
 	if ( is_numeric( get_post_meta( get_the_ID(), $attributes['metaKey'], true ) ) ) {
 		$query_args['orderby'] = 'meta_value_num';
@@ -105,6 +122,18 @@ if (
 }
 
 $query = new WP_Query( $query_args );
+
+if ( ! empty( $include_ids ) && $query->have_posts() ) {
+	$order_index  = array_flip( $include_ids );
+	$query->posts = array_values( $query->posts );
+	usort(
+		$query->posts,
+		static function ( $a, $b ) use ( $order_index ) {
+			return ( $order_index[ $a->ID ] ?? PHP_INT_MAX ) <=> ( $order_index[ $b->ID ] ?? PHP_INT_MAX );
+		}
+	);
+	$query->post_count = count( $query->posts );
+}
 
 // Fallback for upcoming events: show past events if none upcoming.
 if (

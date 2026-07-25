@@ -23,6 +23,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 		showDate,
 		showAuthor,
 		aspectRatio,
+		imageSource,
 		postsToShow,
 		postTypes: selectedPostTypes,
 		taxonomyTerms,
@@ -163,6 +164,26 @@ const Edit = ( { attributes, setAttributes } ) => {
 						] }
 						onChange={ ( value ) =>
 							setAttributes( { aspectRatio: value } )
+						}
+					/>
+					<SelectControl
+						label={ __( 'Bildkälla', 'goodblocks' ) }
+						value={ imageSource }
+						options={ [
+							{
+								label: __( 'Utvald bild', 'goodblocks' ),
+								value: 'featured',
+							},
+							{
+								label: __(
+									'Första bilden i innehåll',
+									'goodblocks'
+								),
+								value: 'first',
+							},
+						] }
+						onChange={ ( value ) =>
+							setAttributes( { imageSource: value } )
 						}
 					/>
 					<ToggleControl

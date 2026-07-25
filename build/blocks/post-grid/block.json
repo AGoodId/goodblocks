@@ -53,6 +53,14 @@
       "type": "string",
       "default": "16/9"
     },
+    "imageSource": {
+      "type": "string",
+      "default": "featured",
+      "enum": [
+        "featured",
+        "first"
+      ]
+    },
     "metaFields": {
       "type": "array",
       "default": []
@@ -60,6 +68,10 @@
     "postsToShow": {
       "type": "number",
       "default": 6
+    },
+    "includeIds": {
+      "type": "array",
+      "default": []
     },
     "postType": {
       "type": "string",
