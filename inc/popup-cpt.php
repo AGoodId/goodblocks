@@ -18,6 +18,8 @@ add_action( 'add_meta_boxes',                    'goodblocks_popup_add_meta_box'
 add_action( 'save_post_goodblocks_popup',        'goodblocks_popup_save_meta', 10, 2 );
 add_action( 'wp_footer',                         'goodblocks_render_popups' );
 add_action( 'wp_enqueue_scripts',                'goodblocks_popup_enqueue_assets' );
+add_action( 'transition_post_status',            'goodblocks_maybe_flush_popup_cache', 10, 3 );
+add_action( 'before_delete_post',                'goodblocks_flush_popup_cache_on_delete' );
 
 function goodblocks_register_popup_cpt(): void {
 	register_post_type( 'goodblocks_popup', [
@@ -129,6 +131,10 @@ function goodblocks_popup_save_meta( int $post_id, WP_Post $post ): void {
 }
 
 function goodblocks_render_popups(): void {
+	if ( ! goodblocks_has_popups() ) {
+		return;
+	}
+
 	$popups = get_posts( [
 		'post_type'      => 'goodblocks_popup',
 		'posts_per_page' => -1,
@@ -172,14 +178,7 @@ function goodblocks_render_popups(): void {
 }
 
 function goodblocks_popup_enqueue_assets(): void {
-	$has_popups = get_posts( [
-		'post_type'      => 'goodblocks_popup',
-		'posts_per_page' => 1,
-		'post_status'    => 'publish',
-		'fields'         => 'ids',
-	] );
-
-	if ( empty( $has_popups ) ) {
+	if ( ! goodblocks_has_popups() ) {
 		return;
 	}
 
@@ -200,4 +199,63 @@ function goodblocks_popup_enqueue_assets(): void {
 		[],
 		GOODBLOCKS_VERSION
 	);
+}
+
+/**
+ * Whether any published popup exists (cached).
+ *
+ * Both the footer renderer and the asset enqueue run on every front-end page.
+ * Without this, each would fire an uncached query on every request. The boolean
+ * is cached until a popup is published, unpublished, trashed or deleted.
+ */
+function goodblocks_has_popups(): bool {
+	$cached = get_transient( 'goodblocks_has_popups' );
+
+	if ( '1' === $cached || '0' === $cached ) {
+		return '1' === $cached;
+	}
+
+	$ids = get_posts( [
+		'post_type'      => 'goodblocks_popup',
+		'posts_per_page' => 1,
+		'post_status'    => 'publish',
+		'fields'         => 'ids',
+		'no_found_rows'  => true,
+	] );
+
+	$has = ! empty( $ids );
+	set_transient( 'goodblocks_has_popups', $has ? '1' : '0', DAY_IN_SECONDS );
+
+	return $has;
+}
+
+/**
+ * Clear the cached popup existence flag.
+ */
+function goodblocks_flush_popup_cache(): void {
+	delete_transient( 'goodblocks_has_popups' );
+}
+
+/**
+ * Flush the popup cache when a popup changes publish status.
+ *
+ * @param string  $new_status New post status.
+ * @param string  $old_status Old post status.
+ * @param WP_Post $post       Post object.
+ */
+function goodblocks_maybe_flush_popup_cache( $new_status, $old_status, $post ): void {
+	if ( isset( $post->post_type ) && 'goodblocks_popup' === $post->post_type ) {
+		goodblocks_flush_popup_cache();
+	}
+}
+
+/**
+ * Flush the popup cache when a popup is permanently deleted.
+ *
+ * @param int $post_id Post ID being deleted.
+ */
+function goodblocks_flush_popup_cache_on_delete( $post_id ): void {
+	if ( 'goodblocks_popup' === get_post_type( $post_id ) ) {
+		goodblocks_flush_popup_cache();
+	}
 }

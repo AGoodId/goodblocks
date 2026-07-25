@@ -112,6 +112,18 @@ function goodblocks_search_suggestions_callback( WP_REST_Request $request ): WP_
 	$count  = min( $request->get_param( 'count' ), 20 );
 	$search = $request->get_param( 's' );
 
+	// The "popular" list (no search term) is identical for every visitor, so it
+	// can be cached. Search-specific suggestions are left uncached.
+	$cache_key = '';
+	if ( ! $search ) {
+		$cache_key = 'goodblocks_suggestions_popular_' . $count;
+		$cached    = get_transient( $cache_key );
+
+		if ( is_array( $cached ) ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
+	}
+
 	$args = [
 		'post_type'      => [ 'post', 'page' ],
 		'post_status'    => 'publish',
@@ -143,6 +155,13 @@ function goodblocks_search_suggestions_callback( WP_REST_Request $request ): WP_
 	}
 
 	wp_reset_postdata();
+
+	if ( $cache_key ) {
+		$ttl = (int) apply_filters( 'goodblocks_suggestions_cache_ttl', 15 * MINUTE_IN_SECONDS );
+		if ( $ttl > 0 ) {
+			set_transient( $cache_key, $results, $ttl );
+		}
+	}
 
 	return new WP_REST_Response( $results, 200 );
 }
