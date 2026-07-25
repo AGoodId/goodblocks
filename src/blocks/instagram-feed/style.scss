@@ -120,8 +120,20 @@
 			position: static;
 			margin-top: auto;
 			padding: 1rem 0.875rem;
+			background: transparent;
+			color: #202020;
+		}
+
+		.goodblocks-instagram-feed__content {
+			width: 100%;
+			margin-top: auto;
 			background: #fff;
-			color: inherit;
+			color: #202020;
+		}
+
+		.goodblocks-instagram-feed__meta {
+			background: transparent;
+			color: #5c5c5c;
 		}
 	}
 

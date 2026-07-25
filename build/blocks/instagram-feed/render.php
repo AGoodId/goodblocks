@@ -65,16 +65,20 @@ $class = 'goodblocks-instagram-feed' . ( 'auto' === $aspect_ratio ? ' is-aspect-
 					<?php if ( ! empty( $item['media_type'] ) && 'image' !== $item['media_type'] ) : ?>
 						<span class="goodblocks-instagram-feed__badge" aria-label="<?php esc_attr_e( 'Video or carousel', 'goodblocks' ); ?>"><?php esc_html_e( 'Video', 'goodblocks' ); ?></span>
 					<?php endif; ?>
-					<?php if ( $show_caption && $caption ) : ?>
-						<p class="goodblocks-instagram-feed__caption"><?php echo esc_html( wp_trim_words( $caption, 22, '...' ) ); ?></p>
-					<?php endif; ?>
-					<?php if ( $show_metadata && ( $username || $posted_at ) ) : ?>
-						<div class="goodblocks-instagram-feed__meta">
-							<?php if ( $username ) : ?>
-								<span class="goodblocks-instagram-feed__username">@<?php echo esc_html( ltrim( $username, '@' ) ); ?></span>
+					<?php if ( ( $show_caption && $caption ) || ( $show_metadata && ( $username || $posted_at ) ) ) : ?>
+						<div class="goodblocks-instagram-feed__content">
+							<?php if ( $show_caption && $caption ) : ?>
+								<p class="goodblocks-instagram-feed__caption"><?php echo esc_html( wp_trim_words( $caption, 22, '...' ) ); ?></p>
 							<?php endif; ?>
-							<?php if ( $posted_at ) : ?>
-								<time datetime="<?php echo esc_attr( gmdate( 'c', $posted_at ) ); ?>"><?php echo esc_html( wp_date( 'j M. Y', $posted_at ) ); ?></time>
+							<?php if ( $show_metadata && ( $username || $posted_at ) ) : ?>
+								<div class="goodblocks-instagram-feed__meta">
+									<?php if ( $username ) : ?>
+										<span class="goodblocks-instagram-feed__username">@<?php echo esc_html( ltrim( $username, '@' ) ); ?></span>
+									<?php endif; ?>
+									<?php if ( $posted_at ) : ?>
+										<time datetime="<?php echo esc_attr( gmdate( 'c', $posted_at ) ); ?>"><?php echo esc_html( wp_date( 'j M. Y', $posted_at ) ); ?></time>
+									<?php endif; ?>
+								</div>
 							<?php endif; ?>
 						</div>
 					<?php endif; ?>
