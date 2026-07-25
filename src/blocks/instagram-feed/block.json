@@ -38,6 +38,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"showMetadata": {
+			"type": "boolean",
+			"default": false
+		},
 		"showProfileLink": {
 			"type": "boolean",
 			"default": true
