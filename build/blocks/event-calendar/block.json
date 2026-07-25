@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/event-calendar",
+  "title": "Event Calendar",
+  "category": "goodblocks",
+  "icon": "calendar-alt",
+  "description": "Responsive event calendar with month and agenda views, filters, and recurring event support.",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "default": {
+      "align": "wide"
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "defaultView": {
+      "type": "string",
+      "default": "month",
+      "enum": [
+        "month",
+        "agenda"
+      ]
+    },
+    "eventsToShow": {
+      "type": "number",
+      "default": 500
+    },
+    "showPast": {
+      "type": "boolean",
+      "default": true
+    },
+    "showFilters": {
+      "type": "boolean",
+      "default": true
+    },
+    "showViewToggle": {
+      "type": "boolean",
+      "default": true
+    },
+    "categorySlug": {
+      "type": "string",
+      "default": ""
+    },
+    "eventType": {
+      "type": "string",
+      "default": ""
+    },
+    "emptyText": {
+      "type": "string",
+      "default": "Inga kalenderhändelser hittades."
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}

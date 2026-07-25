@@ -315,7 +315,7 @@
 		.post-thumbnail + p,
 		.post-thumbnail + h3,
 		.post-thumbnail + div {
-			margin-top: 1rem;
+			margin-top: 10px;
 		}
 
 		.post-date + .post-venue {
@@ -324,11 +324,14 @@
 
 		// --- Thumbnail ---
 		.post-thumbnail {
+			display: block;
 			width: 100%;
 			overflow: hidden;
 			aspect-ratio: var(--aspect-ratio, 16/9);
+			text-decoration: none;
 
 			img {
+				display: block;
 				aspect-ratio: var(--aspect-ratio, 16/9);
 				object-fit: cover;
 				width: 100%;
@@ -338,14 +341,24 @@
 
 		// --- Typography ---
 		.post-title {
-			font-size: 1.5rem;
+			font-size: 18px;
+			font-weight: 600;
+			line-height: 1.1;
+			margin: 0 0 10px;
+
+			a {
+				font-weight: inherit;
+			}
 		}
 
 		.post-date,
 		.post-author,
-		.post-excerpt,
 		.post-meta {
 			margin: 0;
+		}
+
+		.post-excerpt {
+			margin: 0 0 10px;
 		}
 	}
 

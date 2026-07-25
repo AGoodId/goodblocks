@@ -60,13 +60,7 @@ $event               = $is_goodblocks_event ? goodblocks_get_event_data( get_the
 				<?php if ( $is_goodblocks_event && $event && in_array( $event['status'], [ 'changed', 'cancelled', 'live' ], true ) ) : ?>
 					<span class="past-event-alert event-status-alert is-<?php echo esc_attr( $event['status'] ); ?>"><?php echo esc_html( $event['status_label'] ); ?></span>
 				<?php endif; ?>
-				<?php
-				if ( has_excerpt() ) {
-					echo esc_html( get_the_excerpt() );
-				} else {
-					echo esc_html( wp_trim_words( get_the_excerpt(), $attributes['excerptLength'], '...' ) );
-				}
-				?>
+				<?php echo esc_html( goodblocks_get_trimmed_excerpt( $attributes['excerptLength'] ?? 35 ) ); ?>
 			</div>
 		<?php endif; ?>
 	</div>
