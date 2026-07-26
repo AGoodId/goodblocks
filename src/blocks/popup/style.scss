@@ -7,6 +7,7 @@
 	justify-content: center;
 	opacity: 0;
 	transition: opacity 0.3s ease;
+	padding: 1rem;
 
 	&.is-visible {
 		opacity: 1;
@@ -29,6 +30,7 @@
 		width: 100%;
 		max-height: 90vh;
 		overflow-y: auto;
+		box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.3);
 	}
 
 	.popup-close {
@@ -47,6 +49,12 @@
 		&:hover {
 			opacity: 1;
 		}
+
+		&:focus-visible {
+			opacity: 1;
+			outline: 2px solid currentcolor;
+			outline-offset: 2px;
+		}
 	}
 
 	.popup-content {
@@ -58,5 +66,16 @@
 		> *:last-child {
 			margin-bottom: 0;
 		}
+	}
+}
+
+body.goodblocks-popup-open {
+	overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.wp-block-goodblocks-popup {
+		transition-duration: 0.01ms;
 	}
 }

@@ -10,6 +10,7 @@
     "lint": "npm run lint:js && npm run lint:css",
     "test:events": "php tests/php/events-recurrence-smoke.php",
     "test:forms": "php tests/php/forms-smoke.php",
+    "test:popups": "php tests/php/popups-smoke.php",
     "packages-update": "wp-scripts packages-update",
     "prepare": "husky"
   },
