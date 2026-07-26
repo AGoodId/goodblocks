@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/local-navigation",
+  "version": "0.1.0",
+  "title": "Local Navigation",
+  "category": "widgets",
+  "icon": "menu-alt3",
+  "description": "Render local page navigation with optional Bellows-compatible markup.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "source": {
+      "type": "string",
+      "default": "pages"
+    },
+    "parentPostId": {
+      "type": "number",
+      "default": 0
+    },
+    "depth": {
+      "type": "number",
+      "default": 0
+    },
+    "orderby": {
+      "type": "string",
+      "default": "menu_order,post_title"
+    },
+    "order": {
+      "type": "string",
+      "default": "ASC"
+    },
+    "showRoot": {
+      "type": "boolean",
+      "default": false
+    },
+    "accordion": {
+      "type": "boolean",
+      "default": true
+    },
+    "markupPreset": {
+      "type": "string",
+      "default": "goodblocks"
+    },
+    "configId": {
+      "type": "string",
+      "default": "main"
+    }
+  },
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}

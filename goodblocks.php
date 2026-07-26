@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Post Grid, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.14.0-rc.13
+ * Version: 1.14.0-rc.21
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,13 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.14.0-rc.13' );
+define( 'GOODBLOCKS_VERSION', '1.14.0-rc.21' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
 // REST API endpoints.
 require_once GOODBLOCKS_DIR . 'inc/masonry-rest-api.php';
 require_once GOODBLOCKS_DIR . 'inc/search-rest-api.php';
+
+// Simple self-hosted form handling.
+require_once GOODBLOCKS_DIR . 'inc/forms.php';
 
 // AGoodApp Media Picker integration.
 require_once GOODBLOCKS_DIR . 'inc/agoodapp-settings.php';
@@ -36,6 +39,9 @@ require_once GOODBLOCKS_DIR . 'inc/events-migrate.php';
 
 // Instagram feed.
 require_once GOODBLOCKS_DIR . 'inc/instagram-feed.php';
+
+// Local navigation.
+require_once GOODBLOCKS_DIR . 'inc/local-navigation.php';
 
 // Popups.
 require_once GOODBLOCKS_DIR . 'inc/popup-cpt.php';
@@ -62,10 +68,12 @@ function goodblocks_register_blocks() {
 		'countdown',
 		'quiz',
 		'page-list',
+		'local-navigation',
 		'double-container-text',
 		'media-grid',
 		'media-grid-item',
 		'mailchimp-signup',
+		'form',
 		'post-grid',
 		'event-list',
 		'event-calendar',
@@ -106,6 +114,43 @@ function goodblocks_register_blocks() {
 	}
 }
 add_action( 'init', 'goodblocks_register_blocks' );
+
+/**
+ * Load local navigation assets for both block and shortcode usage.
+ */
+function goodblocks_enqueue_local_navigation_assets() {
+	$block_dir = GOODBLOCKS_DIR . 'build/blocks/local-navigation/';
+	$block_uri = GOODBLOCKS_URI . 'build/blocks/local-navigation/';
+
+	if ( file_exists( $block_dir . 'style-index.css' ) ) {
+		wp_enqueue_style(
+			'goodblocks-local-navigation',
+			$block_uri . 'style-index.css',
+			[],
+			filemtime( $block_dir . 'style-index.css' )
+		);
+	}
+
+	if ( ! file_exists( $block_dir . 'view.js' ) ) {
+		return;
+	}
+
+	$asset = file_exists( $block_dir . 'view.asset.php' )
+		? require $block_dir . 'view.asset.php'
+		: array(
+			'dependencies' => array(),
+			'version'      => GOODBLOCKS_VERSION,
+		);
+
+	wp_enqueue_script(
+		'goodblocks-local-navigation',
+		$block_uri . 'view.js',
+		$asset['dependencies'] ?? array(),
+		$asset['version'] ?? filemtime( $block_dir . 'view.js' ),
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'goodblocks_enqueue_local_navigation_assets' );
 
 /**
  * Run migrations on update (version check).
