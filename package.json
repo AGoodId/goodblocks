@@ -8,6 +8,8 @@
     "lint:js": "wp-scripts lint-js src/",
     "lint:css": "wp-scripts lint-style 'src/**/*.scss'",
     "lint": "npm run lint:js && npm run lint:css",
+    "test:events": "php tests/php/events-recurrence-smoke.php",
+    "test:forms": "php tests/php/forms-smoke.php",
     "packages-update": "wp-scripts packages-update",
     "prepare": "husky"
   },

@@ -59,6 +59,14 @@ module.exports = {
 			__dirname,
 			'src/blocks/page-list/index.js'
 		),
+		'blocks/local-navigation/index': path.resolve(
+			__dirname,
+			'src/blocks/local-navigation/index.js'
+		),
+		'blocks/local-navigation/view': path.resolve(
+			__dirname,
+			'src/blocks/local-navigation/view.js'
+		),
 		'blocks/double-container-text/index': path.resolve(
 			__dirname,
 			'src/blocks/double-container-text/index.js'
@@ -78,6 +86,10 @@ module.exports = {
 		'blocks/mailchimp-signup/index': path.resolve(
 			__dirname,
 			'src/blocks/mailchimp-signup/index.js'
+		),
+		'blocks/form/index': path.resolve(
+			__dirname,
+			'src/blocks/form/index.js'
 		),
 		'blocks/post-grid/index': path.resolve(
 			__dirname,

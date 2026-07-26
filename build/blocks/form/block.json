@@ -1,0 +1,78 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/form",
+  "title": "Simple Form",
+  "category": "widgets",
+  "icon": "feedback",
+  "description": "A self-hosted contact or registration form with email delivery and saved submissions.",
+  "textdomain": "goodblocks",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "attributes": {
+    "formId": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": "Contact us"
+    },
+    "description": {
+      "type": "string",
+      "default": "We will get back to you as soon as possible."
+    },
+    "recipientEmail": {
+      "type": "string",
+      "default": ""
+    },
+    "storeSubmissions": {
+      "type": "boolean",
+      "default": true
+    },
+    "emailSubject": {
+      "type": "string",
+      "default": "New form submission"
+    },
+    "submitLabel": {
+      "type": "string",
+      "default": "Send"
+    },
+    "successMessage": {
+      "type": "string",
+      "default": "Thank you — your message has been sent."
+    },
+    "fields": {
+      "type": "array",
+      "default": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "message",
+          "label": "Message",
+          "type": "textarea",
+          "required": true
+        }
+      ]
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}
