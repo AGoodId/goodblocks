@@ -20,15 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 function goodblocks_get_thumbnail( $size = 'large', $attr = array(), $source = 'featured' ) {
 	$post = get_post();
 
-	if ( 'first' !== $source && has_post_thumbnail( $post ) ) {
-		return get_the_post_thumbnail( $post, $size, $attr );
+	if ( 'first' !== $source ) {
+		$thumbnail = goodblocks_get_post_thumbnail_html( $post, $size, $attr );
+		if ( $thumbnail ) {
+			return $thumbnail;
+		}
 	}
 
 	if ( 'first' === $source ) {
 		$content = get_the_content( null, false, $post );
 
 		if ( preg_match( '/wp-image-(\d+)/', $content, $image_id ) ) {
-			$image = wp_get_attachment_image( absint( $image_id[1] ), $size, false, $attr );
+			$attachment_id = absint( $image_id[1] );
+			$mime_type     = get_post_mime_type( $attachment_id );
+			$image         = 'image/svg+xml' !== $mime_type ? wp_get_attachment_image( $attachment_id, $size, false, $attr ) : '';
 			if ( $image ) {
 				return $image;
 			}
@@ -36,7 +41,8 @@ function goodblocks_get_thumbnail( $size = 'large', $attr = array(), $source = '
 
 		if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/', $content, $matches ) ) {
 			$src = esc_url( $matches[1] );
-			if ( $src ) {
+			$path = wp_parse_url( $src, PHP_URL_PATH );
+			if ( $src && 'svg' !== strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) ) ) {
 				return sprintf(
 					'<img src="%1$s" alt="%2$s" loading="lazy" decoding="async" />',
 					$src,
@@ -45,8 +51,9 @@ function goodblocks_get_thumbnail( $size = 'large', $attr = array(), $source = '
 			}
 		}
 
-		if ( has_post_thumbnail( $post ) ) {
-			return get_the_post_thumbnail( $post, $size, $attr );
+		$thumbnail = goodblocks_get_post_thumbnail_html( $post, $size, $attr );
+		if ( $thumbnail ) {
+			return $thumbnail;
 		}
 	}
 
@@ -70,6 +77,28 @@ function goodblocks_get_thumbnail( $size = 'large', $attr = array(), $source = '
 	}
 
 	return '';
+}
+
+/**
+ * Get a featured image only when it is suitable for thumbnail contexts.
+ *
+ * @param WP_Post|int|null $post Post object or ID.
+ * @param string           $size Image size.
+ * @param array            $attr Image attributes.
+ * @return string Image HTML.
+ */
+function goodblocks_get_post_thumbnail_html( $post, $size = 'large', $attr = array() ) {
+	if ( ! has_post_thumbnail( $post ) ) {
+		return '';
+	}
+
+	$thumbnail_id = get_post_thumbnail_id( $post );
+
+	if ( $thumbnail_id && 'image/svg+xml' === get_post_mime_type( $thumbnail_id ) ) {
+		return '';
+	}
+
+	return get_the_post_thumbnail( $post, $size, $attr );
 }
 
 /**
