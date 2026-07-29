@@ -13,10 +13,15 @@ $event               = $is_goodblocks_event ? goodblocks_get_event_data( get_the
 ?>
 <div class="list-item">
 
-	<?php if ( $attributes['showFeaturedImage'] && has_post_thumbnail() ) : ?>
+	<?php
+	$thumbnail = ! empty( $attributes['showFeaturedImage'] )
+		? goodblocks_get_thumbnail( 'large', array(), $attributes['imageSource'] ?? 'featured' )
+		: '';
+	?>
+	<?php if ( $thumbnail ) : ?>
 		<a href="<?php the_permalink(); ?>" class="post-thumbnail"
 			style="aspect-ratio: <?php echo esc_attr( $attributes['aspectRatio'] ); ?>;">
-			<?php echo goodblocks_get_thumbnail( 'large' ); ?>
+			<?php echo $thumbnail; ?>
 		</a>
 	<?php endif; ?>
 

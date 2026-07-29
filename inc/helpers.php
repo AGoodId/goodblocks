@@ -56,6 +56,19 @@ function goodblocks_get_thumbnail( $size = 'large', $attr = array(), $source = '
 		return wp_get_attachment_image( $default_image, $size );
 	}
 
+	$legacy_default_image = apply_filters( 'pt_cv_default_image', '' );
+
+	if ( is_string( $legacy_default_image ) && $legacy_default_image ) {
+		$src = esc_url( $legacy_default_image );
+		if ( $src ) {
+			return sprintf(
+				'<img src="%1$s" alt="%2$s" loading="lazy" decoding="async" />',
+				$src,
+				esc_attr( get_the_title( $post ) )
+			);
+		}
+	}
+
 	return '';
 }
 
@@ -82,6 +95,60 @@ function goodblocks_get_trimmed_excerpt( $word_count = 35 ) {
 
 	return preg_replace( '/[.!?]\s+…$/u', ' …', $excerpt );
 }
+
+/**
+ * Display an event date range for legacy The Events Calendar events.
+ *
+ * @param int|null $event_id Event post ID.
+ */
+function goodblocks_display_tribe_event_date_range( $event_id = null ) {
+	if ( ! function_exists( 'tribe_get_start_date' ) ) {
+		return;
+	}
+
+	$event_id = $event_id ? absint( $event_id ) : get_the_ID();
+	if ( ! $event_id ) {
+		return;
+	}
+
+	$is_all_day = function_exists( 'tribe_event_is_all_day' ) && tribe_event_is_all_day( $event_id );
+	$current_year = date_i18n( 'Y' );
+	$date_format  = 'j F';
+	$time_format  = ' H.i';
+
+	$start_date = tribe_get_start_date( $event_id, false, 'Y-m-d' );
+	$end_date   = tribe_get_end_date( $event_id, false, 'Y-m-d' );
+	$start_year = date( 'Y', strtotime( $start_date ) );
+	$end_year   = date( 'Y', strtotime( $end_date ) );
+
+	$start_format = $date_format;
+	if ( $start_year !== $current_year ) {
+		$start_format .= ' Y';
+	}
+	if ( ! $is_all_day ) {
+		$start_format .= $time_format;
+	}
+
+	$end_format = $date_format;
+	if ( $end_year !== $current_year ) {
+		$end_format .= ' Y';
+	}
+	if ( ! $is_all_day ) {
+		$end_format .= $time_format;
+	}
+
+	$start    = tribe_get_start_date( $event_id, false, $start_format );
+	$end      = tribe_get_end_date( $event_id, false, $end_format );
+	$end_time = function_exists( 'tribe_get_end_time' ) ? tribe_get_end_time( $event_id, 'H.i' ) : '';
+
+	if ( $start_date === $end_date ) {
+		echo esc_html( $is_all_day || ! $end_time ? $start : sprintf( '%s-%s', $start, $end_time ) );
+		return;
+	}
+
+	echo esc_html( sprintf( '%s-%s', $start, $end ) );
+}
+add_action( 'goodblocks_event_date_range', 'goodblocks_display_tribe_event_date_range', 10, 1 );
 
 /**
  * Load a block template with theme override support.
