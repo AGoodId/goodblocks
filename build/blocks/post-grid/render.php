@@ -135,24 +135,6 @@ if ( ! empty( $include_ids ) && $query->have_posts() ) {
 	$query->post_count = count( $query->posts );
 }
 
-// Fallback for upcoming events: show past events if none upcoming.
-if (
-	( $has_tribe_events || $has_goodblocks_events ) &&
-	$attributes['sortOrder'] === 'date_upcoming' &&
-	! $query->have_posts()
-) {
-	$query_args['order']      = 'DESC';
-	$query_args['meta_query'] = [
-		[
-			'key'     => $event_start_meta_key,
-			'value'   => $current_date,
-			'compare' => '<',
-			'type'    => 'DATETIME',
-		],
-	];
-	$query = new WP_Query( $query_args );
-}
-
 $index = 0;
 if ( $query->have_posts() ) : ?>
 	<div <?php echo get_block_wrapper_attributes( [
