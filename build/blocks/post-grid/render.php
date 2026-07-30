@@ -135,24 +135,6 @@ if ( ! empty( $include_ids ) && $query->have_posts() ) {
 	$query->post_count = count( $query->posts );
 }
 
-// Fallback for upcoming events: show past events if none upcoming.
-if (
-	( $has_tribe_events || $has_goodblocks_events ) &&
-	$attributes['sortOrder'] === 'date_upcoming' &&
-	! $query->have_posts()
-) {
-	$query_args['order']      = 'DESC';
-	$query_args['meta_query'] = [
-		[
-			'key'     => $event_start_meta_key,
-			'value'   => $current_date,
-			'compare' => '<',
-			'type'    => 'DATETIME',
-		],
-	];
-	$query = new WP_Query( $query_args );
-}
-
 $index = 0;
 if ( $query->have_posts() ) : ?>
 	<div <?php echo get_block_wrapper_attributes( [
@@ -188,8 +170,30 @@ if ( $query->have_posts() ) : ?>
 	</div>
 
 <?php else : ?>
-	<?php if ( $has_tribe_events || $has_goodblocks_events ) : ?>
-		<p class="my-6"><?php esc_html_e( 'Inga kommande händelser.', 'goodblocks' ); ?></p>
+	<?php if ( ( $has_tribe_events || $has_goodblocks_events ) && 'date_upcoming' === ( $attributes['sortOrder'] ?? '' ) ) : ?>
+		<?php
+		$events_archive_url = ! empty( $attributes['moreLinkUrl'] ) ? $attributes['moreLinkUrl'] : '';
+
+		if ( ! $events_archive_url && $has_tribe_events && function_exists( 'tribe_get_events_link' ) ) {
+			$events_archive_url = tribe_get_events_link();
+		}
+
+		if ( ! $events_archive_url ) {
+			$events_archive_url = get_post_type_archive_link( $has_goodblocks_events ? 'goodblocks_event' : 'tribe_events' );
+		}
+
+		if ( ! $events_archive_url ) {
+			$events_archive_url = home_url( '/kalender/' );
+		}
+
+		$past_events_url = add_query_arg( 'eventDisplay', 'past', $events_archive_url );
+		?>
+		<p class="my-6 event-post-grid-empty">
+			<?php esc_html_e( 'Inga kommande händelser finns i kalendern.', 'goodblocks' ); ?>
+			[<a href="<?php echo esc_url( $past_events_url ); ?>"><?php esc_html_e( 'Se tidigare händelser', 'goodblocks' ); ?></a>]
+		</p>
+	<?php elseif ( $has_tribe_events || $has_goodblocks_events ) : ?>
+		<p class="my-6"><?php esc_html_e( 'Inga händelser hittades.', 'goodblocks' ); ?></p>
 	<?php else : ?>
 		<p class="my-6"><?php echo esc_html( $attributes['noPostsText'] ); ?></p>
 	<?php endif; ?>
