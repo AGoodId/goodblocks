@@ -26,11 +26,11 @@ jobs:
 
       - name: Create plugin zip
         run: |
-          mkdir -p dist
-          zip -r dist/goodblocks.zip \
-            goodblocks.php \
-            inc/ \
-            build/ \
+          mkdir -p dist/goodblocks
+          cp -R goodblocks.php inc build dist/goodblocks/
+          cd dist
+          zip -r goodblocks.zip \
+            goodblocks/ \
             -x "*.DS_Store"
 
       - name: Create GitHub Release
