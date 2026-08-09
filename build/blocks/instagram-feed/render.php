@@ -65,6 +65,7 @@ $class = 'goodblocks-instagram-feed' . ( 'auto' === $aspect_ratio ? ' is-aspect-
 						src="<?php echo esc_url( $item['image_url'] ); ?>"
 						alt="<?php echo esc_attr( $alt ); ?>"
 						data-no-lazy="1"
+						referrerpolicy="no-referrer"
 						loading="lazy"
 						decoding="async"
 					/>
