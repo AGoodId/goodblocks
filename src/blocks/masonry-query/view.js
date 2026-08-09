@@ -282,6 +282,7 @@ class MasonryQueryBlock {
 						<h2 class="masonry-modal__title"></h2>
 						<p class="masonry-modal__excerpt"></p>
 						<div class="masonry-modal__tags portfolio-meta__tags"></div>
+						<p class="masonry-modal__sidebar-caption"></p>
 					</div>
 					<a class="masonry-modal__read-more" href="#">
 						${ i18n.readMore || 'Read more' }
@@ -359,13 +360,16 @@ class MasonryQueryBlock {
 	}
 
 	setupModalSwipe() {
-		const container = this.modal.querySelector(
-			'.masonry-modal__container'
-		);
+		// Bound to the media (image) zone only — not the sidebar/container —
+		// so the text zone keeps its own vertical scroll when content
+		// overflows (swipe-to-navigate/close must not hijack that).
+		const media = this.modal.querySelector( '.masonry-modal__media' );
+		const SWIPE_THRESHOLD = 50;
+		const CLOSE_SWIPE_THRESHOLD = 80;
 		let touchStartX = 0;
 		let touchStartY = 0;
 
-		container.addEventListener(
+		media.addEventListener(
 			'touchstart',
 			( e ) => {
 				touchStartX = e.touches[ 0 ].clientX;
@@ -374,14 +378,25 @@ class MasonryQueryBlock {
 			{ passive: true }
 		);
 
-		container.addEventListener(
+		media.addEventListener(
 			'touchend',
 			( e ) => {
 				const dx = e.changedTouches[ 0 ].clientX - touchStartX;
 				const dy = e.changedTouches[ 0 ].clientY - touchStartY;
+				const absDx = Math.abs( dx );
+				const absDy = Math.abs( dy );
 
-				// Only count horizontal swipes (ignore vertical scrolling).
-				if ( Math.abs( dx ) < 50 || Math.abs( dx ) < Math.abs( dy ) ) {
+				// Downward swipe with little horizontal drift → close.
+				if (
+					dy > CLOSE_SWIPE_THRESHOLD &&
+					absDx < CLOSE_SWIPE_THRESHOLD
+				) {
+					this.closeModal();
+					return;
+				}
+
+				// Otherwise, a clear horizontal swipe → navigate.
+				if ( absDx < SWIPE_THRESHOLD || absDx < absDy ) {
 					return;
 				}
 
@@ -536,6 +551,9 @@ class MasonryQueryBlock {
 		const image = this.modal.querySelector( '.masonry-modal__image' );
 		const video = this.modal.querySelector( '.masonry-modal__video' );
 		const caption = this.modal.querySelector( '.masonry-modal__caption' );
+		const sidebarCaption = this.modal.querySelector(
+			'.masonry-modal__sidebar-caption'
+		);
 		const counter = this.modal.querySelector( '.masonry-modal__counter' );
 
 		const meta = this.modal.querySelector( '.masonry-modal__meta' );
@@ -547,6 +565,7 @@ class MasonryQueryBlock {
 			video.src = slide.src;
 			video.play();
 			caption.textContent = '';
+			sidebarCaption.textContent = '';
 			meta.textContent = '';
 		} else {
 			video.style.display = 'none';
@@ -561,6 +580,7 @@ class MasonryQueryBlock {
 				item.querySelector( '.masonry-query__title' )?.textContent ||
 				'';
 			caption.textContent = slide?.cap || '';
+			sidebarCaption.textContent = slide?.cap || '';
 
 			// EXIF metadata
 			if ( slide?.meta ) {
@@ -640,10 +660,14 @@ class MasonryQueryBlock {
 			/* ignore */
 		}
 
-		// Read more link
+		// Read more link — hidden when there's no real permalink to go to.
 		const fullUrl = new URL( permalink, window.location.origin );
-		this.modal.querySelector( '.masonry-modal__read-more' ).href =
-			fullUrl.toString();
+		const readMoreLink = this.modal.querySelector(
+			'.masonry-modal__read-more'
+		);
+		readMoreLink.href = fullUrl.toString();
+		readMoreLink.style.display =
+			! permalink || permalink === '#' ? 'none' : '';
 
 		// Browser URL
 		if ( isFirstOpen ) {
