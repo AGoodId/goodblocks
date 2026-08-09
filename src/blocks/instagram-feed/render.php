@@ -27,7 +27,13 @@ if ( ! in_array( $aspect_ratio, $allowed_ratios, true ) ) {
 	$aspect_ratio = 'auto';
 }
 
-$cache = goodblocks_instagram_get_cache();
+// Refresh when cache is stale so signed CDN media URLs do not expire in place.
+// Cron remains the primary refresher; this is a request-time safety net.
+if ( function_exists( 'goodblocks_instagram_refresh_feed' ) ) {
+	$cache = goodblocks_instagram_refresh_feed( false );
+} else {
+	$cache = goodblocks_instagram_get_cache();
+}
 $items = array_slice( $cache['items'], 0, $posts_to_show );
 $style = sprintf(
 	'--instagram-feed-columns: %d; --instagram-feed-tablet-columns: %d; --instagram-feed-mobile-columns: %d; --instagram-feed-gap: %dpx; --instagram-feed-aspect-ratio: %s;',

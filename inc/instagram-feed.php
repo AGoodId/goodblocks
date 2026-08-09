@@ -376,6 +376,36 @@ function goodblocks_instagram_is_cache_stale( array $cache ): bool {
 }
 
 /**
+ * Detect Instagram CDN URLs whose signed oe= expiry has passed (or is imminent).
+ *
+ * Meta media URLs can die while the WP option cache is still "fresh" by TTL.
+ *
+ * @param array $cache Feed cache.
+ * @return bool
+ */
+function goodblocks_instagram_cache_media_expired( array $cache ): bool {
+	$items = isset( $cache['items'] ) && is_array( $cache['items'] ) ? $cache['items'] : [];
+	$skew  = HOUR_IN_SECONDS;
+
+	foreach ( $items as $item ) {
+		if ( empty( $item['image_url'] ) || ! is_string( $item['image_url'] ) ) {
+			continue;
+		}
+
+		if ( ! preg_match( '/[?&]oe=([0-9A-Fa-f]+)/', $item['image_url'], $matches ) ) {
+			continue;
+		}
+
+		$expires_at = hexdec( $matches[1] );
+		if ( $expires_at > 0 && $expires_at <= ( time() + $skew ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Check whether the stored token should be refreshed.
  *
  * @return bool
@@ -486,7 +516,11 @@ function goodblocks_instagram_maybe_refresh_token( bool $force = false ): string
 function goodblocks_instagram_refresh_feed( bool $force = false ): array {
 	$cache = goodblocks_instagram_get_cache();
 
-	if ( ! $force && ! goodblocks_instagram_is_cache_stale( $cache ) ) {
+	if (
+		! $force
+		&& ! goodblocks_instagram_is_cache_stale( $cache )
+		&& ! goodblocks_instagram_cache_media_expired( $cache )
+	) {
 		return $cache;
 	}
 
