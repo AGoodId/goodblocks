@@ -447,14 +447,16 @@ foreach ( $data_attrs as $key => $value ) {
 			}
 
 			// For media/attachment, the post itself is the image
-			$is_video_item = false;
-			$video_src     = '';
+			$is_video_item  = false;
+			$video_src      = '';
+			$video_duration = '';
 			if ( $post_type === 'attachment' ) {
 				if ( wp_attachment_is( 'video', $post_id ) ) {
 					// A video attachment carries no image — use its poster, if any.
-					$is_video_item = true;
-					$video_src     = wp_get_attachment_url( $post_id );
-					$image_id      = goodblocks_video_poster_id( $post_id );
+					$is_video_item  = true;
+					$video_src      = wp_get_attachment_url( $post_id );
+					$video_duration = goodblocks_video_duration( $post_id );
+					$image_id       = goodblocks_video_poster_id( $post_id );
 				} else {
 					$image_id = $post_id;
 				}
@@ -637,15 +639,27 @@ foreach ( $data_attrs as $key => $value ) {
 							decoding="async"
 						/>
 					<?php elseif ( $is_video_item ) : ?>
-						<span class="masonry-query__video-placeholder" aria-hidden="true"></span>
+						<span class="masonry-query__video-placeholder">
+							<span class="masonry-query__video-placeholder-title"><?php echo esc_html( get_the_title( $post_id ) ); ?></span>
+						</span>
 					<?php endif; ?>
 
 					<?php if ( $is_video_item ) : ?>
 						<span class="masonry-query__play">
-							<svg viewBox="0 0 24 24" width="24" height="24" focusable="false" aria-hidden="true">
+							<svg viewBox="0 0 24 24" width="12" height="12" focusable="false" aria-hidden="true">
 								<path d="M8 5.14v13.72L19 12z" fill="currentColor" />
 							</svg>
-							<span class="masonry-query__sr-only"><?php esc_html_e( 'Film', 'goodblocks' ); ?></span>
+							<?php if ( $video_duration ) : ?>
+								<span class="masonry-query__play-duration"><?php echo esc_html( $video_duration ); ?></span>
+							<?php endif; ?>
+							<span class="masonry-query__sr-only">
+								<?php
+								echo $video_duration
+									/* translators: %s: video duration, e.g. 1:24 */
+									? esc_html( sprintf( __( 'Film, %s', 'goodblocks' ), $video_duration ) )
+									: esc_html__( 'Film', 'goodblocks' );
+								?>
+							</span>
 						</span>
 					<?php endif; ?>
 				</div>
