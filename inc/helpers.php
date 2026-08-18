@@ -231,3 +231,69 @@ function goodblocks_template( string $block, string $template_name, array $attri
 		} )( $template_path, $attributes );
 	}
 }
+
+/**
+ * Resolve which attachment mime types a media query should include.
+ *
+ * Defaults to images only so existing grids keep their current contents when
+ * the mediaTypes attribute is absent.
+ *
+ * @param mixed $media_types Requested media types, e.g. array( 'image', 'video' ).
+ * @return array Mime type prefixes suitable for WP_Query's post_mime_type.
+ */
+function goodblocks_masonry_mime_types( $media_types ) {
+	$allowed = array( 'image', 'video' );
+	$types   = array_values( array_intersect( $allowed, array_map( 'sanitize_key', (array) $media_types ) ) );
+
+	return $types ? $types : array( 'image' );
+}
+
+/**
+ * Get the poster image for a video attachment.
+ *
+ * WordPress stores the poster chosen in the media library as the attachment's
+ * featured image. Uploads without one have no poster at all — the caller is
+ * expected to fall back to a placeholder.
+ *
+ * @param int $attachment_id Video attachment ID.
+ * @return int Poster attachment ID, or 0 when none is set.
+ */
+function goodblocks_video_poster_id( $attachment_id ) {
+	return (int) get_post_thumbnail_id( $attachment_id );
+}
+
+/**
+ * Let editors set a poster image on video attachments.
+ *
+ * WordPress reads a video poster from the attachment's featured image
+ * (see wp_prepare_attachment_for_js), but registers the attachment post type
+ * without thumbnail support — so the field is never rendered and the poster
+ * can only be set programmatically. Core gates the Featured image meta box on
+ * the 'attachment:video' pseudo post type for exactly this case; opting in
+ * makes the field appear on the attachment edit screen.
+ *
+ * @return void
+ */
+function goodblocks_enable_video_poster_support() {
+	add_post_type_support( 'attachment:video', 'thumbnail' );
+}
+add_action( 'init', 'goodblocks_enable_video_poster_support' );
+
+/**
+ * Get the human-readable duration of a video attachment.
+ *
+ * Populated by WordPress at upload time via wp_read_video_metadata(); formats
+ * that carry no duration simply yield an empty string.
+ *
+ * @param int $attachment_id Video attachment ID.
+ * @return string Duration such as '1:24', or '' when unknown.
+ */
+function goodblocks_video_duration( $attachment_id ) {
+	$meta = wp_get_attachment_metadata( $attachment_id );
+
+	if ( empty( $meta['length_formatted'] ) ) {
+		return '';
+	}
+
+	return (string) $meta['length_formatted'];
+}

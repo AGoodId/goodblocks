@@ -11,6 +11,7 @@
     "test:events": "php tests/php/events-recurrence-smoke.php",
     "test:forms": "php tests/php/forms-smoke.php",
     "test:popups": "php tests/php/popups-smoke.php",
+    "test:masonry": "php tests/php/masonry-media-types-smoke.php",
     "packages-update": "wp-scripts packages-update",
     "prepare": "husky"
   },

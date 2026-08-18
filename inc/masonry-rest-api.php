@@ -106,7 +106,7 @@ function goodblocks_masonry_load_more( $request ) {
 	];
 
 	if ( $post_type === 'attachment' ) {
-		$args['post_mime_type'] = 'image';
+		$args['post_mime_type'] = goodblocks_masonry_mime_types( $attributes['mediaTypes'] ?? array( 'image' ) );
 	}
 
 	// Taxonomy filters.
@@ -170,8 +170,19 @@ function goodblocks_masonry_load_more( $request ) {
 				break;
 		}
 
+		$is_video_item  = false;
+		$video_src      = '';
+		$video_duration = '';
 		if ( $post_type === 'attachment' ) {
-			$image_id = $post_id;
+			if ( wp_attachment_is( 'video', $post_id ) ) {
+				// A video attachment carries no image — use its poster, if any.
+				$is_video_item  = true;
+				$video_src      = wp_get_attachment_url( $post_id );
+				$video_duration = goodblocks_video_duration( $post_id );
+				$image_id       = goodblocks_video_poster_id( $post_id );
+			} else {
+				$image_id = $post_id;
+			}
 		}
 
 		if ( ! $image_id && ! empty( $attributes['fallbackImageId'] ) ) {
@@ -209,7 +220,7 @@ function goodblocks_masonry_load_more( $request ) {
 		}
 
 		// Build item HTML.
-		$href = $click_action === 'link' ? get_permalink( $post_id ) : ( $image_full[0] ?? '' );
+		$href = $click_action === 'link' ? get_permalink( $post_id ) : ( $is_video_item ? $video_src : ( $image_full[0] ?? '' ) );
 		$tag  = $click_action === 'none' ? 'div' : 'a';
 		$tag  = in_array( $tag, [ 'a', 'div' ], true ) ? $tag : 'div';
 
@@ -260,23 +271,50 @@ function goodblocks_masonry_load_more( $request ) {
 			<?php if ( $hero_video_url ) : ?>
 				data-video="<?php echo esc_url( $hero_video_url ); ?>"
 			<?php endif; ?>
+			<?php if ( $is_video_item && $video_src ) : ?>
+				data-gallery="<?php echo esc_attr( wp_json_encode( array( array( 'type' => 'video', 'src' => $video_src ) ) ) ); ?>"
+			<?php endif; ?>
 			data-caption="<?php echo esc_attr( wp_get_attachment_caption( $image_id ) ); ?>"
 			data-alt="<?php echo esc_attr( $image_alt ); ?>"
 			<?php echo $exif_html; ?>
 		>
-			<?php if ( $image_large ) : ?>
-				<div class="masonry-query__image-wrapper">
+			<?php if ( $image_large || $is_video_item ) : ?>
+				<div class="masonry-query__image-wrapper"<?php echo ! $image_large ? ' style="aspect-ratio:4/3;"' : ''; ?>>
 					<?php if ( $hero_video_url ) : ?>
 						<video class="masonry-query__video" src="<?php echo esc_url( $hero_video_url ); ?>" muted loop playsinline preload="metadata"></video>
 					<?php endif; ?>
-					<img
-						class="masonry-query__image"
-						src="<?php echo esc_url( $image_large[0] ); ?>"
-						alt="<?php echo esc_attr( $image_alt ); ?>"
-						width="<?php echo esc_attr( $image_large[1] ); ?>"
-						height="<?php echo esc_attr( $image_large[2] ); ?>"
-						loading="lazy"
-					/>
+					<?php if ( $image_large ) : ?>
+						<img
+							class="masonry-query__image"
+							src="<?php echo esc_url( $image_large[0] ); ?>"
+							alt="<?php echo esc_attr( $image_alt ); ?>"
+							width="<?php echo esc_attr( $image_large[1] ); ?>"
+							height="<?php echo esc_attr( $image_large[2] ); ?>"
+							loading="lazy"
+						/>
+					<?php elseif ( $is_video_item ) : ?>
+						<span class="masonry-query__video-placeholder">
+							<span class="masonry-query__video-placeholder-title"><?php echo esc_html( get_the_title( $post_id ) ); ?></span>
+						</span>
+					<?php endif; ?>
+					<?php if ( $is_video_item ) : ?>
+						<span class="masonry-query__play">
+							<svg viewBox="0 0 24 24" width="12" height="12" focusable="false" aria-hidden="true">
+								<path d="M8 5.14v13.72L19 12z" fill="currentColor" />
+							</svg>
+							<?php if ( $video_duration ) : ?>
+								<span class="masonry-query__play-duration"><?php echo esc_html( $video_duration ); ?></span>
+							<?php endif; ?>
+							<span class="masonry-query__sr-only">
+								<?php
+								echo $video_duration
+									/* translators: %s: video duration, e.g. 1:24 */
+									? esc_html( sprintf( __( 'Film, %s', 'goodblocks' ), $video_duration ) )
+									: esc_html__( 'Film', 'goodblocks' );
+								?>
+							</span>
+						</span>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 
