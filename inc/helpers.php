@@ -231,3 +231,33 @@ function goodblocks_template( string $block, string $template_name, array $attri
 		} )( $template_path, $attributes );
 	}
 }
+
+/**
+ * Resolve which attachment mime types a media query should include.
+ *
+ * Defaults to images only so existing grids keep their current contents when
+ * the mediaTypes attribute is absent.
+ *
+ * @param mixed $media_types Requested media types, e.g. array( 'image', 'video' ).
+ * @return array Mime type prefixes suitable for WP_Query's post_mime_type.
+ */
+function goodblocks_masonry_mime_types( $media_types ) {
+	$allowed = array( 'image', 'video' );
+	$types   = array_values( array_intersect( $allowed, array_map( 'sanitize_key', (array) $media_types ) ) );
+
+	return $types ? $types : array( 'image' );
+}
+
+/**
+ * Get the poster image for a video attachment.
+ *
+ * WordPress stores the poster chosen in the media library as the attachment's
+ * featured image. Uploads without one have no poster at all — the caller is
+ * expected to fall back to a placeholder.
+ *
+ * @param int $attachment_id Video attachment ID.
+ * @return int Poster attachment ID, or 0 when none is set.
+ */
+function goodblocks_video_poster_id( $attachment_id ) {
+	return (int) get_post_thumbnail_id( $attachment_id );
+}
