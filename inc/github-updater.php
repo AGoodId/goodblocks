@@ -131,12 +131,19 @@ class GoodBlocks_GitHub_Updater {
 
 		global $wp_filesystem;
 
-		$proper_destination = WP_PLUGIN_DIR . '/' . dirname( $this->slug );
-		$wp_filesystem->delete( $proper_destination, true );
-		$wp_filesystem->move( $result['destination'], $proper_destination );
+		$proper_destination = untrailingslashit( WP_PLUGIN_DIR . '/' . dirname( $this->slug ) );
+		$source             = untrailingslashit( (string) ( $result['destination'] ?? '' ) );
+
+		if ( $source && $source !== $proper_destination ) {
+			$wp_filesystem->delete( $proper_destination, true );
+			$wp_filesystem->move( $source, $proper_destination );
+		}
+
 		$result['destination'] = $proper_destination;
 
-		activate_plugin( $this->slug );
+		if ( ! is_plugin_active( $this->slug ) ) {
+			activate_plugin( $this->slug );
+		}
 
 		return $result;
 	}
@@ -146,24 +153,26 @@ class GoodBlocks_GitHub_Updater {
 	 * Prefers an uploaded goodblocks.zip asset; falls back to source zipball.
 	 */
 	private function get_zip_url( object $release ): string {
-		// Look for the uploaded zip asset from our release workflow.
 		if ( ! empty( $release->assets ) ) {
 			foreach ( $release->assets as $asset ) {
-				if ( str_ends_with( $asset->name, '.zip' ) ) {
-					$url = $asset->browser_download_url;
-
-					// For private repos, use the API URL with auth.
-					$token = defined( 'GOODBLOCKS_GITHUB_TOKEN' ) ? GOODBLOCKS_GITHUB_TOKEN : '';
-					if ( $token ) {
-						return add_query_arg( 'access_token', $token, $asset->url );
-					}
-
-					return $url;
+				if ( 'goodblocks.zip' === ( $asset->name ?? '' ) ) {
+					return $this->authorized_asset_url( $asset );
 				}
 			}
 		}
 
-		// Fallback to source zipball.
 		return $release->zipball_url ?? '';
+	}
+
+	/**
+	 * Return a downloadable asset URL, using a token for private repos.
+	 */
+	private function authorized_asset_url( object $asset ): string {
+		$token = defined( 'GOODBLOCKS_GITHUB_TOKEN' ) ? GOODBLOCKS_GITHUB_TOKEN : '';
+		if ( $token ) {
+			return add_query_arg( 'access_token', $token, $asset->url );
+		}
+
+		return $asset->browser_download_url ?? '';
 	}
 }
