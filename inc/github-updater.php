@@ -126,26 +126,26 @@ class GoodBlocks_GitHub_Updater {
 	 */
 	public function after_install( $response, $hook_extra, $result ) {
 		if ( ! isset( $hook_extra['plugin'] ) || $hook_extra['plugin'] !== $this->slug ) {
-			return $result;
+			return $response;
 		}
 
 		global $wp_filesystem;
 
-		$proper_destination = untrailingslashit( WP_PLUGIN_DIR . '/' . dirname( $this->slug ) );
+		$proper_destination = untrailingslashit( trailingslashit( WP_PLUGIN_DIR ) . dirname( $this->slug ) );
 		$source             = untrailingslashit( (string) ( $result['destination'] ?? '' ) );
 
-		if ( $source && $source !== $proper_destination ) {
-			$wp_filesystem->delete( $proper_destination, true );
-			$wp_filesystem->move( $source, $proper_destination );
+		if ( $source && ! $this->is_same_plugin_path( $source, $proper_destination ) ) {
+			$relocated = $this->relocate_extracted_plugin( $wp_filesystem, $source, $proper_destination );
+			if ( is_wp_error( $relocated ) ) {
+				return $relocated;
+			}
 		}
-
-		$result['destination'] = $proper_destination;
 
 		if ( ! is_plugin_active( $this->slug ) ) {
 			activate_plugin( $this->slug );
 		}
 
-		return $result;
+		return $response;
 	}
 
 	/**
@@ -155,7 +155,7 @@ class GoodBlocks_GitHub_Updater {
 	private function get_zip_url( object $release ): string {
 		if ( ! empty( $release->assets ) ) {
 			foreach ( $release->assets as $asset ) {
-				if ( 'goodblocks.zip' === ( $asset->name ?? '' ) ) {
+				if ( 0 === strcasecmp( (string) ( $asset->name ?? '' ), 'goodblocks.zip' ) ) {
 					return $this->authorized_asset_url( $asset );
 				}
 			}
@@ -174,5 +174,60 @@ class GoodBlocks_GitHub_Updater {
 		}
 
 		return $asset->browser_download_url ?? '';
+	}
+
+	/**
+	 * Move an extracted package onto the plugin slug without deleting first.
+	 *
+	 * @param object $wp_filesystem WordPress filesystem API.
+	 * @return true|\WP_Error
+	 */
+	private function relocate_extracted_plugin( $wp_filesystem, string $source, string $destination ) {
+		$backup = $destination . '.updating-bak';
+
+		if ( $wp_filesystem->exists( $destination ) && ! $wp_filesystem->move( $destination, $backup ) ) {
+			return new WP_Error(
+				'goodblocks_updater_backup',
+				'Could not back up the existing GoodBlocks plugin directory.'
+			);
+		}
+
+		if ( ! $wp_filesystem->move( $source, $destination ) ) {
+			if ( $wp_filesystem->exists( $backup ) ) {
+				$wp_filesystem->move( $backup, $destination );
+			}
+
+			return new WP_Error(
+				'goodblocks_updater_move',
+				'Could not move the extracted GoodBlocks plugin into place.'
+			);
+		}
+
+		if ( $wp_filesystem->exists( $backup ) ) {
+			$wp_filesystem->delete( $backup, true );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Compare plugin paths after normalizing slashes, dots, and realpath aliases.
+	 */
+	private function is_same_plugin_path( string $left, string $right ): bool {
+		return $this->normalize_plugin_path( $left ) === $this->normalize_plugin_path( $right );
+	}
+
+	/**
+	 * Normalize a filesystem path for equality checks.
+	 */
+	private function normalize_plugin_path( string $path ): string {
+		$path = wp_normalize_path( untrailingslashit( $path ) );
+		$resolved = realpath( $path );
+
+		if ( false !== $resolved ) {
+			return wp_normalize_path( $resolved );
+		}
+
+		return $path;
 	}
 }

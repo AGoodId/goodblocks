@@ -19,6 +19,16 @@ function untrailingslashit( $value ): string {
 	return rtrim( (string) $value, '/\\' );
 }
 
+function trailingslashit( $value ): string {
+	return untrailingslashit( $value ) . '/';
+}
+
+function wp_normalize_path( $path ): string {
+	$path = str_replace( '\\', '/', (string) $path );
+	$path = preg_replace( '#/+#', '/', $path ) ?? $path;
+	return $path;
+}
+
 function plugin_basename( string $file ): string {
 	return 'goodblocks/goodblocks.php';
 }
@@ -35,6 +45,11 @@ function is_plugin_active( string $plugin ): bool {
 class GoodBlocks_Test_Filesystem {
 	public array $deleted = [];
 	public array $moved = [];
+	public ?string $fail_move_from = null;
+
+	public function exists( $file ): bool {
+		return file_exists( (string) $file );
+	}
 
 	public function delete( $file, $recursive = false ): bool {
 		$this->deleted[] = $file;
@@ -57,6 +72,9 @@ class GoodBlocks_Test_Filesystem {
 
 	public function move( $source, $destination ): bool {
 		$this->moved[] = [ $source, $destination ];
+		if ( $this->fail_move_from && $source === $this->fail_move_from ) {
+			return false;
+		}
 		if ( ! file_exists( $source ) ) {
 			return false;
 		}
@@ -64,6 +82,20 @@ class GoodBlocks_Test_Filesystem {
 			return true;
 		}
 		return rename( $source, $destination );
+	}
+}
+
+function is_wp_error( $thing ): bool {
+	return $thing instanceof WP_Error;
+}
+
+class WP_Error {
+	public string $code;
+	public string $message;
+
+	public function __construct( string $code = '', string $message = '' ) {
+		$this->code    = $code;
+		$this->message = $message;
 	}
 }
 
@@ -121,6 +153,28 @@ goodblocks_updater_assert_same(
 	'get_zip_url must fall back to the zipball when goodblocks.zip is missing.'
 );
 
+$mixed_case = (object) [
+	'zipball_url' => 'https://api.github.com/repos/AGoodId/goodblocks/zipball/v1.14.0-rc.27',
+	'assets'      => [
+		(object) [
+			'name'                 => 'goodblocks-1.14.0-rc.27-folder.zip',
+			'browser_download_url' => 'https://github.com/AGoodId/goodblocks/releases/download/v1.14.0-rc.27/goodblocks-1.14.0-rc.27-folder.zip',
+			'url'                  => 'https://api.github.com/repos/AGoodId/goodblocks/releases/assets/1',
+		],
+		(object) [
+			'name'                 => 'GoodBlocks.zip',
+			'browser_download_url' => 'https://github.com/AGoodId/goodblocks/releases/download/v1.14.0-rc.27/GoodBlocks.zip',
+			'url'                  => 'https://api.github.com/repos/AGoodId/goodblocks/releases/assets/3',
+		],
+	],
+];
+
+goodblocks_updater_assert_same(
+	'https://github.com/AGoodId/goodblocks/releases/download/v1.14.0-rc.27/GoodBlocks.zip',
+	$select->invoke( $updater, $mixed_case ),
+	'get_zip_url must accept goodblocks.zip case-insensitively.'
+);
+
 $plugin_root = sys_get_temp_dir() . '/goodblocks-updater-' . uniqid( '', true );
 $plugins_dir = $plugin_root . '/plugins';
 $plugin_dir  = $plugins_dir . '/goodblocks';
@@ -167,9 +221,20 @@ goodblocks_updater_assert_same(
 	'after_install must not reactivate a plugin that is already active.'
 );
 goodblocks_updater_assert_same(
-	$plugin_dir,
-	$result['destination'],
-	'after_install must report the existing plugin directory as destination.'
+	true,
+	$result,
+	'after_install must return the upgrader response, not the result array.'
+);
+
+$passthrough = $updater->after_install(
+	true,
+	[ 'plugin' => 'other/other.php' ],
+	[ 'destination' => $plugin_dir ]
+);
+goodblocks_updater_assert_same(
+	true,
+	$passthrough,
+	'after_install must pass through the upgrader response for other plugins.'
 );
 
 $slashed_dir = $plugin_dir . '/';
@@ -195,6 +260,31 @@ goodblocks_updater_assert_same(
 	[],
 	$GLOBALS['wp_filesystem']->deleted,
 	'after_install must not delete when destination only differs by a trailing slash.'
+);
+
+$dot_dir = $plugins_dir . '/./goodblocks';
+file_put_contents( $plugin_dir . '/goodblocks.php', "<?php\n// dot\n" );
+$GLOBALS['wp_filesystem']            = new GoodBlocks_Test_Filesystem();
+$GLOBALS['goodblocks_activated']     = [];
+$GLOBALS['goodblocks_plugin_active'] = true;
+
+$updater->after_install(
+	true,
+	[ 'plugin' => 'goodblocks/goodblocks.php' ],
+	[
+		'destination' => $dot_dir,
+	]
+);
+
+goodblocks_updater_assert_same(
+	true,
+	is_file( $plugin_dir . '/goodblocks.php' ),
+	'after_install must treat a /./ destination as the same plugin folder.'
+);
+goodblocks_updater_assert_same(
+	[],
+	$GLOBALS['wp_filesystem']->deleted,
+	'after_install must not delete when destination only differs by /./.'
 );
 
 $other_dir = $plugins_dir . '/AGoodId-goodblocks-abc123';
@@ -232,9 +322,51 @@ goodblocks_updater_assert_same(
 	'after_install must activate the plugin when it is not already active.'
 );
 goodblocks_updater_assert_same(
-	$plugin_dir,
-	$moved['destination'],
-	'after_install must report the plugin slug directory after a move.'
+	true,
+	$moved,
+	'after_install must return true after a successful move.'
+);
+
+file_put_contents( $plugin_dir . '/goodblocks.php', "<?php\n// keep-me\n" );
+$fail_dir = $plugins_dir . '/AGoodId-goodblocks-fail';
+if ( ! mkdir( $fail_dir, 0777, true ) && ! is_dir( $fail_dir ) ) {
+	fwrite( STDERR, "Failed to create fail extract dir.\n" );
+	exit( 1 );
+}
+file_put_contents( $fail_dir . '/goodblocks.php', "<?php\n// new-copy\n" );
+
+$GLOBALS['wp_filesystem']            = new GoodBlocks_Test_Filesystem();
+$GLOBALS['wp_filesystem']->fail_move_from = $fail_dir;
+$GLOBALS['goodblocks_activated']     = [];
+$GLOBALS['goodblocks_plugin_active'] = false;
+
+$failed = $updater->after_install(
+	true,
+	[ 'plugin' => 'goodblocks/goodblocks.php' ],
+	[
+		'destination' => $fail_dir,
+	]
+);
+
+goodblocks_updater_assert_same(
+	true,
+	is_file( $plugin_dir . '/goodblocks.php' ),
+	'after_install must keep the existing plugin if the replacement move fails.'
+);
+goodblocks_updater_assert_same(
+	"<?php\n// keep-me\n",
+	file_get_contents( $plugin_dir . '/goodblocks.php' ),
+	'after_install must not replace plugin files when the move fails.'
+);
+goodblocks_updater_assert_same(
+	true,
+	is_wp_error( $failed ),
+	'after_install must return WP_Error when the replacement move fails.'
+);
+goodblocks_updater_assert_same(
+	[],
+	$GLOBALS['goodblocks_activated'],
+	'after_install must not activate after a failed replacement.'
 );
 
 fwrite( STDOUT, "GitHub updater smoke tests passed.\n" );
