@@ -49,6 +49,14 @@
       "type": "string",
       "default": "post,page,portfolio"
     },
+    "includeTerms": {
+      "type": "boolean",
+      "default": false
+    },
+    "taxonomies": {
+      "type": "string",
+      "default": ""
+    },
     "showThumbnail": {
       "type": "boolean",
       "default": true

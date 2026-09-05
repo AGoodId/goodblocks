@@ -1,6 +1,6 @@
 {
   "name": "goodblocks",
-  "version": "1.0.0",
+  "version": "1.14.0-rc.29",
   "description": "Reusable Gutenberg blocks by AGoodId",
   "scripts": {
     "build": "wp-scripts build",

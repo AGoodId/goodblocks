@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "goodblocks/matterport",
+	"title": "Matterport Tour",
+	"category": "goodblocks",
+	"icon": "admin-site-alt3",
+	"description": "Embed a responsive Matterport virtual tour.",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"attributes": {
+		"modelId": { "type": "string", "default": "" },
+		"eyebrow": { "type": "string", "default": "" },
+		"title": { "type": "string", "default": "Virtual tour" },
+		"description": { "type": "string", "default": "" },
+		"height": { "type": "number", "default": 640 }
+	},
+	"textdomain": "goodblocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

@@ -173,6 +173,10 @@ module.exports = {
 			__dirname,
 			'src/blocks/event-class-schedule/view.js'
 		),
+		'blocks/matterport/index': path.resolve(
+			__dirname,
+			'src/blocks/matterport/index.js'
+		),
 		// Testimonials
 		'blocks/testimonials/index': path.resolve(
 			__dirname,

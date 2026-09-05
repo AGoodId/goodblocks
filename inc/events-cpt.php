@@ -894,7 +894,7 @@ function goodblocks_get_event_data( int $post_id, array $overrides = [] ): array
 	$end_ts    = $end ? goodblocks_event_local_timestamp( $end ) : false;
 	$frequency = (string) get_post_meta( $post_id, '_event_recurrence_frequency', true );
 
-	return [
+	$data = [
 		'id'           => $post_id,
 		'occurrence_id' => $overrides['occurrence_id'] ?? (string) $post_id,
 		'title'        => get_the_title( $post_id ),
@@ -920,6 +920,50 @@ function goodblocks_get_event_data( int $post_id, array $overrides = [] ): array
 		'is_exception' => ! empty( $overrides['is_exception'] ),
 		'excerpt'      => get_the_excerpt( $post_id ),
 	];
+
+	/**
+	 * Filter normalized event data before blocks render it.
+	 *
+	 * This is the supported extension point for site-specific display timezone,
+	 * labels and grouping metadata. Stored event values remain unchanged.
+	 *
+	 * @param array $data      Normalized event data.
+	 * @param int   $post_id   Event post ID.
+	 * @param array $overrides Virtual occurrence overrides.
+	 */
+	return (array) apply_filters( 'goodblocks_event_data', $data, $post_id, $overrides );
+}
+
+/**
+ * Format a stored event time in an explicit display timezone.
+ *
+ * @param string            $start            Event start.
+ * @param string            $end              Event end.
+ * @param bool              $all_day          Whether this is an all-day event.
+ * @param DateTimeZone|null $source_timezone  Timezone used by stored values.
+ * @param DateTimeZone|null $display_timezone Desired output timezone.
+ * @return string
+ */
+function goodblocks_format_event_time_in_timezone( string $start, string $end = '', bool $all_day = false, ?DateTimeZone $source_timezone = null, ?DateTimeZone $display_timezone = null ): string {
+	if ( $all_day || ! $start ) {
+		return $all_day ? __( 'All day', 'goodblocks' ) : '';
+	}
+
+	$source_timezone  = $source_timezone ?: wp_timezone();
+	$display_timezone = $display_timezone ?: $source_timezone;
+	$start_dt         = date_create_immutable( $start, $source_timezone );
+	$end_dt           = $end ? date_create_immutable( $end, $source_timezone ) : false;
+
+	if ( ! $start_dt ) {
+		return '';
+	}
+
+	$label = wp_date( get_option( 'time_format' ), $start_dt->getTimestamp(), $display_timezone );
+	if ( $end_dt ) {
+		$label .= ' – ' . wp_date( get_option( 'time_format' ), $end_dt->getTimestamp(), $display_timezone );
+	}
+
+	return $label;
 }
 
 function goodblocks_get_event_occurrences( int $post_id, string $from = '', string $to = '', int $limit = 500, ?array $overrides = null ): array {

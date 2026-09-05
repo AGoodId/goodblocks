@@ -20,6 +20,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		minChars,
 		maxResults,
 		postTypes,
+		includeTerms,
+		taxonomies,
 		showThumbnail,
 		showExcerpt,
 		showType,
@@ -83,6 +85,26 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							'goodblocks'
 						) }
 					/>
+					<ToggleControl
+						label={ __( 'Inkludera taxonomitermer', 'goodblocks' ) }
+						checked={ includeTerms }
+						onChange={ ( value ) =>
+							setAttributes( { includeTerms: value } )
+						}
+					/>
+					{ includeTerms && (
+						<TextControl
+							label={ __( 'Taxonomier', 'goodblocks' ) }
+							value={ taxonomies }
+							onChange={ ( value ) =>
+								setAttributes( { taxonomies: value } )
+							}
+							help={ __(
+								'Lämna tomt för alla publika taxonomier eller ange kommaseparerade namn.',
+								'goodblocks'
+							) }
+						/>
+					) }
 				</PanelBody>
 
 				<PanelBody

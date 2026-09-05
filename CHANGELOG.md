@@ -10,6 +10,16 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+## [1.14.0-rc.29] — 2026-09-05
+
+### Added
+- `goodblocks/matterport` with a reusable renderer and shortcode.
+- Opt-in taxonomy-term search results plus language, query-argument and result filters.
+- Event display-timezone and two-level schedule-heading extension points.
+
+### Changed
+- The npm package version now follows the canonical plugin header/constant version.
+
 ## [1.13.0-rc.10] — 2026-05-07
 
 ### Fixed
