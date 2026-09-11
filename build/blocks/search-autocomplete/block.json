@@ -57,6 +57,10 @@
       "type": "string",
       "default": ""
     },
+    "useCurrentLanguage": {
+      "type": "boolean",
+      "default": false
+    },
     "showThumbnail": {
       "type": "boolean",
       "default": true

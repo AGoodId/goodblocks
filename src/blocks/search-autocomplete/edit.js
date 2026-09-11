@@ -22,6 +22,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		postTypes,
 		includeTerms,
 		taxonomies,
+		useCurrentLanguage,
 		showThumbnail,
 		showExcerpt,
 		showType,
@@ -105,6 +106,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							) }
 						/>
 					) }
+					<ToggleControl
+						label={ __(
+							'Begränsa till aktuellt språk',
+							'goodblocks'
+						) }
+						checked={ useCurrentLanguage }
+						onChange={ ( value ) =>
+							setAttributes( { useCurrentLanguage: value } )
+						}
+						help={ __(
+							'Kräver Polylang. Avstängt som standard för bakåtkompatibilitet.',
+							'goodblocks'
+						) }
+					/>
 				</PanelBody>
 
 				<PanelBody

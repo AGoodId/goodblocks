@@ -10,6 +10,8 @@ Genereras automatiskt från [conventional commits](https://www.conventionalcommi
 
 ## [Unreleased]
 
+- Keep Polylang scoping in Search Autocomplete opt-in (`useCurrentLanguage`) so existing multilingual consumers retain their current result set.
+
 ## [1.14.0-rc.29] — 2026-09-05
 
 ### Added
