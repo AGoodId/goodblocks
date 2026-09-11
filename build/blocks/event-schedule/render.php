@@ -30,6 +30,11 @@ foreach ( $events as $event ) {
 
 asort( $classes );
 $class_list_id = wp_unique_id( 'goodblocks-event-classes-' );
+$search_placeholder = (string) apply_filters(
+	'goodblocks_event_schedule_search_placeholder',
+	__( 'Search class or event', 'goodblocks' ),
+	$attributes
+);
 ?>
 <div <?php echo get_block_wrapper_attributes( [ 'class' => 'goodblocks-event-schedule' ] ); ?>>
 	<?php if ( $events ) : ?>
@@ -46,7 +51,7 @@ $class_list_id = wp_unique_id( 'goodblocks-event-classes-' );
 					<?php if ( ! empty( $attributes['showSearch'] ) ) : ?>
 						<label>
 							<span><?php esc_html_e( 'Find class', 'goodblocks' ); ?></span>
-							<input type="search" list="<?php echo esc_attr( $class_list_id ); ?>" placeholder="<?php esc_attr_e( 'Search class or event', 'goodblocks' ); ?>" data-schedule-search>
+							<input type="search" list="<?php echo esc_attr( $class_list_id ); ?>" placeholder="<?php echo esc_attr( $search_placeholder ); ?>" aria-label="<?php echo esc_attr( $search_placeholder ); ?>" data-schedule-search>
 							<datalist id="<?php echo esc_attr( $class_list_id ); ?>">
 								<?php foreach ( $classes as $class ) : ?>
 									<option value="<?php echo esc_attr( $class ); ?>"></option>
@@ -71,7 +76,26 @@ $class_list_id = wp_unique_id( 'goodblocks-event-classes-' );
 		</div>
 
 		<div class="goodblocks-event-schedule__list" data-empty-text="<?php echo esc_attr( $attributes['emptyText'] ?? __( 'No schedule items found.', 'goodblocks' ) ); ?>">
+			<?php
+			$previous_day   = null;
+			$previous_group = null;
+			?>
 			<?php foreach ( $events as $event ) : ?>
+				<?php
+				$day = (string) apply_filters( 'goodblocks_event_schedule_day_heading', '', $event, $attributes );
+				$group = (string) apply_filters( 'goodblocks_event_schedule_group_label', '', $event, $attributes );
+				if ( '' !== $day && $day !== $previous_day ) :
+					$previous_day   = $day;
+					$previous_group = null;
+					?>
+					<h2 class="goodblocks-event-schedule__day-heading" data-schedule-heading="day"><?php echo esc_html( $day ); ?></h2>
+				<?php endif; ?>
+				<?php
+				if ( '' !== $group && $group !== $previous_group ) :
+					$previous_group = $group;
+					?>
+					<h3 class="goodblocks-event-schedule__block-heading" data-schedule-heading="group"><?php echo esc_html( $group ); ?></h3>
+				<?php endif; ?>
 				<article class="goodblocks-event-schedule__item" data-schedule-item data-day="<?php echo esc_attr( $event['date_key'] ); ?>" data-class="<?php echo esc_attr( $event['class'] ); ?>" data-title="<?php echo esc_attr( $event['title'] ); ?>" data-type="<?php echo esc_attr( $event['type'] ); ?>">
 					<div class="goodblocks-event-schedule__time">
 						<span><?php echo esc_html( $event['time_label'] ); ?></span>

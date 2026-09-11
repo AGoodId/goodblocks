@@ -6,6 +6,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const search = root.querySelector( '[data-schedule-search]' );
 			const type = root.querySelector( '[data-schedule-type]' );
 			const items = root.querySelectorAll( '[data-schedule-item]' );
+			const headings = root.querySelectorAll( '[data-schedule-heading]' );
 			const list = root.querySelector(
 				'.goodblocks-event-schedule__list'
 			);
@@ -33,6 +34,28 @@ document.addEventListener( 'DOMContentLoaded', () => {
 					if ( shouldShow ) {
 						visible += 1;
 					}
+				} );
+
+				headings.forEach( ( heading ) => {
+					let next = heading.nextElementSibling;
+					let hasVisibleItem = false;
+					const level = heading.dataset.scheduleHeading;
+					while (
+						next &&
+						! ( level === 'day'
+							? next.matches( '[data-schedule-heading="day"]' )
+							: next.matches( '[data-schedule-heading]' ) )
+					) {
+						if (
+							next.matches( '[data-schedule-item]' ) &&
+							! next.hidden
+						) {
+							hasVisibleItem = true;
+							break;
+						}
+						next = next.nextElementSibling;
+					}
+					heading.hidden = ! hasVisibleItem;
 				} );
 
 				if ( list ) {

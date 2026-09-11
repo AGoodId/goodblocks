@@ -54,6 +54,7 @@ class WP_Query {
 
 function add_action(): void {}
 function add_filter(): void {}
+function apply_filters( string $hook, $value ) { return $value; }
 function register_post_type(): void {}
 function register_taxonomy(): void {}
 function register_post_meta(): void {}
@@ -66,10 +67,10 @@ function wp_parse_args( array $args, array $defaults ): array { return array_mer
 function wp_reset_postdata(): void { unset( $GLOBALS['post'] ); }
 function current_time(): string { return '2026-07-01 00:00:00'; }
 function wp_timezone(): DateTimeZone { return new DateTimeZone( 'Europe/Stockholm' ); }
-function wp_date( string $format, ?int $timestamp = null ): string {
+function wp_date( string $format, ?int $timestamp = null, ?DateTimeZone $timezone = null ): string {
 	$timestamp = $timestamp ?? strtotime( current_time() );
 
-	return ( new DateTimeImmutable( '@' . $timestamp ) )->setTimezone( wp_timezone() )->format( $format );
+	return ( new DateTimeImmutable( '@' . $timestamp ) )->setTimezone( $timezone ?: wp_timezone() )->format( $format );
 }
 function get_option( string $key ): string { return 'date_format' === $key ? 'Y-m-d' : 'H:i'; }
 function sanitize_key( $value ): string { return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $value ) ); }
@@ -267,6 +268,11 @@ goodblocks_assert_same(
 goodblocks_assert_same( true, $events[1]['is_exception'], 'Override event should be flagged as an exception.' );
 goodblocks_assert_same( 'changed', $events[1]['status'], 'Override event should keep its own status.' );
 goodblocks_assert_same( '18:00 – 19:00', $events[0]['time_label'], 'Local event times should not be shifted by the site timezone.' );
+goodblocks_assert_same(
+	'16:00 – 17:00',
+	goodblocks_format_event_time_in_timezone( '2026-07-06 18:00:00', '2026-07-06 19:00:00', false, wp_timezone(), new DateTimeZone( 'UTC' ) ),
+	'Explicit display timezones should be applied without changing stored event values.'
+);
 goodblocks_assert_same( '', goodblocks_sanitize_event_date_only( '2026-02-31' ), 'Invalid recurrence dates should be rejected rather than normalized.' );
 goodblocks_assert_same(
 	false,

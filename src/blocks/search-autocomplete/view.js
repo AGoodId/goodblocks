@@ -33,6 +33,9 @@ class SearchAutocompleteBlock {
 			minChars: parseInt( this.container.dataset.minChars, 10 ) || 2,
 			maxResults: parseInt( this.container.dataset.maxResults, 10 ) || 5,
 			postTypes: this.container.dataset.postTypes || 'post,page',
+			includeTerms: this.container.dataset.includeTerms === 'true',
+			taxonomies: this.container.dataset.taxonomies || '',
+			language: this.container.dataset.language || '',
 			showThumbnail: this.container.dataset.showThumbnail === 'true',
 			showExcerpt: this.container.dataset.showExcerpt === 'true',
 			showType: this.container.dataset.showType === 'true',
@@ -355,7 +358,7 @@ class SearchAutocompleteBlock {
 	}
 
 	async search( query ) {
-		const cacheKey = `${ query }-${ this.settings.postTypes }`;
+		const cacheKey = `${ query }-${ this.settings.postTypes }-${ this.settings.includeTerms }-${ this.settings.taxonomies }-${ this.settings.language }`;
 		if ( this.cache.has( cacheKey ) ) {
 			this.renderResults( this.cache.get( cacheKey ), query );
 			return;
@@ -370,6 +373,15 @@ class SearchAutocompleteBlock {
 				post_types: this.settings.postTypes,
 				per_page: this.settings.maxResults,
 			} );
+			if ( this.settings.includeTerms ) {
+				params.set( 'include_terms', 'true' );
+			}
+			if ( this.settings.taxonomies ) {
+				params.set( 'taxonomies', this.settings.taxonomies );
+			}
+			if ( this.settings.language ) {
+				params.set( 'lang', this.settings.language );
+			}
 
 			const response = await fetch(
 				`${ this.settings.apiUrl }?${ params }`,

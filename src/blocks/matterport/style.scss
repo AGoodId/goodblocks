@@ -1,0 +1,31 @@
+.goodblocks-matterport {
+
+	&__header {
+		margin-bottom: var(--wp--preset--spacing--md, 1.5rem);
+
+		h2,
+		p {
+			margin-top: 0;
+		}
+	}
+
+	&__frame {
+		background: #111;
+		min-height: 320px;
+		position: relative;
+	}
+
+	&__frame iframe {
+		border: 0;
+		display: block;
+		height: var(--goodblocks-matterport-height, 640px);
+		max-height: 80vh;
+		width: 100%;
+	}
+
+	&__fallback {
+		font-size: 0.875em;
+		margin-top: 0.75rem;
+	}
+}
+
