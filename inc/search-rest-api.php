@@ -127,7 +127,7 @@ function goodblocks_search_callback( WP_REST_Request $request ): WP_REST_Respons
 		}
 	) );
 	if ( ! $query_args['post_type'] ) {
-		$query_args['post_type'] = [ 'post', 'page' ];
+		return new WP_REST_Response( [], 200 );
 	}
 	$query      = new WP_Query( $query_args );
 
@@ -196,12 +196,17 @@ function goodblocks_search_matching_terms( string $search, WP_REST_Request $requ
 		return [];
 	}
 
-	$terms = get_terms( [
+	$term_args = [
 		'taxonomy'   => $allowed,
 		'search'     => $search,
 		'hide_empty' => true,
 		'number'     => min( 20, max( 1, $per_page ) ),
-	] );
+	];
+	$lang = sanitize_key( (string) $request->get_param( 'lang' ) );
+	if ( $lang ) {
+		$term_args['lang'] = $lang;
+	}
+	$terms = get_terms( $term_args );
 
 	if ( is_wp_error( $terms ) ) {
 		return [];
