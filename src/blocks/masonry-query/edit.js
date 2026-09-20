@@ -204,6 +204,54 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 
+					{ queryType === 'media' && (
+						<div>
+							<p className="components-base-control__label">
+								{ __( 'Medietyper', 'goodblocks' ) }
+							</p>
+							{ [
+								{
+									value: 'image',
+									label: __( 'Bilder', 'goodblocks' ),
+								},
+								{
+									value: 'video',
+									label: __( 'Filmer', 'goodblocks' ),
+								},
+							].map( ( mt ) => {
+								const current = attributes.mediaTypes || [
+									'image',
+								];
+								return (
+									<CheckboxControl
+										key={ mt.value }
+										label={ mt.label }
+										checked={ current.includes( mt.value ) }
+										onChange={ ( checked ) => {
+											const next = checked
+												? [ ...current, mt.value ]
+												: current.filter(
+														( v ) => v !== mt.value
+												  );
+											// Never leave the grid with nothing to query.
+											setAttributes( {
+												mediaTypes: next.length
+													? next
+													: [ 'image' ],
+											} );
+										} }
+									/>
+								);
+							} ) }
+							<p className="components-base-control__help">
+								{ __(
+									'Filmer visar sin posterbild i rutnätet. Ladda upp en poster i mediabiblioteket — annars visas en platshållare.',
+									'goodblocks'
+								) }
+							</p>
+						</div>
+					) }
+
 					{ queryType === 'custom' &&
 						availablePostTypes.length > 0 && (
 							<SelectControl
