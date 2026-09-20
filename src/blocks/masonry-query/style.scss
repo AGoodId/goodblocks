@@ -595,6 +595,24 @@
 		}
 	}
 
+	// Mobile-only caption shown in the text zone (sidebar). Mirrors the
+	// media-overlay __caption content via JS; hidden on desktop, and the
+	// media-overlay __caption is hidden on mobile — see the mobile @media
+	// block below. Keeps desktop markup/behaviour untouched.
+	&__sidebar-caption {
+		display: none;
+		margin: 0;
+		font-family: var(--wp--preset--font-family--body, "Untitled Sans", system-ui, sans-serif);
+		font-size: var(--wp--preset--font-size--sm, 0.875rem);
+		font-weight: 400;
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.5;
+
+		&:empty {
+			display: none;
+		}
+	}
+
 	// Navigation — discreet, no background
 	&__nav {
 		position: absolute;
@@ -650,55 +668,64 @@
 		}
 	}
 
-	// Mobile: stack vertically
+	// Mobile: two zones — image zone (contain, no overlay text) + a
+	// content-driven text zone below it (caption + read-more only).
 	@media (max-width: 768px) {
 
 		&__container {
 			flex-direction: column;
 		}
 
+		// Image zone — as large as possible without cropping; no overlay
+		// text on top of the image on mobile (moved to the text zone).
 		&__media {
 			flex: 1 1 auto;
+			min-height: 0;
 			padding: 56px 16px 16px;
 		}
 
+		// Overlay caption/meta/counter live inside __media and would sit on
+		// top of the image on mobile — hide them here; the caption is
+		// mirrored into __sidebar-caption instead (see below).
+		&__caption,
+		&__meta,
+		&__counter {
+			display: none;
+		}
+
+		// Text zone — height follows content, capped, scrolls if longer.
 		&__sidebar {
 			flex: 0 0 auto;
+			min-height: 3.5rem;
+			max-height: 40vh;
 			border-left: none;
 			border-top: 1px solid rgba(255, 255, 255, 0.06);
-			padding: 16px;
-			max-height: 40vh;
+			justify-content: flex-start;
+			padding: 16px 16px max(16px, env(safe-area-inset-bottom));
 		}
 
-		&__caption {
-			left: 16px;
-			bottom: 16px;
+		// Only the image caption + read-more link are shown in mobile's
+		// text zone — title/excerpt/tags/meta stay hidden (desktop-only).
+		&__title,
+		&__excerpt,
+		&__tags {
+			display: none;
 		}
 
-		&__meta {
-			left: 16px;
-			bottom: 2px;
-			font-size: 10px;
+		&__sidebar-caption {
+			display: block;
 		}
 
+		// Nav arrows hidden on mobile — swipe is primary. Arrow-key
+		// navigation keeps working via the existing keydown handler, which
+		// is untouched (this only hides the visual buttons).
 		&__nav {
-
-			&--prev {
-				left: 8px;
-			}
-
-			&--next {
-				right: 8px;
-			}
+			display: none;
 		}
 
 		&__close {
 			right: 12px;
-			top: 12px;
-		}
-
-		&__counter {
-			right: 16px;
+			top: max(12px, env(safe-area-inset-top));
 		}
 	}
 }
