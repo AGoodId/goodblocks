@@ -1,0 +1,34 @@
+.gb-sticky-cards {
+	display: grid;
+	gap: clamp(1.5rem, 4vw, 3rem);
+	isolation: isolate;
+
+	> .wp-block-group {
+		position: relative;
+		min-width: 0;
+		box-sizing: border-box;
+		overflow-wrap: anywhere;
+		border: 1px solid color-mix(in srgb, currentcolor 15%, transparent);
+		border-radius: var(--wp--custom--radius--lg, 1.5rem);
+		box-shadow: 0 1rem 3rem rgb(0 0 0 / 6%);
+	}
+
+	&.gb-stack-ready > .wp-block-group {
+		position: sticky;
+		top: calc(var(--gb-card-offset) + var(--gb-card-index, 0) * var(--gb-card-gap));
+	}
+}
+
+:where(.gb-sticky-cards > .wp-block-group) {
+	background: var(--wp--preset--color--surface, Canvas);
+	color: inherit;
+	padding: clamp(1.5rem, 6vw, 5rem);
+}
+
+@media (max-width: 59.99rem), (prefers-reduced-motion: reduce) {
+
+	.gb-sticky-cards.gb-stack-ready > .wp-block-group {
+		position: relative;
+		top: auto;
+	}
+}

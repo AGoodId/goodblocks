@@ -51,6 +51,7 @@ require_once GOODBLOCKS_DIR . 'inc/helpers.php';
 
 // Style guide showcase registration (agoodsite-fse integration).
 require_once GOODBLOCKS_DIR . 'inc/showcase.php';
+require_once GOODBLOCKS_DIR . 'inc/motion-showcase.php';
 
 // GitHub-based auto-updater.
 require_once GOODBLOCKS_DIR . 'inc/github-updater.php';
@@ -85,6 +86,9 @@ function goodblocks_register_blocks() {
 		'icon',
 		'kpi-grid',
 		'story-card',
+		'scrollytelling',
+		'story-step',
+		'sticky-cards',
 		'hero',
 		'slider',
 		'slide',
