@@ -9,6 +9,11 @@ const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 module.exports = {
 	...defaultConfig,
 	entry: {
+		'blocks/scrollytelling/index': path.resolve( __dirname, 'src/blocks/scrollytelling/index.js' ),
+		'blocks/scrollytelling/view': path.resolve( __dirname, 'src/blocks/scrollytelling/view.js' ),
+		'blocks/story-step/index': path.resolve( __dirname, 'src/blocks/story-step/index.js' ),
+		'blocks/sticky-cards/index': path.resolve( __dirname, 'src/blocks/sticky-cards/index.js' ),
+		'blocks/sticky-cards/view': path.resolve( __dirname, 'src/blocks/sticky-cards/view.js' ),
 		// Existing blocks
 		'blocks/masonry-query/index': path.resolve(
 			__dirname,

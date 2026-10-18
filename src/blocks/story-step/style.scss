@@ -1,0 +1,102 @@
+.gb-story-step {
+	display: grid;
+	gap: clamp(1.5rem, 4vw, 4rem);
+	padding-block: clamp(2rem, 5vw, 5rem);
+	min-width: 0;
+
+	&__visual {
+		position: relative;
+		overflow: clip;
+		min-height: 18rem;
+		aspect-ratio: 1;
+		border-radius: var(--wp--custom--radius--lg, 1.5rem);
+		background: var(--wp--preset--color--secondary, #183a36);
+		color: var(--wp--preset--color--primary, currentcolor);
+		display: grid;
+		place-items: center;
+	}
+
+	&__visual img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		position: absolute;
+		inset: 0;
+	}
+
+	&__orb {
+		width: 65%;
+		aspect-ratio: 1;
+		border: 1px solid currentcolor;
+		border-radius: 50%;
+		box-shadow: 2rem 1rem 0 -1px currentcolor;
+		opacity: 0.3;
+		transform: rotate(-25deg);
+	}
+
+	&__number {
+		position: absolute;
+		inset-inline-start: 8%;
+		inset-block-end: 5%;
+		font-size: clamp(4rem, 12vw, 10rem);
+		line-height: 1;
+		font-weight: 700;
+		letter-spacing: -0.06em;
+	}
+
+	&__copy {
+		align-self: center;
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
+
+	&__copy > :first-child {
+		margin-block-start: 0;
+	}
+
+	&__copy > :last-child {
+		margin-block-end: 0;
+	}
+}
+
+@container (min-width: 42rem) {
+
+	.gb-scrollytelling .gb-story-step {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		min-height: var(--gb-story-pace);
+		align-items: start;
+	}
+
+	.gb-scrollytelling .gb-story-step__visual {
+		position: sticky;
+		top: var(--gb-story-offset);
+		max-height: calc(100svh - var(--gb-story-offset) - 2rem);
+		min-height: 0;
+	}
+
+	.gb-scrollytelling .gb-story-step__copy {
+		padding-block: 3rem;
+	}
+
+	.gb-scrollytelling--right .gb-story-step__visual {
+		grid-column: 2;
+		grid-row: 1;
+	}
+
+	.gb-scrollytelling--right .gb-story-step__copy {
+		grid-column: 1;
+		grid-row: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.gb-scrollytelling .gb-story-step {
+		min-height: auto;
+	}
+
+	.gb-scrollytelling .gb-story-step__visual {
+		position: relative;
+		top: auto;
+	}
+}

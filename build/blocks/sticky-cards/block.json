@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/sticky-cards",
+  "title": "Sticky Cards",
+  "category": "goodblocks",
+  "icon": "slides",
+  "description": "A stack of editable cards that gently overlap as you scroll.",
+  "textdomain": "goodblocks",
+  "attributes": {
+    "stickyOffset": {
+      "type": "number",
+      "default": 96
+    },
+    "cardGap": {
+      "type": "number",
+      "default": 24
+    },
+    "anchor": {
+      "type": "string"
+    }
+  },
+  "supports": {
+    "anchor": true,
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

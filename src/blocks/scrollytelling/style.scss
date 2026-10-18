@@ -1,0 +1,13 @@
+.gb-scrollytelling {
+	--gb-story-offset: 96px;
+	--gb-story-pace: 100svh;
+	container-type: inline-size;
+
+	&--compact {
+		--gb-story-pace: 75svh;
+	}
+
+	.gb-story-step {
+		margin-block: 0;
+	}
+}

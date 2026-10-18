@@ -201,3 +201,27 @@ refactor: bryt ut template-loader till helpers.php
 GPL-2.0-or-later. See [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html).
 
 Built by [AGoodId](https://agoodid.se).
+
+
+## Motion and storytelling
+
+- **GB · Scrollytelling** (`goodblocks/scrollytelling`): editable Story Step chapters,
+  visual left/right, relaxed/compact rhythm and sticky offset. Each chapter accepts
+  a media-library image with alternative text and ordinary WordPress inner blocks.
+- **GB · Sticky Cards** (`goodblocks/sticky-cards`): ordinary Group cards with stack
+  spacing and sticky offset. Colors, padding and nested content remain editable.
+
+Use a wide layout for generous compositions. Configure offsets to clear the site's
+header. Stacks use ordinary document flow on mobile, with reduced motion, when any
+card cannot fit the viewport, or while a control inside the stack has keyboard focus.
+Scrollytelling remains readable without JavaScript; scroll scaling is optional GSAP
+progressive enhancement using the existing dependency. No smooth-scroll interception.
+
+`inc/motion-showcase.php` contributes three live configurations per parent block to
+AGoodSite's block library and legacy showcase. Thumbnail assets belong to this plugin;
+use the matching AGoodSite motion-library update for URL thumbnails and legacy nested
+showcase rendering. The blocks themselves also work in other compatible block themes.
+
+Run `node --test tests/js/sticky-cards.test.cjs`, targeted lint and `npm run build`.
+Commit the three new `build/blocks/` directories with their sources. No site-specific
+code or deployment is part of this library.
