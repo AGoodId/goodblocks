@@ -3,7 +3,7 @@
  * Plugin Name: GoodBlocks
  * Plugin URI: https://agoodsite.se
  * Description: Reusable Gutenberg blocks: Masonry Query, Post Grid, Search Autocomplete, Image Compare, Feature Card, Countdown, Quiz, Page List, Double Container, Media Grid, and Mailchimp Signup.
- * Version: 1.14.0-rc.28
+ * Version: 1.14.0-rc.29
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Author: AGoodId
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GOODBLOCKS_VERSION', '1.14.0-rc.28' );
+define( 'GOODBLOCKS_VERSION', '1.14.0-rc.29' );
 define( 'GOODBLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GOODBLOCKS_URI', plugin_dir_url( __FILE__ ) );
 
@@ -39,6 +39,9 @@ require_once GOODBLOCKS_DIR . 'inc/events-migrate.php';
 
 // Instagram feed.
 require_once GOODBLOCKS_DIR . 'inc/instagram-feed.php';
+
+// RSS and Atom feeds.
+require_once GOODBLOCKS_DIR . 'inc/rss-feed.php';
 
 // Local navigation.
 require_once GOODBLOCKS_DIR . 'inc/local-navigation.php';
@@ -90,6 +93,7 @@ function goodblocks_register_blocks() {
 		'slide',
 		'product-carousel',
 		'instagram-feed',
+		'rss-feed',
 		'table-of-contents',
 	];
 
@@ -298,6 +302,7 @@ function goodblocks_activate() {
 	goodblocks_migrate_namespace( 'agoodsite-fse', 'goodblocks' );
 	goodblocks_migrate_agoodblocks();
 	goodblocks_instagram_ensure_cron();
+	goodblocks_rss_ensure_cron();
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'goodblocks_activate' );
@@ -309,6 +314,7 @@ function goodblocks_deactivate() {
 	goodblocks_migrate_namespace( 'goodblocks', 'agoodsite-fse' );
 	goodblocks_rollback_agoodblocks();
 	goodblocks_instagram_clear_cron();
+	goodblocks_rss_clear_cron();
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'goodblocks_deactivate' );
