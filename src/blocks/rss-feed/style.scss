@@ -1,0 +1,152 @@
+.wp-block-goodblocks-rss-feed {
+	--goodblocks-rss-columns: 3;
+	--goodblocks-rss-tablet-columns: 2;
+	--goodblocks-rss-gap: 24px;
+	--goodblocks-rss-aspect-ratio: 16 / 9;
+
+	.goodblocks-rss-feed__items {
+		display: grid;
+		grid-template-columns: repeat(var(--goodblocks-rss-columns), minmax(0, 1fr));
+		gap: var(--goodblocks-rss-gap);
+	}
+
+	.goodblocks-rss-feed__item {
+		display: flex;
+		min-width: 0;
+		flex-direction: column;
+		overflow: hidden;
+		border: 1px solid color-mix(in srgb, currentcolor 18%, transparent);
+		border-radius: var(--wp--custom--border-radius--medium, 0.5rem);
+		background: var(--wp--preset--color--base, #fff);
+		color: var(--wp--preset--color--contrast, #1e1e1e);
+	}
+
+	.goodblocks-rss-feed__image-link {
+		display: block;
+		overflow: hidden;
+		background: color-mix(in srgb, currentcolor 7%, transparent);
+	}
+
+	.goodblocks-rss-feed__image {
+		display: block;
+		width: 100%;
+		aspect-ratio: var(--goodblocks-rss-aspect-ratio);
+		object-fit: cover;
+		transition: transform 0.25s ease;
+	}
+
+	.goodblocks-rss-feed__content {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		padding: clamp(1rem, 2vw, 1.35rem);
+	}
+
+	.goodblocks-rss-feed__meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem 0.75rem;
+		margin-bottom: 0.65rem;
+		color: color-mix(in srgb, currentcolor 68%, transparent);
+		font-size: 0.78em;
+		line-height: 1.3;
+	}
+
+	.goodblocks-rss-feed__source {
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+	}
+
+	.goodblocks-rss-feed__title {
+		margin: 0;
+		font-size: clamp(1.05rem, 2vw, 1.35rem);
+		line-height: 1.2;
+	}
+
+	.goodblocks-rss-feed__title a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.goodblocks-rss-feed__title a:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 0.08em;
+		text-underline-offset: 0.15em;
+	}
+
+	.goodblocks-rss-feed__title a:focus-visible {
+		outline: 2px solid currentcolor;
+		outline-offset: 3px;
+	}
+
+	.goodblocks-rss-feed__excerpt {
+		margin: 0.85rem 0 0;
+		color: color-mix(in srgb, currentcolor 78%, transparent);
+		line-height: 1.55;
+	}
+
+	.goodblocks-rss-feed__fallback {
+		margin: 0;
+	}
+
+	&.is-layout-list {
+
+		.goodblocks-rss-feed__items {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.goodblocks-rss-feed__item {
+			display: grid;
+			grid-template-columns: minmax(10rem, 32%) minmax(0, 1fr);
+		}
+
+		.goodblocks-rss-feed__item.no-image {
+			grid-template-columns: 1fr;
+		}
+
+		.goodblocks-rss-feed__image-link,
+		.goodblocks-rss-feed__image {
+			height: 100%;
+		}
+
+		.goodblocks-rss-feed__image {
+			aspect-ratio: auto;
+		}
+	}
+
+	.goodblocks-rss-feed__item:hover .goodblocks-rss-feed__image {
+		transform: scale(1.025);
+	}
+
+	@media (max-width: 900px) {
+
+		.goodblocks-rss-feed__items {
+			grid-template-columns: repeat(var(--goodblocks-rss-tablet-columns), minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+
+		.goodblocks-rss-feed__items {
+			grid-template-columns: 1fr;
+		}
+
+		&.is-layout-list .goodblocks-rss-feed__item {
+			grid-template-columns: 1fr;
+		}
+
+		&.is-layout-list .goodblocks-rss-feed__image {
+			aspect-ratio: var(--goodblocks-rss-aspect-ratio);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+
+		.goodblocks-rss-feed__image {
+			transition: none;
+		}
+	}
+}

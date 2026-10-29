@@ -132,6 +132,10 @@ module.exports = {
 			__dirname,
 			'src/blocks/instagram-feed/index.js'
 		),
+		'blocks/rss-feed/index': path.resolve(
+			__dirname,
+			'src/blocks/rss-feed/index.js'
+		),
 		'blocks/table-of-contents/index': path.resolve(
 			__dirname,
 			'src/blocks/table-of-contents/index.js'

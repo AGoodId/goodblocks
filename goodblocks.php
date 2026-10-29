@@ -40,6 +40,9 @@ require_once GOODBLOCKS_DIR . 'inc/events-migrate.php';
 // Instagram feed.
 require_once GOODBLOCKS_DIR . 'inc/instagram-feed.php';
 
+// RSS and Atom feeds.
+require_once GOODBLOCKS_DIR . 'inc/rss-feed.php';
+
 // Local navigation.
 require_once GOODBLOCKS_DIR . 'inc/local-navigation.php';
 
@@ -90,6 +93,7 @@ function goodblocks_register_blocks() {
 		'slide',
 		'product-carousel',
 		'instagram-feed',
+		'rss-feed',
 		'table-of-contents',
 	];
 
@@ -298,6 +302,7 @@ function goodblocks_activate() {
 	goodblocks_migrate_namespace( 'agoodsite-fse', 'goodblocks' );
 	goodblocks_migrate_agoodblocks();
 	goodblocks_instagram_ensure_cron();
+	goodblocks_rss_ensure_cron();
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'goodblocks_activate' );
@@ -309,6 +314,7 @@ function goodblocks_deactivate() {
 	goodblocks_migrate_namespace( 'goodblocks', 'agoodsite-fse' );
 	goodblocks_rollback_agoodblocks();
 	goodblocks_instagram_clear_cron();
+	goodblocks_rss_clear_cron();
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'goodblocks_deactivate' );

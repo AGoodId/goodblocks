@@ -50,6 +50,9 @@ jobs:
           find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 | \
             xargs -0 -n1 php -l
 
+      - name: RSS feed smoke tests
+        run: php tests/php/rss-feed-smoke.php
+
   validate-blocks:
     runs-on: ubuntu-latest
 

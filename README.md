@@ -1,6 +1,6 @@
 # GoodBlocks
 
-A collection of 12 reusable Gutenberg blocks for WordPress, built and maintained by [AGoodId](https://agoodid.se).
+A collection of reusable Gutenberg blocks for WordPress, built and maintained by [AGoodId](https://agoodid.se).
 
 **Requires:** WordPress 6.4+ &bull; PHP 8.0+
 **License:** GPL-2.0-or-later
@@ -66,6 +66,10 @@ Curated Lucide icon block for event pages and style-guide examples. Includes a s
 
 The editor also includes an inline Lucide icon format for RichText fields, so editors can insert curated icons directly inside headings, paragraphs, lists, and other text-based blocks.
 
+### External News Feed
+
+Server-rendered RSS and Atom feed cards with source selection, grid/list layouts, optional images, excerpts, dates, and source labels. Trusted sources are configured under **Settings > RSS Feeds**. Feeds are refreshed hourly on the server, de-duplicated, and cached; a failed refresh keeps the last successful items available to visitors.
+
 ---
 
 ## Features beyond blocks
@@ -103,13 +107,14 @@ Handles automatic migration from the legacy `agoodsite-fse` and `agoodblocks` na
 
 ## REST API
 
-The plugin registers three endpoints under `goodblocks/v1`:
+The plugin registers these endpoints under `goodblocks/v1`:
 
 | Endpoint | Method | Purpose |
 |---|---|---|
 | `/masonry-query` | POST | Load-more pagination for the Masonry Query block |
 | `/search` | GET | Live search with post type filtering |
 | `/search/suggestions` | GET | Popular or matching post suggestions |
+| `/rss-sources` | GET | Editor-only list of configured RSS sources and cache status |
 
 ---
 
@@ -137,6 +142,7 @@ npm install
 | `npm run lint:js` | Lint JavaScript with `@wordpress/eslint-plugin` |
 | `npm run lint:css` | Lint SCSS files |
 | `npm run lint` | Run both JS and CSS linting |
+| `npm run test:rss` | Run standalone RSS source/cache smoke tests |
 
 ### Project structure
 

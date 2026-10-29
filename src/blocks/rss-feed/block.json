@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "goodblocks/rss-feed",
+  "title": "External News Feed",
+  "category": "goodblocks",
+  "icon": "rss",
+  "description": "Display cached news from one or more configured RSS or Atom sources.",
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "default": {
+      "align": "wide"
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "attributes": {
+    "sourceIds": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    },
+    "postsToShow": {
+      "type": "number",
+      "default": 8
+    },
+    "layout": {
+      "type": "string",
+      "default": "grid"
+    },
+    "columns": {
+      "type": "number",
+      "default": 3
+    },
+    "gap": {
+      "type": "number",
+      "default": 24
+    },
+    "aspectRatio": {
+      "type": "string",
+      "default": "16/9"
+    },
+    "showImage": {
+      "type": "boolean",
+      "default": true
+    },
+    "showExcerpt": {
+      "type": "boolean",
+      "default": true
+    },
+    "showDate": {
+      "type": "boolean",
+      "default": true
+    },
+    "showSource": {
+      "type": "boolean",
+      "default": true
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": true
+    },
+    "fallbackText": {
+      "type": "string",
+      "default": "No news is available right now."
+    }
+  },
+  "example": {},
+  "textdomain": "goodblocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}
