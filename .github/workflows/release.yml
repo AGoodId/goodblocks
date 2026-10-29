@@ -26,11 +26,15 @@ jobs:
 
       - name: Create plugin zip
         run: |
-          mkdir -p dist/goodblocks
-          cp -R goodblocks.php inc build dist/goodblocks/
+          # Inner folder must not be named "goodblocks". Sites still run the
+          # old after_install, which deletes plugins/goodblocks when the zip
+          # already unpacked there. A unique folder makes that hook move
+          # instead of wiping. Do not upload extra *-folder.zip assets.
+          mkdir -p dist/goodblocks-package
+          cp -R goodblocks.php inc build dist/goodblocks-package/
           cd dist
           zip -r goodblocks.zip \
-            goodblocks/ \
+            goodblocks-package/ \
             -x "*.DS_Store"
 
       - name: Create GitHub Release

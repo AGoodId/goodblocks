@@ -126,19 +126,26 @@ class GoodBlocks_GitHub_Updater {
 	 */
 	public function after_install( $response, $hook_extra, $result ) {
 		if ( ! isset( $hook_extra['plugin'] ) || $hook_extra['plugin'] !== $this->slug ) {
-			return $result;
+			return $response;
 		}
 
 		global $wp_filesystem;
 
-		$proper_destination = WP_PLUGIN_DIR . '/' . dirname( $this->slug );
-		$wp_filesystem->delete( $proper_destination, true );
-		$wp_filesystem->move( $result['destination'], $proper_destination );
-		$result['destination'] = $proper_destination;
+		$proper_destination = untrailingslashit( trailingslashit( WP_PLUGIN_DIR ) . dirname( $this->slug ) );
+		$source             = untrailingslashit( (string) ( $result['destination'] ?? '' ) );
 
-		activate_plugin( $this->slug );
+		if ( $source && ! $this->is_same_plugin_path( $source, $proper_destination ) ) {
+			$relocated = $this->relocate_extracted_plugin( $wp_filesystem, $source, $proper_destination );
+			if ( is_wp_error( $relocated ) ) {
+				return $relocated;
+			}
+		}
 
-		return $result;
+		if ( ! is_plugin_active( $this->slug ) ) {
+			activate_plugin( $this->slug );
+		}
+
+		return $response;
 	}
 
 	/**
@@ -146,24 +153,81 @@ class GoodBlocks_GitHub_Updater {
 	 * Prefers an uploaded goodblocks.zip asset; falls back to source zipball.
 	 */
 	private function get_zip_url( object $release ): string {
-		// Look for the uploaded zip asset from our release workflow.
 		if ( ! empty( $release->assets ) ) {
 			foreach ( $release->assets as $asset ) {
-				if ( str_ends_with( $asset->name, '.zip' ) ) {
-					$url = $asset->browser_download_url;
-
-					// For private repos, use the API URL with auth.
-					$token = defined( 'GOODBLOCKS_GITHUB_TOKEN' ) ? GOODBLOCKS_GITHUB_TOKEN : '';
-					if ( $token ) {
-						return add_query_arg( 'access_token', $token, $asset->url );
-					}
-
-					return $url;
+				if ( 0 === strcasecmp( (string) ( $asset->name ?? '' ), 'goodblocks.zip' ) ) {
+					return $this->authorized_asset_url( $asset );
 				}
 			}
 		}
 
-		// Fallback to source zipball.
 		return $release->zipball_url ?? '';
+	}
+
+	/**
+	 * Return a downloadable asset URL, using a token for private repos.
+	 */
+	private function authorized_asset_url( object $asset ): string {
+		$token = defined( 'GOODBLOCKS_GITHUB_TOKEN' ) ? GOODBLOCKS_GITHUB_TOKEN : '';
+		if ( $token ) {
+			return add_query_arg( 'access_token', $token, $asset->url );
+		}
+
+		return $asset->browser_download_url ?? '';
+	}
+
+	/**
+	 * Move an extracted package onto the plugin slug without deleting first.
+	 *
+	 * @param object $wp_filesystem WordPress filesystem API.
+	 * @return true|\WP_Error
+	 */
+	private function relocate_extracted_plugin( $wp_filesystem, string $source, string $destination ) {
+		$backup = $destination . '.updating-bak';
+
+		if ( $wp_filesystem->exists( $destination ) && ! $wp_filesystem->move( $destination, $backup ) ) {
+			return new WP_Error(
+				'goodblocks_updater_backup',
+				'Could not back up the existing GoodBlocks plugin directory.'
+			);
+		}
+
+		if ( ! $wp_filesystem->move( $source, $destination ) ) {
+			if ( $wp_filesystem->exists( $backup ) ) {
+				$wp_filesystem->move( $backup, $destination );
+			}
+
+			return new WP_Error(
+				'goodblocks_updater_move',
+				'Could not move the extracted GoodBlocks plugin into place.'
+			);
+		}
+
+		if ( $wp_filesystem->exists( $backup ) ) {
+			$wp_filesystem->delete( $backup, true );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Compare plugin paths after normalizing slashes, dots, and realpath aliases.
+	 */
+	private function is_same_plugin_path( string $left, string $right ): bool {
+		return $this->normalize_plugin_path( $left ) === $this->normalize_plugin_path( $right );
+	}
+
+	/**
+	 * Normalize a filesystem path for equality checks.
+	 */
+	private function normalize_plugin_path( string $path ): string {
+		$path = wp_normalize_path( untrailingslashit( $path ) );
+		$resolved = realpath( $path );
+
+		if ( false !== $resolved ) {
+			return wp_normalize_path( $resolved );
+		}
+
+		return $path;
 	}
 }
