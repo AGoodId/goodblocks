@@ -61,6 +61,14 @@
       "type": "boolean",
       "default": true
     },
+    "sourceLabel": {
+      "type": "string",
+      "default": "Source:"
+    },
+    "dateLabel": {
+      "type": "string",
+      "default": "Published:"
+    },
     "openInNewTab": {
       "type": "boolean",
       "default": true
