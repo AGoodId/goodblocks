@@ -226,14 +226,20 @@ function goodblocks_rss_refresh_sources( ?array $source_ids = null ): array {
 	$sources = goodblocks_rss_get_sources();
 	$cache   = goodblocks_rss_get_cache();
 	$wanted  = null === $source_ids ? null : array_fill_keys( array_map( 'sanitize_key', $source_ids ), true );
+	$fetched = 0;
 
 	foreach ( $sources as $source ) {
 		if ( null !== $wanted && ! isset( $wanted[ $source['id'] ] ) ) {
 			continue;
 		}
 
+		if ( $fetched > 0 ) {
+			sleep( 1 );
+		}
+
 		$cache[ $source['id'] ] = goodblocks_rss_refresh_source( $source, $cache[ $source['id'] ] ?? [] );
 		update_option( GOODBLOCKS_RSS_CACHE_OPTION, $cache, false );
+		++$fetched;
 	}
 
 	return $cache;

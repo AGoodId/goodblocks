@@ -15,7 +15,8 @@ $source_ids      = isset( $attributes['sourceIds'] ) && is_array( $attributes['s
 	? array_map( 'sanitize_key', $attributes['sourceIds'] )
 	: [];
 $posts_to_show   = max( 1, min( 24, absint( $attributes['postsToShow'] ?? 8 ) ) );
-$layout          = isset( $attributes['layout'] ) && 'list' === $attributes['layout'] ? 'list' : 'grid';
+$layout          = sanitize_key( $attributes['layout'] ?? 'grid' );
+$layout          = in_array( $layout, [ 'grid', 'list', 'compact' ], true ) ? $layout : 'grid';
 $columns         = max( 1, min( 4, absint( $attributes['columns'] ?? 3 ) ) );
 $gap             = max( 0, min( 64, absint( $attributes['gap'] ?? 24 ) ) );
 $aspect_ratio    = sanitize_text_field( $attributes['aspectRatio'] ?? '16/9' );
@@ -23,6 +24,8 @@ $show_image      = ! isset( $attributes['showImage'] ) || (bool) $attributes['sh
 $show_excerpt    = ! isset( $attributes['showExcerpt'] ) || (bool) $attributes['showExcerpt'];
 $show_date       = ! isset( $attributes['showDate'] ) || (bool) $attributes['showDate'];
 $show_source     = ! isset( $attributes['showSource'] ) || (bool) $attributes['showSource'];
+$source_label    = sanitize_text_field( $attributes['sourceLabel'] ?? __( 'Source:', 'goodblocks' ) );
+$date_label      = sanitize_text_field( $attributes['dateLabel'] ?? __( 'Published:', 'goodblocks' ) );
 $open_in_new_tab = ! isset( $attributes['openInNewTab'] ) || (bool) $attributes['openInNewTab'];
 $fallback_text   = isset( $attributes['fallbackText'] )
 	? sanitize_text_field( $attributes['fallbackText'] )
@@ -85,10 +88,14 @@ $rel    = $open_in_new_tab ? 'noopener noreferrer external' : 'external';
 						<?php if ( ( $show_source && $source ) || ( $show_date && $timestamp ) ) : ?>
 							<div class="goodblocks-rss-feed__meta">
 								<?php if ( $show_source && $source ) : ?>
-									<span class="goodblocks-rss-feed__source"><?php echo esc_html( $source ); ?></span>
+									<span class="goodblocks-rss-feed__source">
+										<?php if ( 'compact' === $layout && '' !== $source_label ) : ?><span class="goodblocks-rss-feed__meta-label"><?php echo esc_html( $source_label ); ?> </span><?php endif; ?>
+										<?php echo esc_html( $source ); ?>
+									</span>
 								<?php endif; ?>
 								<?php if ( $show_date && $timestamp ) : ?>
 									<time datetime="<?php echo esc_attr( gmdate( 'c', $timestamp ) ); ?>">
+										<?php if ( 'compact' === $layout && '' !== $date_label ) : ?><span class="goodblocks-rss-feed__meta-label"><?php echo esc_html( $date_label ); ?> </span><?php endif; ?>
 										<?php echo esc_html( wp_date( get_option( 'date_format' ), $timestamp ) ); ?>
 									</time>
 								<?php endif; ?>

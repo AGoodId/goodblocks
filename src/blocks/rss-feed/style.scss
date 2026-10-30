@@ -117,6 +117,64 @@
 		}
 	}
 
+	&.is-layout-compact {
+
+		.goodblocks-rss-feed__items {
+			display: flex;
+			flex-direction: column;
+			gap: var(--goodblocks-rss-gap);
+		}
+
+		.goodblocks-rss-feed__item {
+			position: relative;
+			display: block;
+			overflow: visible;
+			padding-left: 1.25em;
+			border: 0;
+			border-radius: 0;
+			background: transparent;
+			color: inherit;
+		}
+
+		.goodblocks-rss-feed__item::before {
+			position: absolute;
+			top: 0;
+			left: 0.25em;
+			content: "•";
+		}
+
+		.goodblocks-rss-feed__content {
+			display: flex;
+			padding: 0;
+		}
+
+		.goodblocks-rss-feed__title {
+			order: 1;
+			font-size: inherit;
+			font-weight: inherit;
+			line-height: inherit;
+		}
+
+		.goodblocks-rss-feed__title a {
+			color: var(--wp--preset--color--link, inherit);
+			text-decoration: underline;
+		}
+
+		.goodblocks-rss-feed__meta {
+			order: 2;
+			gap: 0.25em 0.65em;
+			margin: 0.2em 0 0;
+			color: inherit;
+			font-size: 0.85em;
+		}
+
+		.goodblocks-rss-feed__source {
+			font-weight: inherit;
+			letter-spacing: normal;
+			text-transform: none;
+		}
+	}
+
 	.goodblocks-rss-feed__item:hover .goodblocks-rss-feed__image {
 		transform: scale(1.025);
 	}

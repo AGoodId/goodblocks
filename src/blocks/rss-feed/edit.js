@@ -26,6 +26,8 @@ export default function Edit( { attributes, setAttributes } ) {
 		showExcerpt,
 		showDate,
 		showSource,
+		sourceLabel,
+		dateLabel,
 		openInNewTab,
 		fallbackText,
 	} = attributes;
@@ -137,6 +139,10 @@ export default function Edit( { attributes, setAttributes } ) {
 								label: __( 'List', 'goodblocks' ),
 								value: 'list',
 							},
+							{
+								label: __( 'Compact list', 'goodblocks' ),
+								value: 'compact',
+							},
 						] }
 						onChange={ ( value ) =>
 							setAttributes( { layout: value } )
@@ -208,6 +214,24 @@ export default function Edit( { attributes, setAttributes } ) {
 							setAttributes( { showSource: value } )
 						}
 					/>
+					{ layout === 'compact' && showSource && (
+						<TextControl
+							label={ __( 'Source label', 'goodblocks' ) }
+							value={ sourceLabel }
+							onChange={ ( value ) =>
+								setAttributes( { sourceLabel: value } )
+							}
+						/>
+					) }
+					{ layout === 'compact' && showDate && (
+						<TextControl
+							label={ __( 'Date label', 'goodblocks' ) }
+							value={ dateLabel }
+							onChange={ ( value ) =>
+								setAttributes( { dateLabel: value } )
+							}
+						/>
+					) }
 					<ToggleControl
 						label={ __( 'Open links in a new tab', 'goodblocks' ) }
 						checked={ openInNewTab }
