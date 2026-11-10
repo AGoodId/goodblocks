@@ -177,7 +177,29 @@ function goodblocks_display_tribe_event_date_range( $event_id = null ) {
 
 	echo esc_html( sprintf( '%s-%s', $start, $end ) );
 }
-add_action( 'goodblocks_event_date_range', 'goodblocks_display_tribe_event_date_range', 10, 1 );
+/**
+ * Fall back to the default date range if no theme or plugin supplies one.
+ *
+ * Check at render time: plugins load before themes, and theme overrides may
+ * call the action directly rather than use GoodBlocks' own templates.
+ *
+ * @param int|null $event_id Event post ID.
+ */
+function goodblocks_default_tribe_event_date_range( $event_id = null ) {
+	global $wp_filter;
+
+	$hook = $wp_filter['goodblocks_event_date_range'];
+	foreach ( $hook->callbacks as $callbacks ) {
+		foreach ( $callbacks as $callback ) {
+			if ( __FUNCTION__ !== $callback['function'] ) {
+				return;
+			}
+		}
+	}
+
+	goodblocks_display_tribe_event_date_range( $event_id );
+}
+add_action( 'goodblocks_event_date_range', 'goodblocks_default_tribe_event_date_range', 10, 1 );
 
 /**
  * Load a block template with theme override support.
