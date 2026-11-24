@@ -170,7 +170,7 @@ $args     = [
 
 // Handle media/attachment query
 if ( $post_type === 'attachment' ) {
-	$args['post_mime_type']  = 'image';
+	$args['post_mime_type']  = goodblocks_masonry_mime_types( $attributes['mediaTypes'] ?? array( 'image' ) );
 	$args['lang']            = ''; // Bypass Polylang — media should not be language-filtered.
 	$args['suppress_filters'] = true; // Belt-and-suspenders: skip all query filters including Polylang joins.
 }
@@ -360,6 +360,9 @@ if ( $enable_paging ) {
 	if ( ! empty( $attributes['postTypes'] ) ) {
 		$pagination_attrs['postTypes'] = $attributes['postTypes'];
 	}
+	if ( ! empty( $attributes['mediaTypes'] ) ) {
+		$pagination_attrs['mediaTypes'] = $attributes['mediaTypes'];
+	}
 	if ( ! empty( $attributes['fallbackImageId'] ) ) {
 		$pagination_attrs['fallbackImageId'] = $attributes['fallbackImageId'];
 	}
@@ -444,8 +447,19 @@ foreach ( $data_attrs as $key => $value ) {
 			}
 
 			// For media/attachment, the post itself is the image
+			$is_video_item  = false;
+			$video_src      = '';
+			$video_duration = '';
 			if ( $post_type === 'attachment' ) {
-				$image_id = $post_id;
+				if ( wp_attachment_is( 'video', $post_id ) ) {
+					// A video attachment carries no image — use its poster, if any.
+					$is_video_item  = true;
+					$video_src      = wp_get_attachment_url( $post_id );
+					$video_duration = goodblocks_video_duration( $post_id );
+					$image_id       = goodblocks_video_poster_id( $post_id );
+				} else {
+					$image_id = $post_id;
+				}
 			}
 
 			// Fallback image
@@ -522,7 +536,11 @@ foreach ( $data_attrs as $key => $value ) {
 			if ( ! empty( $hero_video_url ) ) {
 				$gallery[] = [ 'type' => 'video', 'src' => $hero_video_url ];
 			}
-			if ( $image_full ) {
+			if ( $is_video_item && $video_src ) {
+				$vid_caption = $lightbox_caption ? wp_get_attachment_caption( $post_id ) : '';
+				$gallery[]   = [ 'type' => 'video', 'src' => $video_src, 'cap' => $vid_caption ?: '' ];
+			}
+			if ( $image_full && ! $is_video_item ) {
 				$img_caption = $lightbox_caption ? wp_get_attachment_caption( $image_id ) : '';
 				$slide       = [ 'type' => 'image', 'src' => $image_full[0], 'w' => $image_full[1], 'h' => $image_full[2], 'cap' => $img_caption ?: '' ];
 				$exif        = goodblocks_get_image_exif( $image_id );
@@ -558,7 +576,7 @@ foreach ( $data_attrs as $key => $value ) {
 			}
 
 			// Determine link href
-			$href = $click_action === 'link' ? get_permalink( $post_id ) : ( $image_full[0] ?? '' );
+			$href = $click_action === 'link' ? get_permalink( $post_id ) : ( $is_video_item ? $video_src : ( $image_full[0] ?? '' ) );
 			$tag  = $click_action === 'none' ? 'div' : 'a';
 			$tag  = in_array( $tag, [ 'a', 'div' ], true ) ? $tag : 'div';
 
@@ -620,6 +638,29 @@ foreach ( $data_attrs as $key => $value ) {
 							loading="lazy"
 							decoding="async"
 						/>
+					<?php elseif ( $is_video_item ) : ?>
+						<span class="masonry-query__video-placeholder">
+							<span class="masonry-query__video-placeholder-title"><?php echo esc_html( get_the_title( $post_id ) ); ?></span>
+						</span>
+					<?php endif; ?>
+
+					<?php if ( $is_video_item ) : ?>
+						<span class="masonry-query__play">
+							<svg viewBox="0 0 24 24" width="12" height="12" focusable="false" aria-hidden="true">
+								<path d="M8 5.14v13.72L19 12z" fill="currentColor" />
+							</svg>
+							<?php if ( $video_duration ) : ?>
+								<span class="masonry-query__play-duration"><?php echo esc_html( $video_duration ); ?></span>
+							<?php endif; ?>
+							<span class="masonry-query__sr-only">
+								<?php
+								echo $video_duration
+									/* translators: %s: video duration, e.g. 1:24 */
+									? esc_html( sprintf( __( 'Film, %s', 'goodblocks' ), $video_duration ) )
+									: esc_html__( 'Film', 'goodblocks' );
+								?>
+							</span>
+						</span>
 					<?php endif; ?>
 				</div>
 

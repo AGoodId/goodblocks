@@ -39,6 +39,10 @@
 			"type": "array",
 			"default": ["post"]
 		},
+		"mediaTypes": {
+			"type": "array",
+			"default": ["image"]
+		},
 		"postsPerPage": {
 			"type": "number",
 			"default": 12

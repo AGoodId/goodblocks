@@ -545,8 +545,9 @@ class MasonryQueryBlock {
 			image.style.display = 'none';
 			video.style.display = '';
 			video.src = slide.src;
-			video.play();
-			caption.textContent = '';
+			// Browsers may refuse to autoplay unmuted video — the controls remain.
+			video.play().catch( () => {} );
+			caption.textContent = slide.cap || '';
 			meta.textContent = '';
 		} else {
 			video.style.display = 'none';
