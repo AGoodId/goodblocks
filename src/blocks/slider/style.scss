@@ -185,7 +185,8 @@
 			}
 
 			&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
-				min-height: auto;
+				// Override the saved inline vh minimum on small screens.
+				min-height: auto !important;
 
 				.swiper-slide {
 					min-height: 0;
