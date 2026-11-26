@@ -3,18 +3,24 @@ const assert = require( 'node:assert/strict' );
 const fs = require( 'node:fs' );
 const path = require( 'node:path' );
 const { JSDOM } = require( 'jsdom' );
+const { createI18n } = require( '@wordpress/i18n' );
 
 const bundle = fs.readFileSync( path.join( __dirname, '../build/blocks/slider/view.js' ), 'utf8' );
 const slide = ( index ) => `<div class="wp-block-goodblocks-slide" data-link-url="/art-${ index }"><div class="slide-media"><img src="/image-${ index }.jpg" alt="Artwork ${ index }"></div><div class="slide-heading">Artwork ${ index }</div></div>`;
 const slider = ( id, count = 3, layout = 'overlay' ) => `<div id="${ id }" class="slider-container" data-show-navigation="true" data-show-pagination="true" data-layout="${ layout }" data-autoplay="true" data-autoplay-delay="100000">${ Array.from( { length: count }, ( _, i ) => slide( i ) ).join( '' ) }</div>`;
 
-async function fixture( reduced = false ) {
+async function fixture( reduced = false, locale = 'en_US' ) {
 	const dom = new JSDOM( slider( 'first' ) + slider( 'second', 3, 'below' ) + slider( 'single', 1 ), { runScripts: 'outside-only', pretendToBeVisual: true, url: 'https://example.test/' } );
 	const { window } = dom;
 	await new Promise( ( resolve ) => window.document.addEventListener( 'DOMContentLoaded', resolve, { once: true } ) );
 	const media = { matches: reduced, listeners: [], addEventListener( _, callback ) { this.listeners.push( callback ); }, removeEventListener( _, callback ) { this.listeners = this.listeners.filter( ( listener ) => listener !== callback ); } };
 	window.matchMedia = () => media;
-	window.wp = { i18n: { __: ( text ) => text } };
+	const i18n = createI18n();
+	if ( locale === 'sv_SE' ) {
+		const catalog = JSON.parse( fs.readFileSync( path.join( __dirname, '../inc/languages/goodblocks-sv_SE-goodblocks-slider-view-script.json' ), 'utf8' ) );
+		i18n.setLocaleData( catalog.locale_data.messages, 'goodblocks' );
+	}
+	window.wp = { i18n };
 	window.eval( bundle );
 	window.document.dispatchEvent( new window.Event( 'DOMContentLoaded' ) );
 	return { dom, window, media, get: ( id ) => window.document.getElementById( id ) };
@@ -93,5 +99,17 @@ async function fixture( reduced = false ) {
 	assert.equal( reducedSlider.swiper.autoplay.running, false, 'hidden document stops manually started rotation' );
 	reducedFixture.window.document.querySelectorAll( '.slider-container' ).forEach( ( element ) => element.swiper.destroy() );
 	reducedFixture.dom.window.close();
-	console.log( 'PASS: compiled Swiper controls, separate instances, alt/link names, single slide, focus, keyboard, pause/play, inactive slides and reduced motion' );
+	const swedishFixture = await fixture( false, 'sv_SE' );
+	const swedishSlider = swedishFixture.get( 'first' );
+	assert.equal( swedishSlider.getAttribute( 'aria-label' ), 'Bildspel' );
+	assert.equal( swedishSlider.querySelector( '.swiper-button-prev' ).getAttribute( 'aria-label' ), 'Föregående bild' );
+	assert.equal( swedishSlider.querySelector( '.swiper-button-next' ).getAttribute( 'aria-label' ), 'Nästa bild' );
+	assert.equal( swedishSlider.querySelector( '.swiper-pagination-bullet' ).getAttribute( 'aria-label' ), 'Visa bild 1' );
+	assert.equal( swedishSlider.querySelector( '.goodblocks-slider-rotation' ).textContent, 'Pausa bildspel' );
+	swedishSlider.querySelector( '.goodblocks-slider-rotation' ).click();
+	assert.equal( swedishSlider.querySelector( '.goodblocks-slider-rotation' ).textContent, 'Starta bildspel' );
+	assert.equal( swedishFixture.window.wp.i18n.__( 'Alternative text', 'goodblocks' ), 'Alternativtext' );
+	swedishFixture.window.document.querySelectorAll( '.slider-container' ).forEach( ( element ) => element.swiper.destroy() );
+	swedishFixture.dom.window.close();
+	console.log( 'PASS: compiled Swiper controls, separate instances, alt/link names, single slide, focus, keyboard, pause/play, inactive slides, reduced motion and Swedish catalog' );
 } )().catch( ( error ) => { console.error( error ); process.exitCode = 1; } );

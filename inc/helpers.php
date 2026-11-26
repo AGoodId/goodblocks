@@ -9,6 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/** Register bundled slider translations after block script registration. */
+function goodblocks_register_slider_translations() {
+	foreach ( array( 'goodblocks-slider-view-script', 'goodblocks-slider-editor-script', 'goodblocks-slide-editor-script' ) as $handle ) {
+		wp_set_script_translations( $handle, 'goodblocks', __DIR__ . '/languages' );
+	}
+}
+add_action( 'init', 'goodblocks_register_slider_translations', 20 );
+
 /**
  * Get post thumbnail or fall back to the first content image/site default image.
  *

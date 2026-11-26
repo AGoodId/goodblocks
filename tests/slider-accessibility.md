@@ -7,6 +7,7 @@ Run from the repository root after installing the existing lockfile with
 npm run build
 node tests/slide-serialization.cjs
 node tests/slider-accessibility.cjs
+php tests/php/slider-translations-smoke.php
 ```
 
 The serialization regression compares twelve combinations against the actual
@@ -18,6 +19,10 @@ Swiper, in JSDOM. It covers separate navigation/pagination instances, accessible
 link names in the below layout, image alternative text preservation, single-slide
 behavior, actual autoplay pause/play, focus pause, arrow keys, inactive slide
 state through loop reordering, and initial/changed reduced-motion preference.
+It also consumes the bundled Swedish catalog through the real WordPress i18n
+library and checks actual generated controls, pagination labels and alt-field text.
+The PHP check covers the exact three native handles, post-registration priority,
+catalog shape and synchronized editor/frontend catalogs without a WP/DB bootstrap.
 
 JSDOM does not prove visual layout, browser tab order/inert support, touch gestures,
 screen-reader behavior, or WordPress editor insertion and save/reload. Those
