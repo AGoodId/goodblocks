@@ -6,6 +6,7 @@ Run from the repository root after installing the existing lockfile with
 ```sh
 npm run build
 node tests/slide-serialization.cjs
+node tests/slide-editor-contract.cjs
 node tests/slider-accessibility.cjs
 php tests/php/slider-translations-smoke.php
 ```
@@ -13,6 +14,11 @@ php tests/php/slider-translations-smoke.php
 The serialization regression compares twelve combinations against the actual
 saved slide component at baseline commit `a38bd2b`. An absent new `mediaAlt`
 attribute must preserve old markup. The new alternative text must be escaped.
+
+The editor component contract renders the selected Slide against the matrix
+control export observed in installed WordPress. A negative regression proves
+the former nonexistent stable export fails. Actual WordPress insertion remains
+the authoritative integration check.
 
 The frontend regression executes the compiled webpack bundle, including real
 Swiper, in JSDOM. It covers separate navigation/pagination instances, accessible

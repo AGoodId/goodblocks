@@ -6,7 +6,8 @@ import {
 	InspectorControls,
 	MediaUpload,
 	MediaUploadCheck,
-	BlockAlignmentMatrixControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalLinkControl as LinkControl,
 } from '@wordpress/block-editor';
