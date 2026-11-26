@@ -25,6 +25,9 @@ Swiper, in JSDOM. It covers separate navigation/pagination instances, accessible
 link names in the below layout, image alternative text preservation, single-slide
 behavior, actual autoplay pause/play, focus pause, arrow keys, inactive slide
 state through loop reordering, and initial/changed reduced-motion preference.
+The pointer regression includes entering the carousel before pointerdown/focus
+and clicking Pause, as happens in a real browser. Hover alone is temporary;
+explicit Pause or focus stop survives pointer leave.
 It also consumes the bundled Swedish catalog through the real WordPress i18n
 library and checks actual generated controls, pagination labels and alt-field text.
 The PHP check covers the exact three native handles, post-registration priority,

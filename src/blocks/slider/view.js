@@ -252,18 +252,21 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			swiper.on( 'slideChange', updateSlides );
 			updateSlides();
 			let rotationButton;
+			let hoverPaused = false;
 			const updateRotationButton = () => {
 				swiperWrapper.setAttribute(
 					'aria-live',
 					swiper.autoplay.running ? 'off' : 'polite'
 				);
 				if ( rotationButton ) {
-					rotationButton.textContent = swiper.autoplay.running
-						? __( 'Pause slideshow', 'goodblocks' )
-						: __( 'Play slideshow', 'goodblocks' );
+					rotationButton.textContent =
+						swiper.autoplay.running || hoverPaused
+							? __( 'Pause slideshow', 'goodblocks' )
+							: __( 'Play slideshow', 'goodblocks' );
 				}
 			};
 			const stopRotation = () => {
+				hoverPaused = false;
 				swiper.autoplay.stop();
 				updateRotationButton();
 			};
@@ -275,7 +278,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				// Pointerdown precedes focusin. Preserve an intended Pause click
 				// when focus itself stops rotation before the click arrives.
 				rotationButton.addEventListener( 'pointerdown', () => {
-					pointerWasRunning = swiper.autoplay.running;
+					pointerWasRunning = swiper.autoplay.running || hoverPaused;
 				} );
 				rotationButton.addEventListener( 'pointercancel', () => {
 					pointerWasRunning = null;
@@ -302,11 +305,24 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				updateRotationButton();
 			}
 			sliderContainer.addEventListener( 'focusin', stopRotation );
-			// These listeners also cover an explicit Play after reduced motion
-			// prevented initial rotation. Restart always requires explicit Play.
+			// Hover temporarily suspends the user's playing state. Keeping the
+			// Pause label prevents pointerenter -> focus -> click from becoming Play.
+			// Focus, visibility and reduced-motion stops still require explicit Play.
 			sliderContainer.addEventListener( 'pointerenter', ( event ) => {
-				if ( event.pointerType === 'mouse' ) {
-					stopRotation();
+				if (
+					event.pointerType === 'mouse' &&
+					swiper.autoplay.running
+				) {
+					hoverPaused = true;
+					swiper.autoplay.stop();
+					updateRotationButton();
+				}
+			} );
+			sliderContainer.addEventListener( 'pointerleave', ( event ) => {
+				if ( event.pointerType === 'mouse' && hoverPaused ) {
+					hoverPaused = false;
+					swiper.autoplay.start();
+					updateRotationButton();
 				}
 			} );
 			sliderContainer.addEventListener( 'keydown', ( event ) => {
