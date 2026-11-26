@@ -37,8 +37,18 @@ Actual local Chrome with the built CSS in slider-max-height-browser.html:
   document width390. No horizontal overflow.
 - Viewport restored; owned local browser tab closed; temporary local server stopped.
 
-These are isolated compiled-CSS and serialization checks. The new option has not
-yet been installed or exercised through WordPress's actual editor UI on staging.
-Source full-width alignment and the remaining real-template comparisons are
-separate gates. No published slider, plugin activation, release or production
-configuration was changed.
+The eight-file scoped package was subsequently installed on staging after
+independent exact-byte review, passing preflight, private file backup and readback.
+Existing helpers.php was preserved; no database/activation/release was involved.
+
+Actual existing Editor account then inserted Slider into disposable draft35646,
+chose2:1, maximum600, native Full width and an existing Media image35512. Saving
+and full reload retained600 and the CSS variable; editor frame1640×600.
+The default Astra page sidebar initially constrained frontend to840×420. Using
+the existing Astra container Full width and No sidebar options, then saving and
+reloading, produced1920×600 atx0/document1920. At390px the image was loaded,
+390×182.578125 atx0/document390, computed wrapper max-height none. Native Trash
+confirmation and Undo ids35646 verified cleanup. No library metadata changed.
+
+The remaining real-template/content comparisons are separate gates. No published
+slider, plugin activation, release or production configuration was changed.
