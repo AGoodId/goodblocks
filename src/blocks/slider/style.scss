@@ -169,7 +169,67 @@
 
 	@media (max-width: 768px) {
 
-		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		// Fit mobile editorial text and reserve separate control rows.
+		&.layout-overlay {
+			min-height: auto;
+
+			.swiper-wrapper {
+				aspect-ratio: auto;
+				height: auto;
+				align-items: stretch;
+			}
+
+			.swiper-slide {
+				height: auto;
+				min-height: 0;
+			}
+
+			&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+				min-height: auto;
+
+				.swiper-slide {
+					min-height: 0;
+				}
+			}
+
+			.slide-item .slide-content {
+				position: relative;
+				inset: auto;
+				transform: none;
+				box-sizing: border-box;
+				width: 100%;
+				max-width: none;
+				padding: 88px 20px 80px;
+
+				.slide-heading {
+					font-size: clamp(1.5rem, 5vw, 2rem);
+					line-height: 1.2;
+					overflow-wrap: anywhere;
+				}
+
+				.slide-text {
+					font-size: 1rem;
+					line-height: 1.4;
+					overflow-wrap: anywhere;
+				}
+			}
+
+			.swiper-button-prev,
+			.swiper-button-next {
+				top: auto;
+				bottom: 16px;
+				margin-top: 0;
+			}
+
+			.swiper-pagination {
+				bottom: 26px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: calc(100% - 128px);
+			}
+		}
+
+		&.layout-below:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
 			aspect-ratio: 16 / 9;
 			min-height: auto;
 			height: auto;
