@@ -30,7 +30,12 @@ Verified:
 Targeted style lint has nine findings in untouched legacy lines (indentation and
 named white colors); baseline source was checked separately. No broad cleanup.
 
-This addition has not yet been installed or tested through a real WordPress
-picker/save/reload workflow. It does not convert public content or deactivate
-Smart Slider. Use `tests/slide-focal-point-browser.html` through a local HTTP
-server to repeat the compiled CSS visual check.
+The eight compiled/catalog files from commit 257c6df were installed only on
+staging with expected-before hashes, durable private file backup, atomic writes
+and full readback. Payload SHA256:
+`0b70079b29abc6483c176fce84f0c1313f4a4f377577d0b304eb0e0b3276adbc`.
+The existing helpers.php stayed unchanged. No WordPress bootstrap, database
+operation, public content conversion or plugin deactivation was performed by
+the installer. A real WordPress picker/save/reload test is still required.
+Use `tests/slide-focal-point-browser.html` through a local HTTP server to repeat
+the compiled CSS visual check.
