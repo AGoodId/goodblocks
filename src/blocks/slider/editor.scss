@@ -60,6 +60,29 @@
 	}
 }
 
+@media (max-width: 768px) {
+
+	.wp-block-goodblocks-slider[data-layout="overlay"][data-mobile-text-padding="true"] {
+		aspect-ratio: auto;
+		max-height: none;
+
+		.wp-block-goodblocks-slide {
+			position: relative;
+			height: auto;
+		}
+
+		.slide-item .slide-content {
+			position: relative;
+			inset: auto;
+			transform: none;
+			box-sizing: border-box;
+			width: 100%;
+			max-width: none;
+			padding: var(--slider-mobile-text-pad-top, 88px) var(--slider-mobile-text-pad-right, 20px) var(--slider-mobile-text-pad-bottom, 80px) var(--slider-mobile-text-pad-left, 20px);
+		}
+	}
+}
+
 // Show active slide.
 .wp-block-goodblocks-slider[data-current-slide="0"] .wp-block-goodblocks-slide:nth-child(1),
 .wp-block-goodblocks-slider[data-current-slide="1"] .wp-block-goodblocks-slide:nth-child(2),

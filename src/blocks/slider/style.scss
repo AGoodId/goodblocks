@@ -217,7 +217,7 @@
 				box-sizing: border-box;
 				width: 100%;
 				max-width: none;
-				padding: 88px 20px 80px;
+				padding: var(--slider-mobile-text-pad-top, 88px) var(--slider-mobile-text-pad-right, 20px) var(--slider-mobile-text-pad-bottom, 80px) var(--slider-mobile-text-pad-left, 20px);
 
 				.slide-heading {
 					font-size: clamp(1.5rem, 5vw, 2rem);

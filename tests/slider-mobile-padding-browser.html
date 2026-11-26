@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slider mobile text padding</title>
+<link rel="stylesheet" href="../build/blocks/slider/style-index.css">
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>body{margin:0;font:16px system-ui}.slider-container{margin:0}.swiper-wrapper{display:flex}.swiper-slide{flex:0 0 100%}.slide-heading{font-size:32px!important;line-height:1.2!important;margin:0!important}.slide-text{display:none}</style>
+<main id="fixtures"></main>
+<script>
+const editor=new URLSearchParams(location.search).has('editor');
+if(editor){const css=document.createElement('link');css.rel='stylesheet';css.href='../build/blocks/slider/index.css';document.head.append(css);}
+const image='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="1200" height="600" fill="#143c54"/></svg>');
+for(const customized of [false,true]){
+const host=document.createElement('div');host.id=customized?'custom':'legacy';host.className='wp-block-goodblocks-slider slider-container layout-overlay aspect-2-1';host.dataset.layout='overlay';host.dataset.aspectRatio='2-1';host.dataset.currentSlide='0';host.style.setProperty('--slider-max-image-height','600px');
+if(customized){host.dataset.mobileTextPadding='true';for(const [side,value] of Object.entries({top:170,right:40,bottom:80,left:40}))host.style.setProperty('--slider-mobile-text-pad-'+side,value+'px');}
+const slide=`<div class="wp-block-goodblocks-slide swiper-slide slide-item position-center-left"><div class="slide-media"><img src="${image}" alt="Geometric image"></div><div class="slide-content position-center-left"><h2 class="slide-heading">Svenskt Tenn: A Philosophy of Home<br><em>27 September 2024–12 January 2025</em></h2><p class="slide-text"></p></div></div>`;
+host.innerHTML=editor?slide:`<div class="swiper-wrapper">${slide}</div>`;document.getElementById('fixtures').append(host);
+}
+</script></html>

@@ -1,4 +1,5 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { mobileTextPaddingStyle } from './mobile-text-padding';
 
 export default function save( { attributes } ) {
 	const {
@@ -11,6 +12,7 @@ export default function save( { attributes } ) {
 		sliderHeight,
 		aspectRatio = '16-9',
 		maxImageHeight,
+		mobileTextPadding,
 	} = attributes;
 	const maxHeightStyle =
 		layout === 'overlay' &&
@@ -21,6 +23,10 @@ export default function save( { attributes } ) {
 			? { '--slider-max-image-height': `${ maxImageHeight }px` }
 			: {};
 
+	const mobilePaddingStyle = mobileTextPaddingStyle(
+		layout,
+		mobileTextPadding
+	);
 	const blockProps = useBlockProps.save( {
 		className: `slider-container ${
 			( aspectRatio && aspectRatio !== 'none' ) || ! aspectRatio
@@ -35,6 +41,9 @@ export default function save( { attributes } ) {
 		'data-layout': layout,
 		'data-slider-height': sliderHeight,
 		'data-aspect-ratio': aspectRatio || '16-9',
+		'data-mobile-text-padding': Object.keys( mobilePaddingStyle ).length
+			? true
+			: undefined,
 		style: {
 			...( aspectRatio === 'none'
 				? {
@@ -43,6 +52,7 @@ export default function save( { attributes } ) {
 				  }
 				: {} ),
 			...maxHeightStyle,
+			...mobilePaddingStyle,
 		},
 	} );
 

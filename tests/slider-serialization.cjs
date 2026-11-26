@@ -5,11 +5,12 @@ const { execFileSync } = require( 'node:child_process' );
 const React = require( 'react' );
 const { renderToStaticMarkup } = require( 'react-dom/server' );
 const babel = require( '@babel/core' );
+const mobileTextPaddingStyle = new Function( fs.readFileSync( 'src/blocks/slider/mobile-text-padding.js', 'utf8' ).replace( 'export function', 'function' ) + '; return mobileTextPaddingStyle;' )();
 
 function loadSave( source ) {
 	const body = source.replace( /import[^;]+;/g, '' ).replace( 'export default function save', 'function save' );
 	const compiled = babel.transformSync( body, { configFile: false, babelrc: false, plugins: [ [ '@babel/plugin-transform-react-jsx', { runtime: 'classic' } ] ] } ).code;
-	return new Function( 'React', 'useBlockProps', 'InnerBlocks', `${ compiled }; return save;` )( React, { save: ( props ) => props }, { Content: () => 'Nested slides' } );
+	return new Function( 'React', 'useBlockProps', 'InnerBlocks', 'mobileTextPaddingStyle', `${ compiled }; return save;` )( React, { save: ( props ) => props }, { Content: () => 'Nested slides' }, mobileTextPaddingStyle );
 }
 const baseline = loadSave( execFileSync( 'git', [ 'show', 'b5e7139:src/blocks/slider/save.js' ], { encoding: 'utf8' } ) );
 const current = loadSave( fs.readFileSync( 'src/blocks/slider/save.js', 'utf8' ) );
@@ -35,3 +36,11 @@ for ( const maxImageHeight of [ 100, 600, 800, 1600 ] ) {
 	}
 }
 console.log( `PASS: ${ checked } legacy slider serializations; invalid/inactive caps unchanged; valid pixel caps saved` );
+const padding = { top: 170, right: 40, bottom: 80, left: 40 };
+const padded = render( current, { ...defaults, mobileTextPadding: padding } );
+for ( const [ side, value ] of Object.entries( padding ) ) assert.ok( padded.includes( `--slider-mobile-text-pad-${ side }:${ value }px` ) );
+for ( const value of [ undefined, null, [], '170px', {}, { ...padding, top: -1 }, { ...padding, top: 801 }, { ...padding, left: '40' }, { ...padding, bottom: 79 }, { ...padding, bottom: Infinity }, { ...padding, top: '0; color:red' } ] ) {
+	assert.equal( render( current, { ...defaults, mobileTextPadding: value } ), render( baseline, defaults ), 'invalid spacing must not alter legacy HTML' );
+}
+assert.equal( render( current, { ...defaults, layout: 'below', mobileTextPadding: padding } ), render( baseline, { ...defaults, layout: 'below' } ), 'spacing cannot change caption layout' );
+console.log( 'PASS: explicit bounded four-side mobile padding; malformed/inactive padding keeps legacy HTML' );

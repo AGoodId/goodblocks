@@ -14,6 +14,7 @@ import {
 	ToggleControl,
 	SelectControl,
 	RangeControl,
+	Button,
 } from '@wordpress/components';
 import {
 	plus,
@@ -25,6 +26,7 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
 import './editor.scss';
+import { mobileTextPaddingStyle } from './mobile-text-padding';
 
 export default function Edit( { clientId, attributes, setAttributes } ) {
 	const {
@@ -36,6 +38,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		layout,
 		sliderHeight,
 		maxImageHeight,
+		mobileTextPadding,
 		aspectRatio = '16-9',
 	} = attributes;
 	const maxHeightStyle =
@@ -47,6 +50,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			? { '--slider-max-image-height': `${ maxImageHeight }px` }
 			: {};
 	const [ currentSlide, setCurrentSlide ] = useState( 0 );
+	const mobilePaddingDefaults = { top: 88, right: 20, bottom: 80, left: 20 };
+	const mobilePaddingStyle = mobileTextPaddingStyle(
+		layout,
+		mobileTextPadding
+	);
 
 	const { innerBlocks, selectedBlockId } = useSelect(
 		( select ) => {
@@ -296,6 +304,53 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						/>
 					) }
 				</PanelBody>
+				{ layout === 'overlay' && (
+					<PanelBody
+						title={ __( 'Mobile text padding', 'goodblocks' ) }
+						initialOpen={ false }
+					>
+						{ [
+							[ 'top', __( 'Above text (px)', 'goodblocks' ) ],
+							[
+								'right',
+								__( 'Right of text (px)', 'goodblocks' ),
+							],
+							[ 'bottom', __( 'Below text (px)', 'goodblocks' ) ],
+							[ 'left', __( 'Left of text (px)', 'goodblocks' ) ],
+						].map( ( [ side, label ] ) => (
+							<RangeControl
+								key={ side }
+								label={ label }
+								min={ side === 'bottom' ? 80 : 0 }
+								max={ 800 }
+								step={ 1 }
+								value={
+									mobileTextPadding?.[ side ] ??
+									mobilePaddingDefaults[ side ]
+								}
+								onChange={ ( value ) =>
+									setAttributes( {
+										mobileTextPadding: {
+											...mobilePaddingDefaults,
+											...mobileTextPadding,
+											[ side ]: value,
+										},
+									} )
+								}
+							/>
+						) ) }
+						<Button
+							variant="secondary"
+							onClick={ () =>
+								setAttributes( {
+									mobileTextPadding: undefined,
+								} )
+							}
+						>
+							{ __( 'Reset text padding', 'goodblocks' ) }
+						</Button>
+					</PanelBody>
+				) }
 			</InspectorControls>
 
 			<div
@@ -303,6 +358,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				data-current-slide={ currentSlide }
 				data-layout={ layout }
 				data-aspect-ratio={ aspectRatio || '16-9' }
+				data-mobile-text-padding={
+					Object.keys( mobilePaddingStyle ).length ? true : undefined
+				}
 				className={ `${ innerBlocksProps.className } ${
 					( aspectRatio && aspectRatio !== 'none' ) || ! aspectRatio
 						? `aspect-${ aspectRatio || '16-9' }`
@@ -316,6 +374,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						  }
 						: {} ),
 					...maxHeightStyle,
+					...mobilePaddingStyle,
 				} }
 			/>
 		</>
