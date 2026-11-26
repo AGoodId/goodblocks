@@ -227,6 +227,7 @@
 				left: 50%;
 				transform: translateX(-50%);
 				width: calc(100% - 128px);
+				max-width: calc(100% - 128px);
 			}
 		}
 
