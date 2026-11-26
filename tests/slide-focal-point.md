@@ -36,6 +36,19 @@ and full readback. Payload SHA256:
 `0b70079b29abc6483c176fce84f0c1313f4a4f377577d0b304eb0e0b3276adbc`.
 The existing helpers.php stayed unchanged. No WordPress bootstrap, database
 operation, public content conversion or plugin deactivation was performed by
-the installer. A real WordPress picker/save/reload test is still required.
+the installer.
+
+The existing staging Editor subsequently inserted a Slider through the native
+inserter in disposable draft 35633, selected an existing library image and set
+48/38 using the Swedish native focus-point number controls. After “Utkast sparat.”
+and a full reload, both controls and the loaded editor image retained 48% 38%.
+Editor CSS URLs include ver=2026.11.26.2. The native frontend preview retained the
+image, heading/body and computed object-position. At 390 px its image was loaded,
+350 × 243.84375 px, with no document horizontal overflow. The draft was never
+published and was moved to recoverable Trash; the page list confirmed one page
+moved with Undo for ID35633. Media library metadata was not edited. Temporary
+viewport and own tabs were cleaned up. This closes that bounded editor workflow,
+not the conversion of public Smart Slider contexts.
+
 Use `tests/slide-focal-point-browser.html` through a local HTTP server to repeat
 the compiled CSS visual check.
