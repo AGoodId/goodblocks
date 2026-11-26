@@ -9,8 +9,10 @@ const bundle = fs.readFileSync( path.join( __dirname, '../build/blocks/slider/vi
 const slide = ( index ) => `<div class="wp-block-goodblocks-slide" ${ index === 0 ? 'style="--slide-object-position:48% 38%"' : '' } data-link-url="/art-${ index }"><div class="slide-media"><img src="/image-${ index }.jpg" alt="Artwork ${ index }"></div><div class="slide-heading">Artwork ${ index }</div></div>`;
 const slider = ( id, count = 3, layout = 'overlay' ) => `<div id="${ id }" class="slider-container" data-show-navigation="true" data-show-pagination="true" data-layout="${ layout }" data-autoplay="true" data-autoplay-delay="100000">${ Array.from( { length: count }, ( _, i ) => slide( i ) ).join( '' ) }</div>`;
 
-async function fixture( reduced = false, locale = 'en_US' ) {
-	const dom = new JSDOM( slider( 'first' ) + slider( 'second', 3, 'below' ) + slider( 'single', 1 ), { runScripts: 'outside-only', pretendToBeVisual: true, url: 'https://example.test/' } );
+async function fixture( reduced = false, locale = 'en_US', labelled = false ) {
+	let markup = slider( 'first' ) + slider( 'second', 3, 'below' ) + slider( 'single', 1 );
+	if ( labelled ) markup = markup.replaceAll( 'data-link-url="/art-0"', 'data-link-label="  Read about the exhibition  " data-link-url="/art-0"' );
+	const dom = new JSDOM( markup, { runScripts: 'outside-only', pretendToBeVisual: true, url: 'https://example.test/' } );
 	const { window } = dom;
 	await new Promise( ( resolve ) => window.document.addEventListener( 'DOMContentLoaded', resolve, { once: true } ) );
 	const media = { matches: reduced, listeners: [], addEventListener( _, callback ) { this.listeners.push( callback ); }, removeEventListener( _, callback ) { this.listeners = this.listeners.filter( ( listener ) => listener !== callback ); } };
@@ -131,5 +133,13 @@ async function fixture( reduced = false, locale = 'en_US' ) {
 	assert.equal( swedishFixture.window.wp.i18n.__( 'Alternative text', 'goodblocks' ), 'Alternativtext' );
 	swedishFixture.window.document.querySelectorAll( '.slider-container' ).forEach( ( element ) => element.swiper.destroy() );
 	swedishFixture.dom.window.close();
+	const labelledFixture = await fixture( false, 'en_US', true );
+	for ( const id of [ 'first', 'second' ] ) {
+		const link = labelledFixture.get( id ).querySelector( '.slide-link' );
+		assert.equal( link.getAttribute( 'aria-label' ), 'Read about the exhibition', 'explicit label survives overlay and below rendering' );
+		assert.equal( link.href, 'https://example.test/art-0', 'label does not change destination' );
+	}
+	labelledFixture.window.document.querySelectorAll( '.slider-container' ).forEach( ( element ) => element.swiper.destroy() );
+	labelledFixture.dom.window.close();
 	console.log( 'PASS: compiled Swiper controls, separate instances, alt/link names, single slide, focus, keyboard, pause/play, inactive slides, reduced motion and Swedish catalog' );
 } )().catch( ( error ) => { console.error( error ); process.exitCode = 1; } );

@@ -48,6 +48,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		overlayColor,
 		overlayOpacity,
 		linkUrl,
+		linkLabel,
 		linkTarget,
 	} = attributes;
 	const [ isEditingLink, setIsEditingLink ] = useState( false );
@@ -154,6 +155,24 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							},
 						] }
 					/>
+					{ linkUrl && (
+						<TextControl
+							label={ __(
+								'Link label for screen readers',
+								'goodblocks'
+							) }
+							value={
+								typeof linkLabel === 'string' ? linkLabel : ''
+							}
+							help={ __(
+								'Describe the destination. Leave empty to use the slide heading.',
+								'goodblocks'
+							) }
+							onChange={ ( value ) =>
+								setAttributes( { linkLabel: value } )
+							}
+						/>
+					) }
 				</Popover>
 			) }
 

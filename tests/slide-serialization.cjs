@@ -44,3 +44,16 @@ assert.deepEqual( focalPointStyle( { x: 0, y: 1 } ), { '--slide-object-position'
 assert.deepEqual( focalPointStyle( { x: 0.5, y: 0.55 } ), { '--slide-object-position': '50% 55%' } );
 console.log( `PASS: ${ checked } existing slide serializations unchanged; new alternative text is saved and escaped` );
 console.log( 'PASS: explicit focal points saved for images/video; invalid/absent points preserve old markup; edge coordinates and percentage precision verified' );
+
+for ( const label of [ undefined, null, '', '   ', false, 42, {} ] ) {
+	const attributes = { ...defaults, mediaUrl: '/art.jpg', heading: '', linkUrl: '/exhibition/' };
+	assert.equal( render( newSave, { ...attributes, linkLabel: label } ), render( newSave, attributes ), 'absent/invalid labels preserve old saved HTML' );
+}
+const labelled = render( newSave, { ...defaults, mediaUrl: '/art.jpg', heading: '', text: 'Exhibition text', linkUrl: '/exhibition/', linkLabel: '  Read about Ylva Snöfrid  ' } );
+assert.match( labelled, /data-link-label="Read about Ylva Snöfrid"/ );
+assert.match( labelled, /<span class="screen-reader-text">Read about Ylva Snöfrid<\/span>/ );
+assert.doesNotMatch( labelled, />Slide link</ );
+const escapedLabel = render( newSave, { ...defaults, mediaUrl: '/art.jpg', linkUrl: '/exhibition/', linkLabel: '<svg onload="alert(1)"> & artwork' } );
+assert.doesNotMatch( escapedLabel, /<svg/ );
+assert.match( escapedLabel, /&lt;svg onload=&quot;alert\(1\)&quot;&gt; &amp; artwork/ );
+console.log( 'PASS: explicit destination labels saved as escaped text/data; blank, missing and invalid labels preserve old HTML' );

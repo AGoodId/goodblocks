@@ -9,6 +9,8 @@ const container = ( { children } ) => React.createElement( 'div', null, children
 const controls = Object.fromEntries( [ 'ToolbarGroup', 'ToolbarButton', 'PanelBody', 'SelectControl', 'TextControl', 'ToggleControl', 'RangeControl', 'Popover' ].map( ( key ) => [ key, container ] ) );
 let pickerProps;
 let captionProps;
+let linkLabelProps;
+controls.TextControl = ( props ) => { if ( props.label === 'Link label for screen readers' ) linkLabelProps = props; return container( props ); };
 controls.TextareaControl = ( props ) => { captionProps = props; return React.createElement( 'textarea', { value: props.value, readOnly: true } ); };
 controls.FocalPointPicker = ( props ) => { pickerProps = props; return React.createElement( 'div', { 'data-native-control': 'focal-point' } ); };
 const focalPointStyle = new Function( `${ fs.readFileSync( 'src/blocks/slide/focal-point.js', 'utf8' ).replace( 'export function', 'function' ) }; return focalPointStyle;` )();
@@ -22,10 +24,10 @@ const editor = {
 	__experimentalBlockAlignmentMatrixControl: () => React.createElement( 'div', { 'data-native-control': 'alignment-matrix' } ),
 	__experimentalLinkControl: container,
 };
-function load( code ) {
+function load( code, forceLinkOpen = false ) {
 	const compiled = babel.transformSync( code, { configFile: false, babelrc: false, plugins: [ '@babel/plugin-transform-react-jsx', '@babel/plugin-transform-modules-commonjs' ] } ).code;
 	const module = { exports: {} };
-	const modules = { '@wordpress/i18n': { __: ( value ) => value }, '@wordpress/block-editor': editor, '@wordpress/components': controls, '@wordpress/icons': {}, '@wordpress/element': React, './editor.scss': {}, './focal-point': { focalPointStyle } };
+	const modules = { '@wordpress/i18n': { __: ( value ) => value }, '@wordpress/block-editor': editor, '@wordpress/components': controls, '@wordpress/icons': {}, '@wordpress/element': forceLinkOpen ? { ...React, useState: () => [ true, () => {} ] } : React, './editor.scss': {}, './focal-point': { focalPointStyle } };
 	new Function( 'require', 'module', 'exports', 'React', compiled )( ( name ) => {
 		assert.ok( Object.hasOwn( modules, name ), name );
 		return modules[ name ];
@@ -53,6 +55,10 @@ assert.equal( captionProps.value, 'A local caption' );
 assert.equal( captionProps.label, 'Caption' );
 captionProps.onChange( 'Updated only here' );
 assert.deepEqual( changed, { caption: 'Updated only here' } );
+renderToStaticMarkup( React.createElement( load( source, true ), { attributes: { ...attributes, linkUrl: '/exhibition/', linkLabel: 'Read about the exhibition' }, setAttributes( value ) { changed = value; }, context: {} } ) );
+assert.equal( linkLabelProps.value, 'Read about the exhibition' );
+linkLabelProps.onChange( 'Updated destination label' );
+assert.deepEqual( changed, { linkLabel: 'Updated destination label' } );
 const previous = source.replace( '__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl', 'BlockAlignmentMatrixControl' );
 const originalError = console.error;
 try {

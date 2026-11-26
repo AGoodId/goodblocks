@@ -50,6 +50,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 			slides.forEach( ( slide ) => {
 				const linkLabel =
+					slide.dataset.linkLabel?.trim() ||
 					slide
 						.querySelector( '.slide-heading' )
 						?.textContent?.trim() ||
