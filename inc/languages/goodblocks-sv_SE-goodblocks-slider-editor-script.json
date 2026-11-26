@@ -28,6 +28,8 @@
       "Enable Autoplay": ["Växla bilder automatiskt"],
       "Autoplay Delay (seconds)": ["Tid mellan bilder (sekunder)"],
       "Aspect Ratio": ["Bildförhållande"],
+      "Maximum image height (px)": ["Bildens maxhöjd (px)"],
+      "0 means no limit. Mobile text can expand the slide.": ["0 betyder ingen gräns. Texten kan ge bilden mer höjd på mobil."],
       "None (use slider height)": ["Inget (använd bildspelets höjd)"],
       "Slider Height (vh)": ["Bildspelets höjd (vh)"],
       "Select Media": ["Välj media"],

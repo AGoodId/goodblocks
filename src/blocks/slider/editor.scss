@@ -9,6 +9,7 @@
 
 	&[data-layout="overlay"] {
 		min-height: auto;
+		max-height: var(--slider-max-image-height, none);
 
 		&[data-aspect-ratio="16-9"] {
 			aspect-ratio: 16 / 9;

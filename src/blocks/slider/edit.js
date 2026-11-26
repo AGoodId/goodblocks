@@ -35,8 +35,17 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		autoplayDelay,
 		layout,
 		sliderHeight,
+		maxImageHeight,
 		aspectRatio = '16-9',
 	} = attributes;
+	const maxHeightStyle =
+		layout === 'overlay' &&
+		aspectRatio !== 'none' &&
+		Number.isInteger( maxImageHeight ) &&
+		maxImageHeight >= 100 &&
+		maxImageHeight <= 1600
+			? { '--slider-max-image-height': `${ maxImageHeight }px` }
+			: {};
 	const [ currentSlide, setCurrentSlide ] = useState( 0 );
 
 	const { innerBlocks, selectedBlockId } = useSelect(
@@ -267,6 +276,25 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							step={ 5 }
 						/>
 					) }
+					{ layout === 'overlay' && aspectRatio !== 'none' && (
+						<RangeControl
+							label={ __(
+								'Maximum image height (px)',
+								'goodblocks'
+							) }
+							help={ __(
+								'0 means no limit. Mobile text can expand the slide.',
+								'goodblocks'
+							) }
+							value={ maxImageHeight || 0 }
+							onChange={ ( value ) =>
+								setAttributes( { maxImageHeight: value } )
+							}
+							min={ 0 }
+							max={ 1600 }
+							step={ 100 }
+						/>
+					) }
 				</PanelBody>
 			</InspectorControls>
 
@@ -280,14 +308,15 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						? `aspect-${ aspectRatio || '16-9' }`
 						: ''
 				}` }
-				style={
-					aspectRatio === 'none'
+				style={ {
+					...( aspectRatio === 'none'
 						? {
 								'--slider-height': `${ sliderHeight }vh`,
 								minHeight: `${ sliderHeight }vh`,
 						  }
-						: {}
-				}
+						: {} ),
+					...maxHeightStyle,
+				} }
 			/>
 		</>
 	);

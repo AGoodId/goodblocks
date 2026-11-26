@@ -10,7 +10,16 @@ export default function save( { attributes } ) {
 		layout,
 		sliderHeight,
 		aspectRatio = '16-9',
+		maxImageHeight,
 	} = attributes;
+	const maxHeightStyle =
+		layout === 'overlay' &&
+		aspectRatio !== 'none' &&
+		Number.isInteger( maxImageHeight ) &&
+		maxImageHeight >= 100 &&
+		maxImageHeight <= 1600
+			? { '--slider-max-image-height': `${ maxImageHeight }px` }
+			: {};
 
 	const blockProps = useBlockProps.save( {
 		className: `slider-container ${
@@ -26,13 +35,15 @@ export default function save( { attributes } ) {
 		'data-layout': layout,
 		'data-slider-height': sliderHeight,
 		'data-aspect-ratio': aspectRatio || '16-9',
-		style:
-			aspectRatio === 'none'
+		style: {
+			...( aspectRatio === 'none'
 				? {
 						'--slider-height': `${ sliderHeight }vh`,
 						minHeight: `${ sliderHeight }vh`,
 				  }
-				: {},
+				: {} ),
+			...maxHeightStyle,
+		},
 	} );
 
 	return (

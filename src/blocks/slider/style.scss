@@ -49,6 +49,10 @@
 	&.layout-overlay {
 		overflow: hidden;
 
+		.swiper-wrapper {
+			max-height: var(--slider-max-image-height, none);
+		}
+
 		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			min-height: var(--slider-height, 100vh);
 		}
@@ -188,6 +192,7 @@
 			.swiper-wrapper {
 				aspect-ratio: auto;
 				height: auto;
+				max-height: none;
 				align-items: stretch;
 			}
 

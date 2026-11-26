@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slider maximum image height</title>
+<link rel="stylesheet" href="../build/blocks/slider/style-index.css">
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>body{margin:0;font:16px system-ui}.slider-container{margin:0}.swiper-wrapper{display:flex}.swiper-slide{flex:0 0 100%}</style>
+<main id="fixtures"></main>
+<script>
+const editor=new URLSearchParams(location.search).has('editor');
+if(editor){const css=document.createElement('link');css.rel='stylesheet';css.href='../build/blocks/slider/index.css';document.head.append(css);}
+const image='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="1200" height="600" fill="#143c54"/></svg>');
+for(const cap of [0,100,600,800]){
+const host=document.createElement('div');host.id='cap-'+cap;host.className='wp-block-goodblocks-slider slider-container layout-overlay aspect-2-1';host.dataset.layout='overlay';host.dataset.aspectRatio='2-1';host.dataset.currentSlide='0';if(cap)host.style.setProperty('--slider-max-image-height',cap+'px');
+const slide=`<div class="wp-block-goodblocks-slide swiper-slide slide-item position-center-left"><div class="slide-media"><img src="${image}" alt="Geometric image"></div><div class="slide-content position-center-left"><h2 class="slide-heading">An exhibition</h2><p class="slide-text">A sufficiently long editorial description that must remain readable at the exact mobile breakpoint, even when a small image height cap has been chosen.</p></div></div>`;
+host.innerHTML=editor?slide:`<div class="swiper-wrapper">${slide}</div>`;document.getElementById('fixtures').append(host);
+}
+</script></html>

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"version": "2026.11.26.5",
+	"version": "2026.11.26.6",
 	"name": "goodblocks/slider",
 	"title": "Slider",
 	"category": "goodblocks",
@@ -44,6 +44,9 @@
 		"aspectRatio": {
 			"type": "string",
 			"default": "16-9"
+		},
+		"maxImageHeight": {
+			"type": "number"
 		}
 	},
 	"providesContext": {
