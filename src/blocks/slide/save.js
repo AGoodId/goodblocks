@@ -1,4 +1,5 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
+import { focalPointStyle } from './focal-point';
 
 export default function save( { attributes } ) {
 	const {
@@ -10,6 +11,7 @@ export default function save( { attributes } ) {
 		text,
 		contentPosition,
 		objectFit,
+		focalPoint,
 		showOverlay,
 		overlayColor,
 		overlayOpacity,
@@ -25,7 +27,7 @@ export default function save( { attributes } ) {
 		'data-object-fit': objectFit,
 		'data-link-url': linkUrl || '',
 		'data-link-target': linkTarget ? '_blank' : '_self',
-		style: { '--object-fit': objectFit },
+		style: { '--object-fit': objectFit, ...focalPointStyle( focalPoint ) },
 	} );
 
 	const slideContent = (

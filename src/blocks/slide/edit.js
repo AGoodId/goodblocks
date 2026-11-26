@@ -20,6 +20,7 @@ import {
 	ToggleControl,
 	RangeControl,
 	Popover,
+	FocalPointPicker,
 } from '@wordpress/components';
 import {
 	image as imageIcon,
@@ -27,6 +28,7 @@ import {
 	linkOff,
 } from '@wordpress/icons';
 import { useState, useRef } from '@wordpress/element';
+import { focalPointStyle } from './focal-point';
 import './editor.scss';
 
 export default function Edit( { attributes, setAttributes, context } ) {
@@ -40,6 +42,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		text,
 		contentPosition,
 		objectFit,
+		focalPoint,
 		showOverlay,
 		overlayColor,
 		overlayOpacity,
@@ -61,10 +64,14 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	};
 
 	const positionClass = contentPosition.replace( ' ', '-' );
+	const focalStyle = focalPointStyle( focalPoint );
+	const pickerValue = focalStyle[ '--slide-object-position' ]
+		? focalPoint
+		: { x: 0.5, y: 0.5 };
 
 	const blockProps = useBlockProps( {
 		className: `slide-item position-${ positionClass } layout-${ layout }`,
-		style: { '--object-fit': objectFit },
+		style: { '--object-fit': objectFit, ...focalStyle },
 	} );
 
 	return (
@@ -175,6 +182,18 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						] }
 						onChange={ ( v ) => setAttributes( { objectFit: v } ) }
 					/>
+					{ mediaUrl &&
+						mediaType === 'image' &&
+						objectFit === 'cover' && (
+							<FocalPointPicker
+								label={ __( 'Focal point', 'goodblocks' ) }
+								url={ mediaUrl }
+								value={ pickerValue }
+								onChange={ ( value ) =>
+									setAttributes( { focalPoint: value } )
+								}
+							/>
+						) }
 				</PanelBody>
 				{ layout === 'overlay' && (
 					<PanelBody title={ __( 'Overlay', 'goodblocks' ) }>

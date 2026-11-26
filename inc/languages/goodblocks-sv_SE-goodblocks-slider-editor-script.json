@@ -39,6 +39,7 @@
       "Alternative text": ["Alternativtext"],
       "Describe the image. Leave empty if it is decorative.": ["Beskriv bilden. Lämna tomt om den är dekorativ."],
       "Object Fit": ["Bildanpassning"],
+      "Focal point": ["Bildens fokuspunkt"],
       "Overlay": ["Toning"],
       "Show Overlay": ["Visa toning"],
       "Overlay Color": ["Toningens färg"],
