@@ -96,12 +96,12 @@
 		}
 
 		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='36px' viewBox='0 -960 960 960' width='36px' fill='%23000'%3E%3Cpath d='M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z'/%3E%3C/svg%3E") !important;
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: 36px 36px;
+		background-repeat: no-repeat !important;
+		background-position: center !important;
+		background-size: 36px 36px !important;
 
 		&:hover {
-			background-color: rgba(255, 255, 255, 1);
+			background-color: rgba(255, 255, 255, 1) !important;
 			transform: scale(1.1);
 		}
 	}
