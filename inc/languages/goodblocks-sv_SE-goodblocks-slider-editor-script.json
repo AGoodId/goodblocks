@@ -36,6 +36,8 @@
       "Change content position": ["Ändra textens placering"],
       "Open in new tab": ["Öppna i ny flik"],
       "Image Settings": ["Bildinställningar"],
+      "Caption": ["Bildtext"],
+      "Only changes this slide, not the media library caption.": ["Ändrar bara den här bilden i bildspelet, inte mediebibliotekets bildtext."],
       "Alternative text": ["Alternativtext"],
       "Describe the image. Leave empty if it is decorative.": ["Beskriv bilden. Lämna tomt om den är dekorativ."],
       "Object Fit": ["Bildanpassning"],

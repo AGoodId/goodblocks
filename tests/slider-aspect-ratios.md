@@ -45,5 +45,12 @@ before atomic writes/full readback. Payload SHA256:
 `e9e7c9aba3519639083be791a04c68a943ad24d7a0497a09deefd336d3e7d81d`.
 The installer reports installed=true, files=7 and database_written=false. Nine
 filesystem installer tests pass for this variant and both older variants.
-Native WordPress selector/save/reload is still open for the ratio addition.
+Native WordPress selector/save/reload subsequently passed with the existing Editor
+in disposable, unpublished draft35635. 2:1 below persisted after save confirmation
+and full reload: editor1200×600, frontend840×420, actual390px frontend350×175 with
+document width390. 3:2 overlay persisted after a second save/reload: editor1200×800,
+frontend840×560 and actual390px frontend350×182.578125 with the existing content-
+sized mobile behavior. Images actually loaded and editor CSS URLs have version.3.
+Draft35635 remains open only for the following local caption workflow test and
+will be moved to recoverable Trash afterwards.
 No public content was converted; original Smart Slider/CVP remain active.

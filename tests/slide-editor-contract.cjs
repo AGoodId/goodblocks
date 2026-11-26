@@ -8,6 +8,8 @@ const source = fs.readFileSync( 'src/blocks/slide/edit.js', 'utf8' );
 const container = ( { children } ) => React.createElement( 'div', null, children );
 const controls = Object.fromEntries( [ 'ToolbarGroup', 'ToolbarButton', 'PanelBody', 'SelectControl', 'TextControl', 'ToggleControl', 'RangeControl', 'Popover' ].map( ( key ) => [ key, container ] ) );
 let pickerProps;
+let captionProps;
+controls.TextareaControl = ( props ) => { captionProps = props; return React.createElement( 'textarea', { value: props.value, readOnly: true } ); };
 controls.FocalPointPicker = ( props ) => { pickerProps = props; return React.createElement( 'div', { 'data-native-control': 'focal-point' } ); };
 const focalPointStyle = new Function( `${ fs.readFileSync( 'src/blocks/slide/focal-point.js', 'utf8' ).replace( 'export function', 'function' ) }; return focalPointStyle;` )();
 const editor = {
@@ -46,6 +48,11 @@ renderToStaticMarkup( React.createElement( load( source ), { attributes: { ...at
 assert.deepEqual( pickerProps.value, { x: 0.48, y: 0.38 } );
 pickerProps.onChange( { x: 0.3, y: 0.7 } );
 assert.deepEqual( changed, { focalPoint: { x: 0.3, y: 0.7 } } );
+renderToStaticMarkup( React.createElement( load( source ), { attributes: { ...attributes, caption: 'A local caption' }, setAttributes( value ) { changed = value; }, context: { 'goodblocks/layout': 'below' } } ) );
+assert.equal( captionProps.value, 'A local caption' );
+assert.equal( captionProps.label, 'Caption' );
+captionProps.onChange( 'Updated only here' );
+assert.deepEqual( changed, { caption: 'Updated only here' } );
 const previous = source.replace( '__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl', 'BlockAlignmentMatrixControl' );
 const originalError = console.error;
 try {

@@ -17,6 +17,7 @@ import {
 	PanelBody,
 	SelectControl,
 	TextControl,
+	TextareaControl,
 	ToggleControl,
 	RangeControl,
 	Popover,
@@ -158,6 +159,19 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 			<InspectorControls>
 				<PanelBody title={ __( 'Image Settings', 'goodblocks' ) }>
+					{ layout === 'below' && (
+						<TextareaControl
+							label={ __( 'Caption', 'goodblocks' ) }
+							value={ caption || '' }
+							help={ __(
+								'Only changes this slide, not the media library caption.',
+								'goodblocks'
+							) }
+							onChange={ ( value ) =>
+								setAttributes( { caption: value } )
+							}
+						/>
+					) }
 					{ mediaType === 'image' && (
 						<TextControl
 							label={ __( 'Alternative text', 'goodblocks' ) }
