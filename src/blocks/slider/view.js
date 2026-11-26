@@ -64,6 +64,15 @@ document.addEventListener( 'DOMContentLoaded', function () {
 					const figure = document.createElement( 'figure' );
 					figure.className = 'swiper-slide slide-item layout-below';
 					figure.style.setProperty( '--object-fit', objectFit );
+					const focalPoint = slide.style.getPropertyValue(
+						'--slide-object-position'
+					);
+					if ( focalPoint ) {
+						figure.style.setProperty(
+							'--slide-object-position',
+							focalPoint
+						);
+					}
 
 					const mediaDiv = slide.querySelector( '.slide-media' );
 					if ( mediaDiv ) {

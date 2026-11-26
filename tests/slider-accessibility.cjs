@@ -6,7 +6,7 @@ const { JSDOM } = require( 'jsdom' );
 const { createI18n } = require( '@wordpress/i18n' );
 
 const bundle = fs.readFileSync( path.join( __dirname, '../build/blocks/slider/view.js' ), 'utf8' );
-const slide = ( index ) => `<div class="wp-block-goodblocks-slide" data-link-url="/art-${ index }"><div class="slide-media"><img src="/image-${ index }.jpg" alt="Artwork ${ index }"></div><div class="slide-heading">Artwork ${ index }</div></div>`;
+const slide = ( index ) => `<div class="wp-block-goodblocks-slide" ${ index === 0 ? 'style="--slide-object-position:48% 38%"' : '' } data-link-url="/art-${ index }"><div class="slide-media"><img src="/image-${ index }.jpg" alt="Artwork ${ index }"></div><div class="slide-heading">Artwork ${ index }</div></div>`;
 const slider = ( id, count = 3, layout = 'overlay' ) => `<div id="${ id }" class="slider-container" data-show-navigation="true" data-show-pagination="true" data-layout="${ layout }" data-autoplay="true" data-autoplay-delay="100000">${ Array.from( { length: count }, ( _, i ) => slide( i ) ).join( '' ) }</div>`;
 
 async function fixture( reduced = false, locale = 'en_US' ) {
@@ -38,6 +38,8 @@ async function fixture( reduced = false, locale = 'en_US' ) {
 	assert.equal( first.querySelector( '.swiper-button-next' ).tagName, 'BUTTON' );
 	assert.equal( first.querySelector( 'img' ).alt, 'Artwork 0' );
 	assert.equal( second.querySelector( '.slide-link' ).getAttribute( 'aria-label' ), 'Artwork 0', 'below layout retains an accessible link name' );
+	assert.equal( second.querySelector( 'img[src="/image-0.jpg"]' ).closest( 'figure' ).style.getPropertyValue( '--slide-object-position' ), '48% 38%', 'below conversion retains the saved focal point' );
+	assert.equal( second.querySelector( 'img[src="/image-1.jpg"]' ).closest( 'figure' ).style.getPropertyValue( '--slide-object-position' ), '', 'legacy slides retain their default crop' );
 	assert.equal( single.swiper.params.loop, false );
 	assert.equal( single.swiper.autoplay.running, false );
 	assert.equal( single.querySelector( '.goodblocks-slider-rotation, .swiper-button-next, .swiper-pagination' ), null );

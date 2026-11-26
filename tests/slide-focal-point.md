@@ -50,5 +50,13 @@ moved with Undo for ID35633. Media library metadata was not edited. Temporary
 viewport and own tabs were cleaned up. This closes that bounded editor workflow,
 not the conversion of public Smart Slider contexts.
 
+A later combined below-layout/caption trial exposed that frontend conversion
+replaced the saved slide with a figure and lost its explicit focus CSS variable.
+The compiled Swiper test reproduced this (expected48%38%, actual empty). The
+conversion now copies only that saved variable when present. The rebuilt compiled
+test passes for both a saved focal point and a legacy slide without it. Save
+markup is unchanged. Parent metadata version2026.11.26.5 refreshes frontend JS.
+This follow-up has not yet been installed or verified in the actual preview.
+
 Use `tests/slide-focal-point-browser.html` through a local HTTP server to repeat
 the compiled CSS visual check.
