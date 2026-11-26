@@ -33,6 +33,8 @@ The native frontend preview retained the exact text. Desktop image840×420 plus
 caption76px gave total496px; caption starts at image bottom and ends at slider
 bottom. Actual390px frontend had350px width and336.15625px total height; caption
 again starts after the image and remains within the slider. Document width390,
-image loaded. The same test draft is retained temporarily to verify the subsequent
-below-layout focal-point correction before recoverable Trash cleanup. No public
-content conversion or Smart Slider/CVP deactivation.
+image loaded. The subsequent below-layout focal-point correction was installed
+and the same saved draft verified48%38% together with the full local caption on
+desktop/mobile. WordPress then confirmed one page moved to Trash with Undo for
+35635. Own tabs and temporary viewport were cleaned up. No public content
+conversion or Smart Slider/CVP deactivation.

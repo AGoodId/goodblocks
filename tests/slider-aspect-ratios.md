@@ -51,6 +51,7 @@ and full reload: editor1200×600, frontend840×420, actual390px frontend350×175
 document width390. 3:2 overlay persisted after a second save/reload: editor1200×800,
 frontend840×560 and actual390px frontend350×182.578125 with the existing content-
 sized mobile behavior. Images actually loaded and editor CSS URLs have version.3.
-Draft35635 remains open only for the following local caption workflow test and
-will be moved to recoverable Trash afterwards.
+The following local-caption/focal-point combined test also passed, then native
+WordPress Trash confirmed one page moved with Undo for35635. The draft was never
+published; own test tabs and temporary viewport settings were cleaned up.
 No public content was converted; original Smart Slider/CVP remain active.

@@ -55,8 +55,18 @@ replaced the saved slide with a figure and lost its explicit focus CSS variable.
 The compiled Swiper test reproduced this (expected48%38%, actual empty). The
 conversion now copies only that saved variable when present. The rebuilt compiled
 test passes for both a saved focal point and a legacy slide without it. Save
-markup is unchanged. Parent metadata version2026.11.26.5 refreshes frontend JS.
-This follow-up has not yet been installed or verified in the actual preview.
+markup is unchanged. Parent metadata version2026.11.26.5 and the regenerated
+frontend asset file refresh cached assets. This follow-up was installed only on
+staging using a reviewed three-file payload, expected-before hashes, durable
+private backup and complete readback. PHP8.3 lint passed for its generated asset.
+
+Actual saved draft35635 below2:1 preview then retained computed object-position
+48%38%, with the exact longer local caption and loaded image: desktop width840,
+image height420; actual390px viewport width350, image height175. Caption starts
+after the image and stays within the slider. Document width390. The real frontend
+requested view.js?ver=169fa7550b016339e4ce, matching the regenerated asset file.
+Native Trash confirmed one page moved with Undo for35635; the draft was never
+published. This closes the bounded combined workflow, not public slider migration.
 
 Use `tests/slide-focal-point-browser.html` through a local HTTP server to repeat
 the compiled CSS visual check.
