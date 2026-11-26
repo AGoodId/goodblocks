@@ -247,6 +247,8 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							},
 							{ label: '16:9', value: '16-9' },
 							{ label: '4:3', value: '4-3' },
+							{ label: '3:2', value: '3-2' },
+							{ label: '2:1', value: '2-1' },
 							{ label: '3:1', value: '3-1' },
 						] }
 						onChange={ ( v ) =>

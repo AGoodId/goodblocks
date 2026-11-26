@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoodBlocks source aspect ratios</title>
+<link rel="stylesheet" href="../build/blocks/slider/style-index.css">
+<link rel="stylesheet" href="../build/blocks/slider/view.css">
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>body{font:16px system-ui;max-width:900px;margin:24px auto;padding:0 20px}.slider-container{margin:24px 0}</style>
+<h1>Original image sequence proportions</h1>
+<main id="fixtures"></main>
+<script>
+const params=new URLSearchParams(location.search);
+const editor=params.has('editor'),below=params.has('below'),fit=params.has('contain')?'contain':'cover';
+if(editor){const css=document.createElement('link');css.rel='stylesheet';css.href='../build/blocks/slider/index.css';document.head.append(css);}
+const image='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="1200" height="800" fill="#143c54"/><circle cx="900" cy="330" r="220" fill="white" opacity=".15"/></svg>');
+for(const ratio of ['2-1','3-2']){
+const section=document.createElement('section');section.innerHTML=`<h2>${editor?'Editor':'Frontend'} ${ratio.replace('-',':')}</h2>`;
+const host=document.createElement('div');host.id='ratio-'+ratio;host.className='wp-block-goodblocks-slider slider-container layout-overlay aspect-'+ratio;host.dataset.layout=below?'below':'overlay';host.dataset.aspectRatio=ratio;host.dataset.currentSlide='0';if(below)host.classList.replace('layout-overlay','layout-below');
+const slide=`<div class="wp-block-goodblocks-slide swiper-slide slide-item position-center-left ${below?'layout-below':''}" style="--object-fit:${fit}"><div class="slide-media"><img src="${image}" alt="Geometric image"></div>${below?'<figcaption class="slide-caption-content">A longer editorial caption that stays below the image and remains readable when the picture is cropped to a different aspect ratio.</figcaption>':'<div class="slide-content position-center-left"><h2 class="slide-heading">An exhibition</h2><p class="slide-text">Editable image and description.</p></div>'}</div>`;
+host.innerHTML=editor?slide:`<div class="swiper-wrapper">${slide}</div>`;section.append(host);document.getElementById('fixtures').append(section);
+}
+</script>
+</html>

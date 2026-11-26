@@ -24,8 +24,20 @@
 		height: auto;
 	}
 
+	&.aspect-3-2 .swiper-wrapper {
+		aspect-ratio: 3 / 2;
+		height: auto;
+	}
+
+	&.aspect-2-1 .swiper-wrapper {
+		aspect-ratio: 2 / 1;
+		height: auto;
+	}
+
 	&.aspect-16-9,
 	&.aspect-4-3,
+	&.aspect-3-2,
+	&.aspect-2-1,
 	&.aspect-3-1 {
 		min-height: auto;
 
@@ -37,7 +49,7 @@
 	&.layout-overlay {
 		overflow: hidden;
 
-		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			min-height: var(--slider-height, 100vh);
 		}
 	}
@@ -54,7 +66,7 @@
 			align-self: flex-start;
 		}
 
-		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			min-height: var(--slider-height, 100vh);
 
 			.swiper-slide {
@@ -67,7 +79,7 @@
 		height: 100%;
 	}
 
-	&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+	&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 
 		.swiper-slide {
 			min-height: var(--slider-height, 100vh);
@@ -184,7 +196,7 @@
 				min-height: 0;
 			}
 
-			&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+			&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 				// Override the saved inline vh minimum on small screens.
 				min-height: auto !important;
 
@@ -231,7 +243,7 @@
 			}
 		}
 
-		&.layout-below:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		&.layout-below:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			aspect-ratio: 16 / 9;
 			min-height: auto;
 			height: auto;

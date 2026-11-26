@@ -22,6 +22,14 @@
 			aspect-ratio: 3 / 1;
 		}
 
+		&[data-aspect-ratio="3-2"] {
+			aspect-ratio: 3 / 2;
+		}
+
+		&[data-aspect-ratio="2-1"] {
+			aspect-ratio: 2 / 1;
+		}
+
 		.wp-block-goodblocks-slide {
 			position: absolute;
 			top: 0;
@@ -33,6 +41,16 @@
 
 	&[data-layout="below"] {
 		min-height: auto;
+
+		&[data-aspect-ratio="3-2"] .slide-media {
+			aspect-ratio: 3 / 2;
+			height: auto;
+		}
+
+		&[data-aspect-ratio="2-1"] .slide-media {
+			aspect-ratio: 2 / 1;
+			height: auto;
+		}
 
 		.wp-block-goodblocks-slide {
 			position: relative;
