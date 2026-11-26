@@ -16,7 +16,7 @@ Actual local Chrome tests with compiled CSS and loaded SVG images:
 | Editor CSS, actual 390 px viewport | 350×175 | 350×233.328125 |
 | Frontend, actual 390 px viewport | 350×271.09375 | 350×271.09375 |
 
-Both mobile documents have width390. Frontend deliberately retains the existing
+Both mobile documents have width 390. Frontend deliberately retains the existing
 content-sized mobile layout so text and controls fit; desktop ratios are not
 forced over mobile text. An attempted reading of the other inactive tab was
 still desktop and was not counted as mobile evidence. A fresh active frontend
@@ -26,8 +26,8 @@ Separate review found that text-below editor mode initially ignored the 2:1
 selection: a 1200×800 image remained 900×600. This was reproduced in Chrome before
 fixing the two new below-frame rules. After rebuilding, both cover and contain
 produced image frames 900×450 / 900×600 on desktop and 350×175 / 350×233.328125 in
-an actual390px viewport. A longer caption begins at or below the image bottom in
-all eight cases; document width is390 on mobile. The fixture accepts `?editor&below`
+an actual 390 px viewport. A longer caption begins at or below the image bottom in
+all eight cases; document width is 390 on mobile. The fixture accepts `?editor&below`
 and `?editor&below&contain` to repeat these checks.
 
 Build, targeted JS lint and compiled Swiper accessibility regression pass.
@@ -36,5 +36,14 @@ findings. No PHP or saved parent serialization function changed.
 
 `tests/slider-aspect-ratios-browser.html` exercises compiled frontend CSS;
 `?editor` additionally loads compiled editor CSS. This is not an actual WordPress
-selector/save/reload test. The ratio addition has not yet been installed on staging
-or used to convert public content. Original Smart Slider/CVP remain active.
+selector/save/reload test.
+
+The seven parent-slider build files from 1783d50 were subsequently installed only
+on staging. Preflight verified their expected predecessors from 42eae3d. The
+reviewed installer retained helpers.php and created a durable private backup
+before atomic writes/full readback. Payload SHA256:
+`e9e7c9aba3519639083be791a04c68a943ad24d7a0497a09deefd336d3e7d81d`.
+The installer reports installed=true, files=7 and database_written=false. Nine
+filesystem installer tests pass for this variant and both older variants.
+Native WordPress selector/save/reload is still open for the ratio addition.
+No public content was converted; original Smart Slider/CVP remain active.
