@@ -289,7 +289,8 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				rotationButton.addEventListener( 'click', () => {
 					if (
 						pointerWasRunning === true ||
-						swiper.autoplay.running
+						swiper.autoplay.running ||
+						hoverPaused
 					) {
 						stopRotation();
 					} else {

@@ -94,6 +94,11 @@ async function fixture( reduced = false, locale = 'en_US' ) {
 	reducedSlider.dispatchEvent( hover );
 	assert.equal( reducedSlider.swiper.autoplay.running, false, 'hover stops rotation after initial reduced motion and Play' );
 	assert.equal( reducedPlay.textContent, 'Pause slideshow', 'temporary hover pause preserves the playing intent and Pause action' );
+	reducedPlay.click();
+	assert.equal( reducedSlider.swiper.autoplay.running, false, 'click-only activation of visible Pause also preserves stop intent' );
+	assert.equal( reducedPlay.textContent, 'Play slideshow' );
+	reducedPlay.click();
+	reducedSlider.dispatchEvent( hover );
 	const leave = new reducedFixture.window.Event( 'pointerleave' );
 	Object.defineProperty( leave, 'pointerType', { value: 'mouse' } );
 	reducedSlider.dispatchEvent( leave );
