@@ -115,6 +115,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			createBlock( 'goodblocks/slide', {
 				mediaId: item.id,
 				mediaUrl: item.url,
+				mediaAlt: item.alt || item.alt_text || '',
 				mediaType: item.type,
 				caption: item.caption || '',
 			} )

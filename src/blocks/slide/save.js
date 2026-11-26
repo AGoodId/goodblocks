@@ -3,6 +3,7 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 export default function save( { attributes } ) {
 	const {
 		mediaUrl,
+		mediaAlt,
 		mediaType,
 		caption,
 		heading,
@@ -32,7 +33,7 @@ export default function save( { attributes } ) {
 			{ mediaUrl && (
 				<div className="slide-media">
 					{ mediaType === 'image' ? (
-						<img src={ mediaUrl } alt="" />
+						<img src={ mediaUrl } alt={ mediaAlt || '' } />
 					) : (
 						<video
 							src={ mediaUrl }

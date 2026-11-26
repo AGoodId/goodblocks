@@ -15,6 +15,7 @@ import {
 	ToolbarButton,
 	PanelBody,
 	SelectControl,
+	TextControl,
 	ToggleControl,
 	RangeControl,
 	Popover,
@@ -31,6 +32,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 	const {
 		mediaId,
 		mediaUrl,
+		mediaAlt,
 		mediaType,
 		caption,
 		heading,
@@ -51,6 +53,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		setAttributes( {
 			mediaId: media.id,
 			mediaUrl: media.url,
+			mediaAlt: media.alt || media.alt_text || '',
 			mediaType: media.type,
 			caption: media.caption || '',
 		} );
@@ -147,6 +150,19 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 			<InspectorControls>
 				<PanelBody title={ __( 'Image Settings', 'goodblocks' ) }>
+					{ mediaType === 'image' && (
+						<TextControl
+							label={ __( 'Alternative text', 'goodblocks' ) }
+							value={ mediaAlt || '' }
+							help={ __(
+								'Describe the image. Leave empty if it is decorative.',
+								'goodblocks'
+							) }
+							onChange={ ( value ) =>
+								setAttributes( { mediaAlt: value } )
+							}
+						/>
+					) }
 					<SelectControl
 						label={ __( 'Object Fit', 'goodblocks' ) }
 						value={ objectFit }
@@ -221,7 +237,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					{ mediaUrl ? (
 						<div className="slide-media">
 							{ mediaType === 'image' ? (
-								<img src={ mediaUrl } alt="" />
+								<img src={ mediaUrl } alt={ mediaAlt || '' } />
 							) : (
 								<video
 									src={ mediaUrl }
@@ -272,7 +288,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					{ mediaUrl && (
 						<div className="slide-media">
 							{ mediaType === 'image' ? (
-								<img src={ mediaUrl } alt="" />
+								<img src={ mediaUrl } alt={ mediaAlt || '' } />
 							) : (
 								<video
 									src={ mediaUrl }

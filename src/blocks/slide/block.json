@@ -16,6 +16,7 @@
 	"attributes": {
 		"mediaId": { "type": "number", "default": 0 },
 		"mediaUrl": { "type": "string", "default": "" },
+		"mediaAlt": { "type": "string", "default": "" },
 		"mediaType": { "type": "string", "default": "image" },
 		"caption": { "type": "string", "default": "" },
 		"heading": { "type": "string", "default": "" },

@@ -29,6 +29,10 @@
       "type": "string",
       "default": ""
     },
+    "mediaAlt": {
+      "type": "string",
+      "default": ""
+    },
     "mediaType": {
       "type": "string",
       "default": "image"
