@@ -6,6 +6,7 @@ export default function save( { attributes } ) {
 	const {
 		showNavigation,
 		showPagination,
+		showThumbnails,
 		effect,
 		autoplay,
 		autoplayDelay,
@@ -41,6 +42,8 @@ export default function save( { attributes } ) {
 		}`,
 		'data-show-navigation': showNavigation,
 		'data-show-pagination': showPagination,
+		'data-show-thumbnails':
+			layout === 'below' && showThumbnails === true ? true : undefined,
 		'data-effect': effect,
 		'data-autoplay': autoplay,
 		'data-autoplay-delay': autoplayDelay,

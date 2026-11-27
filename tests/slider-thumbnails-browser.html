@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slider image thumbnails</title>
+<link rel="stylesheet" href="../build/blocks/slider/view.css">
+<link rel="stylesheet" href="../build/blocks/slider/style-index.css">
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>body{margin:0;font:16px sans-serif}main{max-width:1200px;margin:auto}.slider-container{margin:0}</style>
+<main id="fixtures"></main>
+<script>
+window.wp={i18n:{__:text=>text}};
+for(const [id,thumbs,count] of [['gallery',true,3],['legacy',false,3],['many',true,16]]){
+ if(new URLSearchParams(location.search).has('case')&&new URLSearchParams(location.search).get('case')!==id)continue;
+ const host=document.createElement('div');host.id=id;
+ host.className='wp-block-goodblocks-slider slider-container aspect-2-1';
+ Object.assign(host.dataset,{layout:'below',aspectRatio:'2-1',effect:'slide',autoplay:'false',showNavigation:'true',showPagination:'true'});
+ if(thumbs)host.dataset.showThumbnails='true';
+ for(let i=0;i<count;i++){
+  const slide=document.createElement('div');slide.className='wp-block-goodblocks-slide slide-item';
+  slide.dataset.objectFit='fill';
+  const media=document.createElement('div');media.className='slide-media';
+  const image=document.createElement('img');image.alt='Geometric image '+(i+1);
+  image.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="1200" height="600" fill="'+['#143c54','#d98324','#5d3575'][i%3]+'"/></svg>');
+  media.append(image);slide.append(media);host.append(slide);
+ }
+ document.getElementById('fixtures').append(host);
+}
+</script><script src="../build/blocks/slider/view.js" defer></script></html>

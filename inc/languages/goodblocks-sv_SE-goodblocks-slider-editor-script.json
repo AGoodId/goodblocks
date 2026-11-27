@@ -25,6 +25,8 @@
       "Transition Effect": ["Övergångseffekt"],
       "Show Navigation Arrows": ["Visa navigeringspilar"],
       "Show Pagination Dots": ["Visa bildpunkter"],
+      "Show image thumbnails": ["Visa miniatyrbilder"],
+      "Thumbnails replace dots on large screens and are hidden on mobile. Swipe or use arrows to change images.": ["Miniatyrer ersätter bildpunkterna på stor skärm och döljs på mobil. Svep eller använd pilarna för att byta bild."],
       "Enable Autoplay": ["Växla bilder automatiskt"],
       "Autoplay Delay (seconds)": ["Tid mellan bilder (sekunder)"],
       "Aspect Ratio": ["Bildförhållande"],

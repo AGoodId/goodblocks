@@ -60,3 +60,11 @@ for ( const [ side, value ] of Object.entries( padding ) ) assert.ok( desktop.in
 assert.equal( render( current, { ...defaults, layout: 'below', desktopTextPadding: desktopPadding } ), render( previous, { ...defaults, layout: 'below' } ), 'desktop spacing ignores caption layout' );
 assert.match( render( current, { ...defaults, desktopTextPadding: { top: 0, right: 0, bottom: 0, left: 0 } } ), /data-desktop-text-padding="true"/ );
 console.log( 'PASS: bounded desktop spacing, independent mobile vars, zero insets and unchanged legacy/invalid/below HTML' );
+for ( const layout of [ 'overlay', 'below' ] ) {
+	for ( const showThumbnails of [ undefined, false, null, 'true', 1 ] ) {
+		assert.equal( render( current, { ...defaults, layout, showThumbnails } ), render( previous, { ...defaults, layout } ), 'absent/invalid thumbnails preserve saved HTML' );
+	}
+}
+assert.equal( render( current, { ...defaults, showThumbnails: true } ), render( previous, defaults ), 'thumbnails cannot alter overlay blocks' );
+assert.match( render( current, { ...defaults, layout: 'below', showThumbnails: true } ), /data-show-thumbnails="true"/ );
+console.log( 'PASS: explicit thumbnail opt-in is limited to below layout; legacy/default/invalid markup is unchanged' );

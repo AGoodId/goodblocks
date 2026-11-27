@@ -33,6 +33,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const {
 		showNavigation,
 		showPagination,
+		showThumbnails,
 		effect,
 		autoplay,
 		autoplayDelay,
@@ -238,6 +239,22 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							setAttributes( { showPagination: v } )
 						}
 					/>
+					{ layout === 'below' && (
+						<ToggleControl
+							label={ __(
+								'Show image thumbnails',
+								'goodblocks'
+							) }
+							help={ __(
+								'Thumbnails replace dots on large screens and are hidden on mobile. Swipe or use arrows to change images.',
+								'goodblocks'
+							) }
+							checked={ showThumbnails === true }
+							onChange={ ( v ) =>
+								setAttributes( { showThumbnails: v } )
+							}
+						/>
+					) }
 					<ToggleControl
 						label={ __( 'Enable Autoplay', 'goodblocks' ) }
 						checked={ autoplay }

@@ -42,6 +42,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			const autoplayDelay =
 				parseInt( sliderContainer.dataset.autoplayDelay ) || 5000;
 			const layout = sliderContainer.dataset.layout || 'overlay';
+			const showThumbnails =
+				layout === 'below' &&
+				sliderContainer.dataset.showThumbnails === 'true';
 			const sliderHeight =
 				parseInt( sliderContainer.dataset.sliderHeight ) || 100;
 
@@ -159,9 +162,13 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				sliderContainer.appendChild( nextBtn );
 			}
 
-			if ( showPagination && slides.length > 1 ) {
+			if ( ( showPagination || showThumbnails ) && slides.length > 1 ) {
 				pagination = document.createElement( 'div' );
 				pagination.className = 'swiper-pagination';
+				if ( showThumbnails ) {
+					pagination.classList.add( 'goodblocks-slider-thumbnails' );
+					sliderContainer.classList.add( 'has-image-thumbnails' );
+				}
 				sliderContainer.appendChild( pagination );
 			}
 
@@ -224,8 +231,40 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				swiperConfig.pagination = {
 					el: pagination,
 					clickable: true,
-					dynamicBullets: slides.length > 5,
+					dynamicBullets: ! showThumbnails && slides.length > 5,
 				};
+				if ( showThumbnails ) {
+					swiperConfig.pagination.renderBullet = (
+						index,
+						className
+					) => {
+						const button = document.createElement( 'button' );
+						button.type = 'button';
+						button.className = className;
+						button.setAttribute(
+							'aria-label',
+							__( 'Go to slide {{index}}', 'goodblocks' ).replace(
+								'{{index}}',
+								String( index + 1 )
+							)
+						);
+						const source = slides[ index ].querySelector( 'img' );
+						const video = slides[ index ].querySelector( 'video' );
+						const imageUrl =
+							source?.getAttribute( 'src' ) || video?.poster;
+						if ( imageUrl ) {
+							const image = document.createElement( 'img' );
+							image.src = imageUrl;
+							image.alt = '';
+							image.loading = 'lazy';
+							button.appendChild( image );
+						} else {
+							button.textContent = String( index + 1 );
+						}
+						// Build through DOM properties: no source text is interpolated as HTML.
+						return button.outerHTML;
+					};
+				}
 			}
 
 			if ( autoplay && slides.length > 1 ) {

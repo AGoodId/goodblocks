@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"version": "2026.11.27.3",
+	"version": "2026.11.27.4",
 	"name": "goodblocks/slider",
 	"title": "Slider",
 	"category": "goodblocks",
@@ -20,6 +20,9 @@
 		"showPagination": {
 			"type": "boolean",
 			"default": false
+		},
+		"showThumbnails": {
+			"type": "boolean"
 		},
 		"effect": {
 			"type": "string",
