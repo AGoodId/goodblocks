@@ -1,7 +1,8 @@
 # Optional large-screen text flow
 
-AGoodApp53662 / GoodBlocks PR121. Local implementation and browser fixtures;
-not installed on staging and no published content converted.
+AGoodApp53662 / GoodBlocks PR121. Initial build installed on staging; the
+native placeholder follow-up below is not installed yet. No published content
+converted.
 
 Slider accepts optional desktopTextPadding (four integer pixel insets0–800).
 Only a complete valid overlay value emits its marker/four CSS vars. Missing,
@@ -60,3 +61,34 @@ installation, actual native
 Editor insert/change/save/reload/Reset and runtime visual comparison using the
 real source images/fonts. This does not establish full seven-slider parity,
 thumbnails/media/link identity or authorize published replacement/deactivation.
+
+## Native test and empty-field follow-up
+
+ba0e42a was installed on staging through the ten-file package595611e8…,
+installer2e9139d6…. Actual read-only preflight, ten after hashes, ten preserve
+hashes, exact private before-backups and one complete payload-bound manifest
+passed. No WP/database invocation or published content conversion by installer.
+
+Existing Editor Test Testredaktörsson used disposable page35679, Astra full
+width/no sidebar. Two previously native-validated v9 examples (five images)
+were inserted. Actual save notice and full reload accepted the old HTML with
+the new build. Swedish desktop panel/help/four controls/Reset appeared.
+Native350/20/0/20 and320/20/270/20 were entered and a second actual save notice
+observed. Full reload of those new values and frontend remain pending.
+
+This real editor exposed a missing fixture case: Core's empty RichText p
+contains a zero-width marker and data-rich-text-placeholder span. Its40.796875px
+line shifted the short heading to421.09375 rather than449.5 while the Slider
+parent was selected. The corrective opt-in desktop CSS hides empty native
+placeholder fields only while their Slide is unselected. Selecting that Slide
+reveals the editable field again; nonempty fields, legacy sliders and mobile
+are unaffected. Metadata version2026.11.27.3 refreshes stylesheet URLs.
+
+The editor browser fixture now models Core's placeholder span and a selectable
+Slide. Built CSS gives600px/textTop449.5 for the short case and666.78125px/
+textTop320 for the compact one. Selecting exposes contenteditable placeholder;
+deselecting restores display:none and the exact compact geometry. Build,
+14legacy serializations and unchanged six-old-SCSS-findings check pass.
+The existing generated PHP asset is unchanged from the checked build.
+Both temporary servers/tabs were closed; native draft35679 remains for the
+post-install save/reload/Reset and Trash steps, not for publication.

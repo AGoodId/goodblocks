@@ -320,6 +320,12 @@
 				box-sizing: border-box;
 				padding: var(--slider-desktop-text-pad-top) var(--slider-desktop-text-pad-right) var(--slider-desktop-text-pad-bottom) var(--slider-desktop-text-pad-left);
 			}
+
+			// Empty native RichText fields must not shift the parent preview.
+			// Selecting their Slide reveals them again for normal inline editing.
+			.wp-block-goodblocks-slide:not(.is-selected) :is(.slide-heading, .slide-text):has(> [data-rich-text-placeholder]) {
+				display: none;
+			}
 		}
 	}
 }
