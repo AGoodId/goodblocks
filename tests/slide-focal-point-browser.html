@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoodBlocks slide focal point regression</title>
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>
+body{font:16px system-ui;padding:20px} main{display:flex;gap:20px;flex-wrap:wrap}
+.slide-item{width:200px;height:200px} figure{margin:0} figcaption{margin-top:12px}
+</style>
+<h1>Slide image crop</h1>
+<p>The left crop is red, the right crop blue. Legacy slides keep the centered default.</p>
+<main>
+<figure><div id="legacy" class="slide-item"><div class="slide-media"><img alt="Red left half and blue right half" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='100'%3E%3Cpath fill='red' d='M0 0h200v100H0z'/%3E%3Cpath fill='blue' d='M200 0h200v100H200z'/%3E%3C/svg%3E"></div></div><figcaption>Legacy default</figcaption></figure>
+<figure><div id="left" class="slide-item" style="--slide-object-position:0% 50%"><div class="slide-media"><img alt="Red left half and blue right half" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='100'%3E%3Cpath fill='red' d='M0 0h200v100H0z'/%3E%3Cpath fill='blue' d='M200 0h200v100H200z'/%3E%3C/svg%3E"></div></div><figcaption>Left: all red</figcaption></figure>
+<figure><div id="right" class="slide-item" style="--slide-object-position:100% 50%"><div class="slide-media"><img alt="Red left half and blue right half" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='100'%3E%3Cpath fill='red' d='M0 0h200v100H0z'/%3E%3Cpath fill='blue' d='M200 0h200v100H200z'/%3E%3C/svg%3E"></div></div><figcaption>Right: all blue</figcaption></figure>
+</main>
+</html>

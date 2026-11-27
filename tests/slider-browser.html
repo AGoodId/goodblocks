@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoodBlocks image slider browser regression</title>
+<link rel="stylesheet" href="../build/blocks/slider/style-index.css">
+<link rel="stylesheet" href="../build/blocks/slider/view.css">
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>body{font:18px/1.4 system-ui;margin:24px auto;max-width:920px;padding:0 16px} .slider-container{margin:24px 0} .screen-reader-text{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)} </style>
+<h1>Image slider regression</h1>
+<p>Two independent image sliders. Tab to controls; use arrow keys, pause and play.</p>
+<div id="fixtures"></div>
+<a href="#fixtures">End of test</a>
+<script>
+window.wp={i18n:{__:(text)=>text}};
+const image=(color)=>'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"><rect width="1200" height="675" fill="${color}"/><circle cx="900" cy="330" r="220" fill="white" opacity=".15"/></svg>`);
+const slides=['#143c54','#723426','#3a5946'].map((color,index)=>`<div class="wp-block-goodblocks-slide slide-item position-center-center" data-object-fit="cover" data-link-url="#fixtures"><a href="#fixtures" class="slide-link" style="position:absolute;inset:0;z-index:10"><span class="screen-reader-text">Artwork ${index+1}</span></a><div class="slide-media"><img src="${image(color)}" alt="Geometric composition ${index+1}"></div><div class="slide-content position-center-center"><h2 class="slide-heading">Artwork ${index+1}</h2><p class="slide-text">Editable image, heading and description</p></div></div>`).join('');
+document.getElementById('fixtures').innerHTML=['first','second'].map(id=>`<h2>${id==='first'?'First':'Second'} carousel</h2><div id="${id}" class="wp-block-goodblocks-slider slider-container aspect-16-9" data-show-navigation="true" data-show-pagination="true" data-autoplay="true" data-autoplay-delay="15000" data-effect="fade" data-layout="overlay">${slides}</div>`).join('');
+</script>
+<script src="../build/blocks/slider/view.js"></script>
+</html>

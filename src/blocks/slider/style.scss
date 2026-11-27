@@ -24,8 +24,20 @@
 		height: auto;
 	}
 
+	&.aspect-3-2 .swiper-wrapper {
+		aspect-ratio: 3 / 2;
+		height: auto;
+	}
+
+	&.aspect-2-1 .swiper-wrapper {
+		aspect-ratio: 2 / 1;
+		height: auto;
+	}
+
 	&.aspect-16-9,
 	&.aspect-4-3,
+	&.aspect-3-2,
+	&.aspect-2-1,
 	&.aspect-3-1 {
 		min-height: auto;
 
@@ -37,7 +49,11 @@
 	&.layout-overlay {
 		overflow: hidden;
 
-		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		.swiper-wrapper {
+			max-height: var(--slider-max-image-height, none);
+		}
+
+		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			min-height: var(--slider-height, 100vh);
 		}
 	}
@@ -54,7 +70,7 @@
 			align-self: flex-start;
 		}
 
-		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			min-height: var(--slider-height, 100vh);
 
 			.swiper-slide {
@@ -67,7 +83,7 @@
 		height: 100%;
 	}
 
-	&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+	&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 
 		.swiper-slide {
 			min-height: var(--slider-height, 100vh);
@@ -76,9 +92,13 @@
 
 	.swiper-button-prev,
 	.swiper-button-next {
+		// Preserve control contrast when a theme styles every button as transparent.
 		width: 40px;
 		height: 40px;
-		background-color: rgba(255, 255, 255, 0.7);
+		padding: 0;
+		border: 0 !important;
+		cursor: pointer;
+		background-color: rgba(255, 255, 255, 0.7) !important;
 		border-radius: 50%;
 		transition: transform 0.3s, background-color 0.3s ease-in-out;
 
@@ -91,13 +111,13 @@
 			display: none;
 		}
 
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='36px' viewBox='0 -960 960 960' width='36px' fill='%23000'%3E%3Cpath d='M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z'/%3E%3C/svg%3E");
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: 36px 36px;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='36px' viewBox='0 -960 960 960' width='36px' fill='%23000'%3E%3Cpath d='M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z'/%3E%3C/svg%3E") !important;
+		background-repeat: no-repeat !important;
+		background-position: center !important;
+		background-size: 36px 36px !important;
 
 		&:hover {
-			background-color: rgba(255, 255, 255, 1);
+			background-color: rgba(255, 255, 255, 1) !important;
 			transform: scale(1.1);
 		}
 	}
@@ -139,9 +159,96 @@
 		}
 	}
 
+	.goodblocks-slider-rotation {
+		// Theme-wide important button rules must not remove this contrast surface.
+		position: absolute;
+		top: 16px;
+		left: 16px;
+		z-index: 20;
+		min-height: 44px;
+		padding: 8px 16px;
+		border: 1px solid #000 !important;
+		border-radius: 4px;
+		background: #fff !important;
+		color: #000 !important;
+		font: inherit;
+		cursor: pointer;
+	}
+
+	button:focus-visible,
+	.swiper-pagination .swiper-pagination-bullet:focus-visible,
+	a.slide-link:focus-visible {
+		outline: 3px solid #000;
+		outline-offset: 3px;
+		box-shadow: 0 0 0 6px #fff;
+	}
+
 	@media (max-width: 768px) {
 
-		&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1) {
+		// Fit mobile editorial text and reserve separate control rows.
+		&.layout-overlay {
+			min-height: auto;
+
+			.swiper-wrapper {
+				aspect-ratio: auto;
+				height: auto;
+				max-height: none;
+				align-items: stretch;
+			}
+
+			.swiper-slide {
+				height: auto;
+				min-height: 0;
+			}
+
+			&:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
+				// Override the saved inline vh minimum on small screens.
+				min-height: auto !important;
+
+				.swiper-slide {
+					min-height: 0;
+				}
+			}
+
+			.slide-item .slide-content {
+				position: relative;
+				inset: auto;
+				transform: none;
+				box-sizing: border-box;
+				width: 100%;
+				max-width: none;
+				padding: var(--slider-mobile-text-pad-top, 88px) var(--slider-mobile-text-pad-right, 20px) var(--slider-mobile-text-pad-bottom, 80px) var(--slider-mobile-text-pad-left, 20px);
+
+				.slide-heading {
+					font-size: clamp(1.5rem, 5vw, 2rem);
+					line-height: 1.2;
+					overflow-wrap: anywhere;
+				}
+
+				.slide-text {
+					font-size: 1rem;
+					line-height: 1.4;
+					overflow-wrap: anywhere;
+				}
+			}
+
+			.swiper-button-prev,
+			.swiper-button-next {
+				top: auto;
+				bottom: 16px;
+				margin-top: 0;
+			}
+
+			.swiper-pagination {
+				bottom: 26px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: calc(100% - 128px);
+				max-width: calc(100% - 128px);
+			}
+		}
+
+		&.layout-below:not(.aspect-16-9):not(.aspect-4-3):not(.aspect-3-1):not(.aspect-3-2):not(.aspect-2-1) {
 			aspect-ratio: 16 / 9;
 			min-height: auto;
 			height: auto;
@@ -152,6 +259,132 @@
 				height: 100%;
 				min-height: auto;
 			}
+		}
+	}
+}
+
+// Optional text-led height on large screens. Native block styles are also
+// loaded in the editor; the same selectors cover its direct slide children.
+@media (min-width: 769px) {
+
+	@supports (container-type: inline-size) {
+
+		.wp-block-goodblocks-slider.slider-container[data-layout="overlay"][data-desktop-text-padding="true"] {
+			container-type: inline-size;
+			aspect-ratio: auto;
+			min-height: auto !important;
+			max-height: none;
+			--slider-desktop-ratio-height: var(--slider-height, 50vh);
+			--slider-desktop-image-min-height: min(var(--slider-desktop-ratio-height), var(--slider-max-image-height, var(--slider-desktop-ratio-height)));
+			--slider-editor-active-display: flex;
+
+			&[data-aspect-ratio="16-9"] {
+				--slider-desktop-ratio-height: 56.25cqw;
+			}
+
+			&[data-aspect-ratio="4-3"] {
+				--slider-desktop-ratio-height: 75cqw;
+			}
+
+			&[data-aspect-ratio="3-1"] {
+				--slider-desktop-ratio-height: 33.333333cqw;
+			}
+
+			&[data-aspect-ratio="3-2"] {
+				--slider-desktop-ratio-height: 66.666667cqw;
+			}
+
+			&[data-aspect-ratio="2-1"] {
+				--slider-desktop-ratio-height: 50cqw;
+			}
+
+			.swiper-wrapper {
+				aspect-ratio: auto;
+				height: auto;
+				max-height: none;
+				min-height: var(--slider-desktop-image-min-height);
+			}
+
+			.wp-block-goodblocks-slide {
+				position: relative;
+				inset: auto;
+				height: auto;
+				min-height: var(--slider-desktop-image-min-height);
+				align-self: stretch;
+			}
+
+			.slide-item .slide-content {
+				position: relative;
+				inset: auto;
+				transform: none;
+				box-sizing: border-box;
+				padding: var(--slider-desktop-text-pad-top) var(--slider-desktop-text-pad-right) var(--slider-desktop-text-pad-bottom) var(--slider-desktop-text-pad-left);
+			}
+
+			// Empty native RichText fields must not shift the parent preview.
+			// Selecting their Slide reveals them again for normal inline editing.
+			.wp-block-goodblocks-slide:not(.is-selected) :is(.slide-heading, .slide-text):has(> [data-rich-text-placeholder]) {
+				display: none;
+			}
+		}
+	}
+}
+
+.slider-container.layout-below.has-image-thumbnails {
+	overflow: hidden;
+
+	.goodblocks-slider-thumbnails {
+		position: static;
+		display: flex;
+		justify-content: safe center;
+		gap: 6px;
+		width: 100%;
+		height: 72px;
+		box-sizing: border-box;
+		padding: 6px;
+		transform: none;
+		overflow-x: auto;
+		background: #fff;
+
+		.swiper-pagination-bullet {
+			flex: 0 0 100px;
+			width: 100px;
+			height: 60px;
+			margin: 0 !important;
+			padding: 0;
+			border: 0;
+			border-radius: 0;
+			opacity: 1;
+			background: #eee;
+			color: #000;
+			cursor: pointer;
+
+			img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		.swiper-pagination-bullet-active {
+			outline: 2px solid #000;
+			outline-offset: 1px;
+		}
+	}
+
+	@media (min-width: 769px) {
+
+		.swiper-button-prev,
+		.swiper-button-next {
+			top: calc(50% - 36px);
+		}
+	}
+
+	@media (max-width: 768px) {
+
+		.goodblocks-slider-thumbnails {
+			display: none;
 		}
 	}
 }

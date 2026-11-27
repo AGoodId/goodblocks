@@ -6,7 +6,8 @@ import {
 	InspectorControls,
 	MediaUpload,
 	MediaUploadCheck,
-	BlockAlignmentMatrixControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalBlockAlignmentMatrixControl as BlockAlignmentMatrixControl,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalLinkControl as LinkControl,
 } from '@wordpress/block-editor';
@@ -15,9 +16,12 @@ import {
 	ToolbarButton,
 	PanelBody,
 	SelectControl,
+	TextControl,
+	TextareaControl,
 	ToggleControl,
 	RangeControl,
 	Popover,
+	FocalPointPicker,
 } from '@wordpress/components';
 import {
 	image as imageIcon,
@@ -25,22 +29,26 @@ import {
 	linkOff,
 } from '@wordpress/icons';
 import { useState, useRef } from '@wordpress/element';
+import { focalPointStyle } from './focal-point';
 import './editor.scss';
 
 export default function Edit( { attributes, setAttributes, context } ) {
 	const {
 		mediaId,
 		mediaUrl,
+		mediaAlt,
 		mediaType,
 		caption,
 		heading,
 		text,
 		contentPosition,
 		objectFit,
+		focalPoint,
 		showOverlay,
 		overlayColor,
 		overlayOpacity,
 		linkUrl,
+		linkLabel,
 		linkTarget,
 	} = attributes;
 	const [ isEditingLink, setIsEditingLink ] = useState( false );
@@ -51,16 +59,21 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		setAttributes( {
 			mediaId: media.id,
 			mediaUrl: media.url,
+			mediaAlt: media.alt || media.alt_text || '',
 			mediaType: media.type,
 			caption: media.caption || '',
 		} );
 	};
 
 	const positionClass = contentPosition.replace( ' ', '-' );
+	const focalStyle = focalPointStyle( focalPoint );
+	const pickerValue = focalStyle[ '--slide-object-position' ]
+		? focalPoint
+		: { x: 0.5, y: 0.5 };
 
 	const blockProps = useBlockProps( {
 		className: `slide-item position-${ positionClass } layout-${ layout }`,
-		style: { '--object-fit': objectFit },
+		style: { '--object-fit': objectFit, ...focalStyle },
 	} );
 
 	return (
@@ -142,11 +155,55 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							},
 						] }
 					/>
+					{ linkUrl && (
+						<TextControl
+							label={ __(
+								'Link label for screen readers',
+								'goodblocks'
+							) }
+							value={
+								typeof linkLabel === 'string' ? linkLabel : ''
+							}
+							help={ __(
+								'Describe the destination. Leave empty to use the slide heading.',
+								'goodblocks'
+							) }
+							onChange={ ( value ) =>
+								setAttributes( { linkLabel: value } )
+							}
+						/>
+					) }
 				</Popover>
 			) }
 
 			<InspectorControls>
 				<PanelBody title={ __( 'Image Settings', 'goodblocks' ) }>
+					{ layout === 'below' && (
+						<TextareaControl
+							label={ __( 'Caption', 'goodblocks' ) }
+							value={ caption || '' }
+							help={ __(
+								'Only changes this slide, not the media library caption.',
+								'goodblocks'
+							) }
+							onChange={ ( value ) =>
+								setAttributes( { caption: value } )
+							}
+						/>
+					) }
+					{ mediaType === 'image' && (
+						<TextControl
+							label={ __( 'Alternative text', 'goodblocks' ) }
+							value={ mediaAlt || '' }
+							help={ __(
+								'Describe the image. Leave empty if it is decorative.',
+								'goodblocks'
+							) }
+							onChange={ ( value ) =>
+								setAttributes( { mediaAlt: value } )
+							}
+						/>
+					) }
 					<SelectControl
 						label={ __( 'Object Fit', 'goodblocks' ) }
 						value={ objectFit }
@@ -158,6 +215,18 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						] }
 						onChange={ ( v ) => setAttributes( { objectFit: v } ) }
 					/>
+					{ mediaUrl &&
+						mediaType === 'image' &&
+						objectFit === 'cover' && (
+							<FocalPointPicker
+								label={ __( 'Focal point', 'goodblocks' ) }
+								url={ mediaUrl }
+								value={ pickerValue }
+								onChange={ ( value ) =>
+									setAttributes( { focalPoint: value } )
+								}
+							/>
+						) }
 				</PanelBody>
 				{ layout === 'overlay' && (
 					<PanelBody title={ __( 'Overlay', 'goodblocks' ) }>
@@ -221,7 +290,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					{ mediaUrl ? (
 						<div className="slide-media">
 							{ mediaType === 'image' ? (
-								<img src={ mediaUrl } alt="" />
+								<img src={ mediaUrl } alt={ mediaAlt || '' } />
 							) : (
 								<video
 									src={ mediaUrl }
@@ -272,7 +341,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					{ mediaUrl && (
 						<div className="slide-media">
 							{ mediaType === 'image' ? (
-								<img src={ mediaUrl } alt="" />
+								<img src={ mediaUrl } alt={ mediaAlt || '' } />
 							) : (
 								<video
 									src={ mediaUrl }

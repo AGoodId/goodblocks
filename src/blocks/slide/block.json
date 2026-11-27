@@ -1,6 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
+	"version": "2026.11.26.5",
 	"name": "goodblocks/slide",
 	"title": "Slide",
 	"category": "goodblocks",
@@ -16,16 +17,19 @@
 	"attributes": {
 		"mediaId": { "type": "number", "default": 0 },
 		"mediaUrl": { "type": "string", "default": "" },
+		"mediaAlt": { "type": "string", "default": "" },
 		"mediaType": { "type": "string", "default": "image" },
 		"caption": { "type": "string", "default": "" },
 		"heading": { "type": "string", "default": "" },
 		"text": { "type": "string", "default": "" },
 		"contentPosition": { "type": "string", "default": "center center" },
 		"objectFit": { "type": "string", "default": "cover" },
+		"focalPoint": { "type": "object" },
 		"showOverlay": { "type": "boolean", "default": false },
 		"overlayColor": { "type": "string", "default": "#000000" },
 		"overlayOpacity": { "type": "number", "default": 0.3 },
 		"linkUrl": { "type": "string", "default": "" },
+		"linkLabel": { "type": "string", "default": "" },
 		"linkTarget": { "type": "boolean", "default": false }
 	},
 	"textdomain": "goodblocks",

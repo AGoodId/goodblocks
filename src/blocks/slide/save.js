@@ -1,22 +1,28 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
+import { focalPointStyle } from './focal-point';
 
 export default function save( { attributes } ) {
 	const {
 		mediaUrl,
+		mediaAlt,
 		mediaType,
 		caption,
 		heading,
 		text,
 		contentPosition,
 		objectFit,
+		focalPoint,
 		showOverlay,
 		overlayColor,
 		overlayOpacity,
 		linkUrl,
+		linkLabel,
 		linkTarget,
 	} = attributes;
 
 	const positionClass = contentPosition.replace( ' ', '-' );
+	const explicitLinkLabel =
+		typeof linkLabel === 'string' ? linkLabel.trim() : '';
 
 	const blockProps = useBlockProps.save( {
 		className: `slide-item position-${ positionClass }`,
@@ -24,7 +30,10 @@ export default function save( { attributes } ) {
 		'data-object-fit': objectFit,
 		'data-link-url': linkUrl || '',
 		'data-link-target': linkTarget ? '_blank' : '_self',
-		style: { '--object-fit': objectFit },
+		...( explicitLinkLabel
+			? { 'data-link-label': explicitLinkLabel }
+			: {} ),
+		style: { '--object-fit': objectFit, ...focalPointStyle( focalPoint ) },
 	} );
 
 	const slideContent = (
@@ -32,7 +41,7 @@ export default function save( { attributes } ) {
 			{ mediaUrl && (
 				<div className="slide-media">
 					{ mediaType === 'image' ? (
-						<img src={ mediaUrl } alt="" />
+						<img src={ mediaUrl } alt={ mediaAlt || '' } />
 					) : (
 						<video
 							src={ mediaUrl }
@@ -88,7 +97,7 @@ export default function save( { attributes } ) {
 					} }
 				>
 					<span className="screen-reader-text">
-						{ heading || 'Slide link' }
+						{ explicitLinkLabel || heading || 'Slide link' }
 					</span>
 				</a>
 			) }

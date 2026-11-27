@@ -3,7 +3,9 @@
  */
 
 import Swiper from 'swiper';
+import { __ } from '@wordpress/i18n';
 import {
+	A11y,
 	Navigation,
 	Pagination,
 	Autoplay,
@@ -40,6 +42,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			const autoplayDelay =
 				parseInt( sliderContainer.dataset.autoplayDelay ) || 5000;
 			const layout = sliderContainer.dataset.layout || 'overlay';
+			const showThumbnails =
+				layout === 'below' &&
+				sliderContainer.dataset.showThumbnails === 'true';
 			const sliderHeight =
 				parseInt( sliderContainer.dataset.sliderHeight ) || 100;
 
@@ -47,6 +52,14 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			swiperWrapper.className = 'swiper-wrapper';
 
 			slides.forEach( ( slide ) => {
+				const linkLabel =
+					slide.dataset.linkLabel?.trim() ||
+					slide
+						.querySelector( '.slide-heading' )
+						?.textContent?.trim() ||
+					slide.querySelector( 'img' )?.alt ||
+					slide.dataset.caption ||
+					__( 'View slide', 'goodblocks' );
 				const objectFit = slide.dataset.objectFit || 'cover';
 				const linkUrl = slide.dataset.linkUrl || '';
 				const linkTarget = slide.dataset.linkTarget || '_self';
@@ -55,6 +68,15 @@ document.addEventListener( 'DOMContentLoaded', function () {
 					const figure = document.createElement( 'figure' );
 					figure.className = 'swiper-slide slide-item layout-below';
 					figure.style.setProperty( '--object-fit', objectFit );
+					const focalPoint = slide.style.getPropertyValue(
+						'--slide-object-position'
+					);
+					if ( focalPoint ) {
+						figure.style.setProperty(
+							'--slide-object-position',
+							focalPoint
+						);
+					}
 
 					const mediaDiv = slide.querySelector( '.slide-media' );
 					if ( mediaDiv ) {
@@ -81,6 +103,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 							link.rel = 'noopener noreferrer';
 						}
 						link.className = 'slide-link';
+						link.setAttribute( 'aria-label', linkLabel );
 						link.style.cssText =
 							'position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;text-decoration:none;color:inherit;';
 						figure.appendChild( link );
@@ -104,6 +127,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 							link.rel = 'noopener noreferrer';
 						}
 						link.className = 'slide-link';
+						link.setAttribute( 'aria-label', linkLabel );
 						link.style.cssText =
 							'position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;text-decoration:none;color:inherit;';
 						slide.appendChild( link );
@@ -116,18 +140,35 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			sliderContainer.innerHTML = '';
 			sliderContainer.appendChild( swiperWrapper );
 
-			if ( showNavigation ) {
-				const prevBtn = document.createElement( 'div' );
+			let prevBtn;
+			let nextBtn;
+			let pagination;
+			if ( showNavigation && slides.length > 1 ) {
+				prevBtn = document.createElement( 'button' );
+				prevBtn.type = 'button';
+				prevBtn.setAttribute(
+					'aria-label',
+					__( 'Previous slide', 'goodblocks' )
+				);
 				prevBtn.className = 'swiper-button-prev';
 				sliderContainer.appendChild( prevBtn );
-				const nextBtn = document.createElement( 'div' );
+				nextBtn = document.createElement( 'button' );
+				nextBtn.type = 'button';
+				nextBtn.setAttribute(
+					'aria-label',
+					__( 'Next slide', 'goodblocks' )
+				);
 				nextBtn.className = 'swiper-button-next';
 				sliderContainer.appendChild( nextBtn );
 			}
 
-			if ( showPagination ) {
-				const pagination = document.createElement( 'div' );
+			if ( ( showPagination || showThumbnails ) && slides.length > 1 ) {
+				pagination = document.createElement( 'div' );
 				pagination.className = 'swiper-pagination';
+				if ( showThumbnails ) {
+					pagination.classList.add( 'goodblocks-slider-thumbnails' );
+					sliderContainer.classList.add( 'has-image-thumbnails' );
+				}
 				sliderContainer.appendChild( pagination );
 			}
 
@@ -140,6 +181,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 			const swiperConfig = {
 				modules: [
+					A11y,
 					Navigation,
 					Pagination,
 					Autoplay,
@@ -149,11 +191,21 @@ document.addEventListener( 'DOMContentLoaded', function () {
 					EffectCoverflow,
 				],
 				speed: 600,
-				loop: true,
-				keyboard: { enabled: true },
+				loop: slides.length > 1,
 				a11y: {
-					prevSlideMessage: 'Previous slide',
-					nextSlideMessage: 'Next slide',
+					containerRole: 'region',
+					containerMessage: __( 'Slideshow', 'goodblocks' ),
+					prevSlideMessage: __( 'Previous slide', 'goodblocks' ),
+					nextSlideMessage: __( 'Next slide', 'goodblocks' ),
+					paginationBulletMessage: __(
+						'Go to slide {{index}}',
+						'goodblocks'
+					),
+					containerRoleDescriptionMessage: __(
+						'Carousel',
+						'goodblocks'
+					),
+					itemRoleDescriptionMessage: __( 'Slide', 'goodblocks' ),
 				},
 			};
 
@@ -168,29 +220,201 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				swiperConfig.effect = 'coverflow';
 			}
 
-			if ( showNavigation ) {
+			if ( prevBtn && nextBtn ) {
 				swiperConfig.navigation = {
-					nextEl: '.swiper-button-next',
-					prevEl: '.swiper-button-prev',
+					nextEl: nextBtn,
+					prevEl: prevBtn,
 				};
 			}
 
-			if ( showPagination ) {
+			if ( pagination ) {
 				swiperConfig.pagination = {
-					el: '.swiper-pagination',
+					el: pagination,
 					clickable: true,
-					dynamicBullets: slides.length > 5,
+					dynamicBullets: ! showThumbnails && slides.length > 5,
 				};
+				if ( showThumbnails ) {
+					swiperConfig.pagination.renderBullet = (
+						index,
+						className
+					) => {
+						const button = document.createElement( 'button' );
+						button.type = 'button';
+						button.className = className;
+						button.setAttribute(
+							'aria-label',
+							__( 'Go to slide {{index}}', 'goodblocks' ).replace(
+								'{{index}}',
+								String( index + 1 )
+							)
+						);
+						const source = slides[ index ].querySelector( 'img' );
+						const video = slides[ index ].querySelector( 'video' );
+						const imageUrl =
+							source?.getAttribute( 'src' ) || video?.poster;
+						if ( imageUrl ) {
+							const image = document.createElement( 'img' );
+							image.src = imageUrl;
+							image.alt = '';
+							image.loading = 'lazy';
+							button.appendChild( image );
+						} else {
+							button.textContent = String( index + 1 );
+						}
+						// Build through DOM properties: no source text is interpolated as HTML.
+						return button.outerHTML;
+					};
+				}
 			}
 
-			if ( autoplay ) {
+			if ( autoplay && slides.length > 1 ) {
 				swiperConfig.autoplay = {
+					enabled: false,
 					delay: autoplayDelay,
 					disableOnInteraction: false,
-					pauseOnMouseEnter: true,
+					pauseOnMouseEnter: false,
 				};
 			}
 
-			new Swiper( sliderContainer, swiperConfig );
+			const reducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)'
+			);
+			const shouldRotate = autoplay && slides.length > 1;
+			if ( reducedMotion.matches ) {
+				swiperConfig.speed = 0;
+			}
+			const swiper = new Swiper( sliderContainer, swiperConfig );
+			sliderContainer.tabIndex = slides.length > 1 ? 0 : -1;
+			const updateSlides = () => {
+				swiper.slides.forEach( ( slide, index ) => {
+					const inactive = index !== swiper.activeIndex;
+					if (
+						inactive &&
+						slide.contains( slide.ownerDocument.activeElement )
+					) {
+						sliderContainer.focus( { preventScroll: true } );
+					}
+					slide.inert = inactive;
+					slide.setAttribute( 'aria-hidden', String( inactive ) );
+				} );
+			};
+			swiper.on( 'slideChange', updateSlides );
+			updateSlides();
+			let rotationButton;
+			let hoverPaused = false;
+			const updateRotationButton = () => {
+				swiperWrapper.setAttribute(
+					'aria-live',
+					swiper.autoplay.running ? 'off' : 'polite'
+				);
+				if ( rotationButton ) {
+					rotationButton.textContent =
+						swiper.autoplay.running || hoverPaused
+							? __( 'Pause slideshow', 'goodblocks' )
+							: __( 'Play slideshow', 'goodblocks' );
+				}
+			};
+			const stopRotation = () => {
+				hoverPaused = false;
+				swiper.autoplay.stop();
+				updateRotationButton();
+			};
+			if ( shouldRotate ) {
+				let pointerWasRunning = null;
+				rotationButton = document.createElement( 'button' );
+				rotationButton.type = 'button';
+				rotationButton.className = 'goodblocks-slider-rotation';
+				// Pointerdown precedes focusin. Preserve an intended Pause click
+				// when focus itself stops rotation before the click arrives.
+				rotationButton.addEventListener( 'pointerdown', () => {
+					pointerWasRunning = swiper.autoplay.running || hoverPaused;
+				} );
+				rotationButton.addEventListener( 'pointercancel', () => {
+					pointerWasRunning = null;
+				} );
+				rotationButton.addEventListener( 'keydown', () => {
+					pointerWasRunning = null;
+				} );
+				rotationButton.addEventListener( 'click', () => {
+					if (
+						pointerWasRunning === true ||
+						swiper.autoplay.running ||
+						hoverPaused
+					) {
+						stopRotation();
+					} else {
+						swiper.autoplay.start();
+						updateRotationButton();
+					}
+					pointerWasRunning = null;
+				} );
+				sliderContainer.insertBefore( rotationButton, swiperWrapper );
+				if ( ! reducedMotion.matches ) {
+					swiper.autoplay.start();
+				}
+				updateRotationButton();
+			}
+			sliderContainer.addEventListener( 'focusin', stopRotation );
+			// Hover temporarily suspends the user's playing state. Keeping the
+			// Pause label prevents pointerenter -> focus -> click from becoming Play.
+			// Focus, visibility and reduced-motion stops still require explicit Play.
+			sliderContainer.addEventListener( 'pointerenter', ( event ) => {
+				if (
+					event.pointerType === 'mouse' &&
+					swiper.autoplay.running
+				) {
+					hoverPaused = true;
+					swiper.autoplay.stop();
+					updateRotationButton();
+				}
+			} );
+			sliderContainer.addEventListener( 'pointerleave', ( event ) => {
+				if ( event.pointerType === 'mouse' && hoverPaused ) {
+					hoverPaused = false;
+					swiper.autoplay.start();
+					updateRotationButton();
+				}
+			} );
+			sliderContainer.addEventListener( 'keydown', ( event ) => {
+				if (
+					event.target.closest(
+						'input, textarea, select, [contenteditable="true"]'
+					)
+				) {
+					return;
+				}
+				if ( event.key === 'ArrowLeft' || event.key === 'ArrowRight' ) {
+					event.preventDefault();
+					stopRotation();
+					if ( event.key === 'ArrowLeft' ) {
+						swiper.slidePrev();
+					} else {
+						swiper.slideNext();
+					}
+				}
+			} );
+			const onMotionChange = ( event ) => {
+				if ( event.matches ) {
+					stopRotation();
+				}
+				swiper.params.speed = event.matches ? 0 : 600;
+			};
+			const onVisibilityChange = () => {
+				if ( sliderContainer.ownerDocument.hidden ) {
+					stopRotation();
+				}
+			};
+			reducedMotion.addEventListener( 'change', onMotionChange );
+			sliderContainer.ownerDocument.addEventListener(
+				'visibilitychange',
+				onVisibilityChange
+			);
+			swiper.on( 'destroy', () => {
+				reducedMotion.removeEventListener( 'change', onMotionChange );
+				sliderContainer.ownerDocument.removeEventListener(
+					'visibilitychange',
+					onVisibilityChange
+				);
+			} );
 		} );
 } );

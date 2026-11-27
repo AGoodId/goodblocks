@@ -1,17 +1,39 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { mobileTextPaddingStyle } from './mobile-text-padding';
+import { desktopTextPaddingStyle } from './desktop-text-padding';
 
 export default function save( { attributes } ) {
 	const {
 		showNavigation,
 		showPagination,
+		showThumbnails,
 		effect,
 		autoplay,
 		autoplayDelay,
 		layout,
 		sliderHeight,
 		aspectRatio = '16-9',
+		maxImageHeight,
+		mobileTextPadding,
+		desktopTextPadding,
 	} = attributes;
+	const maxHeightStyle =
+		layout === 'overlay' &&
+		aspectRatio !== 'none' &&
+		Number.isInteger( maxImageHeight ) &&
+		maxImageHeight >= 100 &&
+		maxImageHeight <= 1600
+			? { '--slider-max-image-height': `${ maxImageHeight }px` }
+			: {};
 
+	const mobilePaddingStyle = mobileTextPaddingStyle(
+		layout,
+		mobileTextPadding
+	);
+	const desktopPaddingStyle = desktopTextPaddingStyle(
+		layout,
+		desktopTextPadding
+	);
 	const blockProps = useBlockProps.save( {
 		className: `slider-container ${
 			( aspectRatio && aspectRatio !== 'none' ) || ! aspectRatio
@@ -20,19 +42,31 @@ export default function save( { attributes } ) {
 		}`,
 		'data-show-navigation': showNavigation,
 		'data-show-pagination': showPagination,
+		'data-show-thumbnails':
+			layout === 'below' && showThumbnails === true ? true : undefined,
 		'data-effect': effect,
 		'data-autoplay': autoplay,
 		'data-autoplay-delay': autoplayDelay,
 		'data-layout': layout,
 		'data-slider-height': sliderHeight,
 		'data-aspect-ratio': aspectRatio || '16-9',
-		style:
-			aspectRatio === 'none'
+		'data-mobile-text-padding': Object.keys( mobilePaddingStyle ).length
+			? true
+			: undefined,
+		'data-desktop-text-padding': Object.keys( desktopPaddingStyle ).length
+			? true
+			: undefined,
+		style: {
+			...( aspectRatio === 'none'
 				? {
 						'--slider-height': `${ sliderHeight }vh`,
 						minHeight: `${ sliderHeight }vh`,
 				  }
-				: {},
+				: {} ),
+			...maxHeightStyle,
+			...mobilePaddingStyle,
+			...desktopPaddingStyle,
+		},
 	} );
 
 	return (
