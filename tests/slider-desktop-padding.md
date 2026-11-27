@@ -27,6 +27,11 @@ Verification:
  Targeted JS lint and editor SCSS lint pass. Frontend SCSS has the same six
  pre-existing findings on unchanged lines82/88/125/133/257/258; the new rules
  introduce none. npm build passes, with source and generated assets retained.
+- Independent review found that the first catalog merge lost the slide
+ editor's two existing screen-reader link strings. They are restored in the
+ shared union. slider-catalogs.cjs now verifies all142 previous per-handle
+ message entries against084f4647 as well as the new desktop/help strings and
+ the identical resulting catalogs. This correction has not been installed.
 - Real Chrome loads the built frontend CSS/Swiper in geometric-image fixtures.
  At1920px/document1920, legacy compact remains600px with textTop261.609375.
  Desktop320/20/270/20 gives666.78125px, textTop320, textLeft380, width1160.

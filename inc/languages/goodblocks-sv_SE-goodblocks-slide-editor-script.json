@@ -44,6 +44,8 @@
       "Reset desktop text padding": ["Återställ luft på stor skärm"],
       "Select Media": ["Välj media"],
       "Link": ["Länk"],
+      "Link label for screen readers": ["Länktext för skärmläsare"],
+      "Describe the destination. Leave empty to use the slide heading.": ["Beskriv länkens mål. Lämna tomt för att använda bildens rubrik."],
       "Unlink": ["Ta bort länk"],
       "Change content position": ["Ändra textens placering"],
       "Open in new tab": ["Öppna i ny flik"],
