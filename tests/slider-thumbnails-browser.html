@@ -8,11 +8,12 @@
 <main id="fixtures"></main>
 <script>
 window.wp={i18n:{__:text=>text}};
-for(const [id,thumbs,count] of [['gallery',true,3],['legacy',false,3],['many',true,16]]){
+for(const [id,thumbs,count] of [['gallery',true,3],['legacy',false,3],['many',true,16],['quiet',true,3]]){
  if(new URLSearchParams(location.search).has('case')&&new URLSearchParams(location.search).get('case')!==id)continue;
  const host=document.createElement('div');host.id=id;
  host.className='wp-block-goodblocks-slider slider-container aspect-2-1';
  Object.assign(host.dataset,{layout:'below',aspectRatio:'2-1',effect:'slide',autoplay:'false',showNavigation:'true',showPagination:'true'});
+ if(id==='quiet'){host.dataset.showNavigation='false';host.dataset.showPagination='false';}
  if(thumbs)host.dataset.showThumbnails='true';
  for(let i=0;i<count;i++){
   const slide=document.createElement('div');slide.className='wp-block-goodblocks-slide slide-item';

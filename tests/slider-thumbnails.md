@@ -28,6 +28,11 @@ slide fixtures each have document width390 at viewport390 after the fix; the
 gallery is390×195 and thumbnails display:none. Next selects2/3. Legacy below
 overflow is unchanged and is not claimed fixed by this candidate.
 
+Additional quiet fixture has both showNavigation and showPagination false.
+At390px/document390 no buttons are visible. The actual focused root has
+tabIndex0; ArrowRight selects2/3 and ArrowLeft returns1/3. Thus hiding mobile
+thumbnails does not remove the existing keyboard path when arrows are disabled.
+
 Serialization tests prove14 older layouts unchanged plus false/absent/invalid
 thumbnail values and overlay=true remain byte-identical. Existing mobile and
 desktop padding tests pass. JS lint and build pass. SCSS reports the same six
