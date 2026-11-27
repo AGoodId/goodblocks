@@ -262,3 +262,64 @@
 		}
 	}
 }
+
+// Optional text-led height on large screens. Native block styles are also
+// loaded in the editor; the same selectors cover its direct slide children.
+@media (min-width: 769px) {
+
+	@supports (container-type: inline-size) {
+
+		.wp-block-goodblocks-slider.slider-container[data-layout="overlay"][data-desktop-text-padding="true"] {
+			container-type: inline-size;
+			aspect-ratio: auto;
+			min-height: auto !important;
+			max-height: none;
+			--slider-desktop-ratio-height: var(--slider-height, 50vh);
+			--slider-desktop-image-min-height: min(var(--slider-desktop-ratio-height), var(--slider-max-image-height, var(--slider-desktop-ratio-height)));
+			--slider-editor-active-display: flex;
+
+			&[data-aspect-ratio="16-9"] {
+				--slider-desktop-ratio-height: 56.25cqw;
+			}
+
+			&[data-aspect-ratio="4-3"] {
+				--slider-desktop-ratio-height: 75cqw;
+			}
+
+			&[data-aspect-ratio="3-1"] {
+				--slider-desktop-ratio-height: 33.333333cqw;
+			}
+
+			&[data-aspect-ratio="3-2"] {
+				--slider-desktop-ratio-height: 66.666667cqw;
+			}
+
+			&[data-aspect-ratio="2-1"] {
+				--slider-desktop-ratio-height: 50cqw;
+			}
+
+			.swiper-wrapper {
+				aspect-ratio: auto;
+				height: auto;
+				max-height: none;
+				min-height: var(--slider-desktop-image-min-height);
+			}
+
+			.wp-block-goodblocks-slide {
+				position: relative;
+				inset: auto;
+				height: auto;
+				min-height: var(--slider-desktop-image-min-height);
+				align-self: stretch;
+			}
+
+			.slide-item .slide-content {
+				position: relative;
+				inset: auto;
+				transform: none;
+				box-sizing: border-box;
+				padding: var(--slider-desktop-text-pad-top) var(--slider-desktop-text-pad-right) var(--slider-desktop-text-pad-bottom) var(--slider-desktop-text-pad-left);
+			}
+		}
+	}
+}

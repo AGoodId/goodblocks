@@ -94,5 +94,5 @@
 .wp-block-goodblocks-slider[data-current-slide="7"] .wp-block-goodblocks-slide:nth-child(8),
 .wp-block-goodblocks-slider[data-current-slide="8"] .wp-block-goodblocks-slide:nth-child(9),
 .wp-block-goodblocks-slider[data-current-slide="9"] .wp-block-goodblocks-slide:nth-child(10) {
-	display: block;
+	display: var(--slider-editor-active-display, block);
 }

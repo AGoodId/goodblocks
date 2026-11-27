@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Slider desktop text flow</title>
+<link rel="stylesheet" href="../build/blocks/slider/view.css">
+<link rel="stylesheet" href="../build/blocks/slider/style-index.css?v=desktop-flow-final1">
+<link rel="stylesheet" href="../build/blocks/slide/style-index.css">
+<style>
+body{margin:0;font:16px Georgia,serif}.slider-container{margin:0}
+.slide-heading{font-size:32px!important;line-height:1.2!important;font-weight:400!important;margin:0!important}.slide-text{display:none}
+.site-skin .slide-item .slide-content{max-width:1200px;box-sizing:border-box;padding:0 20px}
+.short-heading .slide-heading{font-size:34px!important;line-height:1.5!important}
+.contained{max-width:900px;margin:auto}
+</style>
+<main id="fixtures"></main>
+<script>window.wp={i18n:{__:text=>text}};
+const image='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="1200" height="600" fill="#143c54"/></svg>');
+for(const [id,padding,narrow,short,ratio='2-1'] of [['legacy',null,false,false],['desktop',{top:320,right:20,bottom:270,left:20},false,false],['short',{top:350,right:20,bottom:0,left:20},false,true],['contained',{top:320,right:20,bottom:270,left:20},true,false],['contained-short',{top:350,right:20,bottom:0,left:20},true,true],...['16-9','4-3','3-1','3-2','2-1','none'].map(ratio=>['ratio-'+ratio,{top:0,right:20,bottom:0,left:20},true,true,ratio])]){
+const section=document.createElement('section');if(narrow)section.className='contained';
+const host=document.createElement('div');host.id=id;host.className='wp-block-goodblocks-slider slider-container aspect-'+ratio+' site-skin'+(short?' short-heading':'');
+Object.assign(host.dataset,{layout:'overlay',aspectRatio:ratio,sliderHeight:'50',effect:'fade',currentSlide:'0',autoplay:'false',showNavigation:'true',showPagination:'true'});if(ratio==='none'){host.style.setProperty('--slider-height','50vh');host.style.minHeight='50vh';}else{host.style.setProperty('--slider-max-image-height','600px');}
+if(padding){host.dataset.desktopTextPadding='true';for(const [side,value] of Object.entries(padding))host.style.setProperty('--slider-desktop-text-pad-'+side,value+'px');}
+for(let index=0;index<2;index++){const slide=document.createElement('div');slide.className='wp-block-goodblocks-slide slide-item position-center-center';slide.innerHTML=`<div class="slide-media"><img src="${image}" alt="Geometric image ${index+1}"></div><div class="slide-content position-center-center"><h2 class="slide-heading">${short?'Vårsalongen 2026':'Svenskt Tenn: A Philosophy of Home<br><em>27 September 2024–12 January 2025</em>'}</h2><p class="slide-text"></p></div>`;host.append(slide);}
+section.append(host);document.getElementById('fixtures').append(section);
+}
+</script><script src="../build/blocks/slider/view.js" defer></script></html>

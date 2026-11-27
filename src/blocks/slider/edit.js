@@ -27,6 +27,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
 import './editor.scss';
 import { mobileTextPaddingStyle } from './mobile-text-padding';
+import { desktopTextPaddingStyle } from './desktop-text-padding';
 
 export default function Edit( { clientId, attributes, setAttributes } ) {
 	const {
@@ -39,6 +40,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		sliderHeight,
 		maxImageHeight,
 		mobileTextPadding,
+		desktopTextPadding,
 		aspectRatio = '16-9',
 	} = attributes;
 	const maxHeightStyle =
@@ -54,6 +56,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const mobilePaddingStyle = mobileTextPaddingStyle(
 		layout,
 		mobileTextPadding
+	);
+	const desktopPaddingDefaults = { top: 32, right: 32, bottom: 32, left: 32 };
+	const desktopPaddingStyle = desktopTextPaddingStyle(
+		layout,
+		desktopTextPadding
 	);
 
 	const { innerBlocks, selectedBlockId } = useSelect(
@@ -291,7 +298,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								'goodblocks'
 							) }
 							help={ __(
-								'0 means no limit. Mobile text can expand the slide.',
+								'0 means no limit. Text can expand the slide.',
 								'goodblocks'
 							) }
 							value={ maxImageHeight || 0 }
@@ -304,6 +311,59 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						/>
 					) }
 				</PanelBody>
+				{ layout === 'overlay' && (
+					<PanelBody
+						title={ __( 'Desktop text padding', 'goodblocks' ) }
+						initialOpen={ false }
+					>
+						<p>
+							{ __(
+								'Sets text spacing on large screens; the slide grows to fit the text.',
+								'goodblocks'
+							) }
+						</p>
+						{ [
+							[ 'top', __( 'Above text (px)', 'goodblocks' ) ],
+							[
+								'right',
+								__( 'Right of text (px)', 'goodblocks' ),
+							],
+							[ 'bottom', __( 'Below text (px)', 'goodblocks' ) ],
+							[ 'left', __( 'Left of text (px)', 'goodblocks' ) ],
+						].map( ( [ side, label ] ) => (
+							<RangeControl
+								key={ side }
+								label={ label }
+								min={ 0 }
+								max={ 800 }
+								step={ 1 }
+								value={
+									desktopTextPadding?.[ side ] ??
+									desktopPaddingDefaults[ side ]
+								}
+								onChange={ ( value ) =>
+									setAttributes( {
+										desktopTextPadding: {
+											...desktopPaddingDefaults,
+											...desktopTextPadding,
+											[ side ]: value,
+										},
+									} )
+								}
+							/>
+						) ) }
+						<Button
+							variant="secondary"
+							onClick={ () =>
+								setAttributes( {
+									desktopTextPadding: undefined,
+								} )
+							}
+						>
+							{ __( 'Reset desktop text padding', 'goodblocks' ) }
+						</Button>
+					</PanelBody>
+				) }
 				{ layout === 'overlay' && (
 					<PanelBody
 						title={ __( 'Mobile text padding', 'goodblocks' ) }
@@ -361,6 +421,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				data-mobile-text-padding={
 					Object.keys( mobilePaddingStyle ).length ? true : undefined
 				}
+				data-desktop-text-padding={
+					Object.keys( desktopPaddingStyle ).length ? true : undefined
+				}
 				className={ `${ innerBlocksProps.className } ${
 					( aspectRatio && aspectRatio !== 'none' ) || ! aspectRatio
 						? `aspect-${ aspectRatio || '16-9' }`
@@ -375,6 +438,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						: {} ),
 					...maxHeightStyle,
 					...mobilePaddingStyle,
+					...desktopPaddingStyle,
 				} }
 			/>
 		</>
